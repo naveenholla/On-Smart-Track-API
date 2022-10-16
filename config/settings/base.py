@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "ontrack"
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR / ".env"))
@@ -84,7 +84,18 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
+    "ontrack.admin_lookup",
+    "ontrack.market_equity",
+    "ontrack.market_index",
+    "ontrack.market_lookup",
+    "ontrack.market_participant",
+    "ontrack.user_account",
+    "ontrack.user_event",
+    "ontrack.user_lookup",
+    "ontrack.user_trading",
     "ontrack.users",
+    # "ontrack.users",
+    # "ontrack.users",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

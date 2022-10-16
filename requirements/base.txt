@@ -22,3 +22,11 @@ djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.13.0 # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.24.2  # https://github.com/tfranzel/drf-spectacular
+
+django_cryptography==1.1
+celery-progress==0.1.2
+pandas==1.5.0
+django-celery-results==2.4.0
+matplotlib==3.6.1
+django-timezone-field==5.0
+tzdata==2022.5

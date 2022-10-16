@@ -1,3 +1,28 @@
+-Softwares    
+	Chrome
+	https://code.visualstudio.com/
+		Extensions
+			Pylance
+			Atom One Dark Theme
+			Auto Rename Tag		
+			Prettier
+			Azure Tools
+	https://git-scm.com/download
+		From Git Bash
+			git config --global user.name "xs2sachin"
+			git config --global user.email "xs2sachin@gmail.com"
+	https://www.python.org/downloads/
+		From Command Prompt
+			pip install virtualenv
+			pip install django
+			pip install cookiecutter
+			pip install pre-commit
+				pre-commit install
+			pip install -U ggshield
+				ggshield auth login
+	https://docs.docker.com/get-docker/#supported-platforms
+    https://www.postgresql.org/download/windows/
+
 - Open Powershell
 - Run Following commands
     virtualenv venv
@@ -83,3 +108,5 @@
 - pip install -r requirements/local.txt
 - update database details
     git update-index --skip-worktree .envs/.local/.postgre
+
+python manage.py makemigrations

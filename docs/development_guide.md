@@ -79,3 +79,7 @@
         keep_local_envs_in_vcs [y]:                     y
         debug [n]:                                      y
         [SUCCESS]: Project initialized, keep up the good work!
+
+- pip install -r requirements/local.txt
+- update database details
+    git update-index --skip-worktree .envs/.local/.postgre

@@ -1,12 +1,8 @@
 from django.db import models
 from django_cryptography.fields import encrypt
 
-from ontrack.admin_lookup.models import (
-    MarketExchange,
-    MarketTradingStrategy,
-    TransactionType,
-)
-from ontrack.user_lookup.models import Account, AccountCheque, TodoTask
+from ontrack.market_lookup.models import MarketExchange, MarketTradingStrategy
+from ontrack.user_lookup.models import Account, AccountCheque, TodoTask, TransactionType
 from ontrack.utils.base.enum import (
     DirectionType,
     OptionType,

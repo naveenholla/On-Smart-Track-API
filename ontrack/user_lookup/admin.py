@@ -3,7 +3,6 @@ from django.contrib import admin
 from ontrack.user_lookup.models import (
     Account,
     AccountCheque,
-    AccountField,
     AccountInterestRate,
     AccountType,
     DematAccount,
@@ -24,7 +23,6 @@ admin.site.register(Person)
 admin.site.register(Account)
 admin.site.register(DematAccount)
 admin.site.register(AccountInterestRate)
-admin.site.register(AccountField)
 admin.site.register(AccountCheque)
 admin.site.register(TodoFolder)
 admin.site.register(TodoTask)

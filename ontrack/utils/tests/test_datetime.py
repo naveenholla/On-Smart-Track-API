@@ -4,7 +4,7 @@ import pytest
 import pytz
 from freezegun import freeze_time
 
-from ontrack.core.utils.datetime import DateTimeHelper
+from ontrack.utils.datetime import DateTimeHelper
 
 utcTimeZone = pytz.timezone("UTC")
 current_date_year = 2021
@@ -59,15 +59,15 @@ test_data_future_past_values = [
     ({"hours": current_date_hour}, current_date_time_value, None, True),
     ({"minutes": current_date_minute}, current_date_time_value, None, True),
     ({"seconds": current_date_second}, current_date_time_value, None, True),
-    ({"microseconds": current_date_millisecond}, current_date_time_value, None, True),
     ({"milliseconds": current_date_millisecond}, current_date_time_value, None, True),
+    ({"microseconds": current_date_millisecond}, current_date_time_value, None, True),
     ({"weeks": current_date_week}, current_date_time_value, None, False),
     ({"days": current_date_date}, current_date_time_value, None, False),
     ({"hours": current_date_hour}, current_date_time_value, None, False),
     ({"minutes": current_date_minute}, current_date_time_value, None, False),
     ({"seconds": current_date_second}, current_date_time_value, None, False),
-    ({"microseconds": current_date_millisecond}, current_date_time_value, None, False),
     ({"milliseconds": current_date_millisecond}, current_date_time_value, None, False),
+    ({"microseconds": current_date_millisecond}, current_date_time_value, None, False),
     (
         {"weeks": current_date_week},
         current_date_time_value,
@@ -99,13 +99,13 @@ test_data_future_past_values = [
         True,
     ),
     (
-        {"microseconds": current_date_millisecond},
+        {"milliseconds": current_date_millisecond},
         current_date_time_value,
         current_date_time_value_2,
         True,
     ),
     (
-        {"milliseconds": current_date_millisecond},
+        {"microseconds": current_date_millisecond},
         current_date_time_value,
         current_date_time_value_2,
         True,
@@ -141,13 +141,13 @@ test_data_future_past_values = [
         False,
     ),
     (
-        {"microseconds": current_date_millisecond},
+        {"milliseconds": current_date_millisecond},
         current_date_time_value,
         current_date_time_value_2,
         False,
     ),
     (
-        {"milliseconds": current_date_millisecond},
+        {"microseconds": current_date_millisecond},
         current_date_time_value,
         current_date_time_value_2,
         False,
@@ -173,8 +173,55 @@ def test_current_time():
     assert time_obj == current_time_value
 
 
+# @pytest.mark.parametrize(
+#     'a, b',
+#     [
+#         (1, {'Two Scoops of Django': '1.8'}),
+#         (True, 'Into the Brambles'),
+#         ('Jason likes cookies', [1, 2, 3]),
+#         (PYTEST_PLUGIN, 'plugin_template'),
+#     ], ids=[
+#         'int and dict',
+#         'bool and str',
+#         'str and list',
+#         'CookiecutterTemplate and str',
+#     ]
+# )
+
+
 @pytest.mark.parametrize(
-    "args, current_time_obj, input_time_obj, is_future", test_data_future_past_values
+    "args, current_time_obj, input_time_obj, is_future",
+    argvalues=test_data_future_past_values,
+    ids=[
+        "Add Week(s) to Current Date",
+        "Add Day(s) to Current Date",
+        "Add Hour(s) to Current Date",
+        "Add Minute(s) to Current Date",
+        "Add Second(s) to Current Date",
+        "Add Microsecond(s) to Current Date",
+        "Add Millisecond(s) to Current Date",
+        "Subtract Week(s) to Current Date",
+        "Subtract Day(s) to Current Date",
+        "Subtract Hour(s) to Current Date",
+        "Subtract Minute(s) to Current Date",
+        "Subtract Second(s) to Current Date",
+        "Subtract Microsecond(s) to Current Date",
+        "Subtract Millisecond(s) to Current Date",
+        "Add Week(s) to Supplied Date",
+        "Add Day(s) to Supplied Date",
+        "Add Hour(s) to Supplied Date",
+        "Add Minute(s) to Supplied Date",
+        "Add Second(s) to Supplied Date",
+        "Add Microsecond(s) to Supplied Date",
+        "Add Millisecond(s) to Supplied Date",
+        "Subtract Week(s) to Supplied Date",
+        "Subtract Day(s) to Supplied Date",
+        "Subtract Hour(s) to Supplied Date",
+        "Subtract Minute(s) to Supplied Date",
+        "Subtract Second(s) to Supplied Date",
+        "Subtract Microsecond(s) to Supplied Date",
+        "Subtract Millisecond(s) to Supplied Date",
+    ],
 )
 def test_get_future_past_date_week(args, current_time_obj, input_time_obj, is_future):
     with freeze_time(current_time_obj):

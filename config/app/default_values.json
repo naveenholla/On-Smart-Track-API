@@ -1,0 +1,12 @@
+{
+    "default_date_format": "%Y-%m-%d",
+    "default_time_format": "%H:%M:%S",
+    "default_date_time_format": "%Y-%m-%d %H:%M:%S.%f %z",
+    "default_datapull_equity_lookup_pause": 5,
+    "days_for_delete_lookup_data": 2,
+    "days_for_delete_equity_eod_data": 750,
+    "days_for_delete_indices_eod_data": 750,
+    "default_start_date_equity_data_pull": "2022-09-20 00:00:00.000000 +00:00",
+    "default_start_date_indices_data_pull": "2022-09-20 00:00:00.000000 +00:00",
+    "average_days_count": 90
+}

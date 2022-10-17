@@ -1,0 +1,563 @@
+{
+    "website_indices_list": "https://www.nseindia.com/products-services/indices-nifty200-index",
+    "listed_equities": "https://www1.nseindia.com/content/equities/EQUITY_L.csv",
+    "top_750": "https://archives.nseindia.com/content/indices/ind_niftytotalmarket_list.csv",
+    "top_500": "https://archives.nseindia.com/content/indices/ind_nifty500list.csv",
+    "top_200": "https://archives.nseindia.com/content/indices/ind_nifty200list.csv",
+    "top_100": "https://archives.nseindia.com/content/indices/ind_nifty100list.csv",
+    "top_50": "https://archives.nseindia.com/content/indices/ind_nifty50list.csv",
+    "midcap_150": "https://archives.nseindia.com/content/indices/ind_niftymidcap150list.csv",
+    "midcap_50": "https://archives.nseindia.com/content/indices/ind_niftymidcap50list.csv",
+    "midcap_100": "https://archives.nseindia.com/content/indices/ind_niftymidcap100list.csv",
+    "smallcap_250": "https://archives.nseindia.com/content/indices/ind_niftysmallcap250list.csv",
+    "smallcap_50": "https://archives.nseindia.com/content/indices/ind_niftysmallcap50list.csv",
+    "smallcap_100": "https://archives.nseindia.com/content/indices/ind_niftysmallcap100list.csv",
+    "fo_marketlot": "https://archives.nseindia.com/content/fo/fo_mktlots.csv",
+    "holidays": [
+      {
+        "exchange": "NSE",
+        "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
+        "url": "https://www.nseindia.com/api/holiday-master?type=trading",
+        "type": "Trading Holiday",
+        "categories": [
+          {
+            "display_name": "Corporate Bonds",
+            "code": "CBM",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Currency Derivatives",
+            "code": "CD",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Equities",
+            "code": "CM",
+            "parent_name":"Capital Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Unknown",
+            "code": "CMOT",
+            "parent_name":"Unknown",
+            "enabled": false
+          },
+          {
+            "display_name": "Commodity Derivatives",
+            "code": "COM",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Equity Derivatives",
+            "code": "FO",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Interest Rate Derivatives",
+            "code": "IRD",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Mutual Funds",
+            "code": "MF",
+            "parent_name":"Capital Market",
+            "enabled": true
+          },
+          {
+            "display_name": "New Debt Segment",
+            "code": "NDM",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Negotiated Trade Reporting Platform",
+            "code": "NTRP",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Securities Lending & Borrowing Schemes",
+            "code": "SLBS",
+            "parent_name":"Capital Market",
+            "enabled": true
+          }
+        ]
+      },
+      {
+        "exchange": "NSE",
+        "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
+        "url": "https://www.nseindia.com/api/holiday-master?type=clearing",
+        "type": "Clearing Holiday",
+        "categories": [
+          {
+            "display_name": "Corporate Bonds",
+            "code": "CBM",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Currency Derivatives",
+            "code": "CD",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Equities",
+            "code": "CM",
+            "parent_name":"Capital Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Unknown",
+            "code": "CMOT",
+            "parent_name":"Unknown",
+            "enabled": false
+          },
+          {
+            "display_name": "Commodity Derivatives",
+            "code": "COM",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Equity Derivatives",
+            "code": "FO",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Interest Rate Derivatives",
+            "code": "IRD",
+            "parent_name":"Derivatives Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Mutual Funds",
+            "code": "MF",
+            "parent_name":"Capital Market",
+            "enabled": true
+          },
+          {
+            "display_name": "New Debt Segment",
+            "code": "NDM",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Negotiated Trade Reporting Platform",
+            "code": "NTRP",
+            "parent_name":"Debt Market",
+            "enabled": true
+          },
+          {
+            "display_name": "Securities Lending & Borrowing Schemes",
+            "code": "SLBS",
+            "parent_name":"Capital Market",
+            "enabled": true
+          }
+        ]
+      }
+    ],
+    "indices_percentage": [
+      {
+        "name": "India Vix",
+        "symbol": "INDIAVIX",
+        "ordinal": 1,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty 50",
+        "symbol": "NIFTY",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%2050.js",
+        "ordinal": 1,
+        "is_sector": false,
+        "is_active": true,
+        "lot_size": 50
+      },
+      {
+        "name": "Nifty Next 50",
+        "symbol": "NIFTYJR",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20NEXT%2050.js",
+        "ordinal": 2,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty 100",
+        "symbol": "CNX100",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20100.js",
+        "ordinal": 3,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty 200",
+        "symbol": "CNX200",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20200.js",
+        "ordinal": 4,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty 500",
+        "symbol": "CNX500",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20500.js",
+        "ordinal": 5,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Total Market",
+        "symbol": "CNX750",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20TOTAL%20MARKET.js",
+        "ordinal": 6,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Midcap 50",
+        "symbol": "NIFTYMIDCAP50",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%2050.js",
+        "ordinal": 7,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "NIFTY Midcap 100",
+        "symbol": "CNXMIDCAP",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%20100.js",
+        "ordinal": 8,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Midcap 150",
+        "symbol": "NIFTYMIDCAP150",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%20150.js",
+        "ordinal": 9,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Midcap Select",
+        "symbol": "MIDCPNIFTY",
+        "chart_symbol": "NIFTY_MID_SELECT",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%20SELECT.js",
+        "ordinal": 10,
+        "is_sector": false,
+        "is_active": true,
+        "lot_size": 75
+      },
+      {
+        "name": "NIFTY Smallcap 50",
+        "symbol": "NIFTYSMLCAP50",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%2050.js",
+        "ordinal": 11,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "NIFTY Smallcap 100",
+        "symbol": "CNXSMALLCAP",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%20100.js",
+        "ordinal": 12,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "NIFTY Smallcap 250",
+        "symbol": "NIFTYSMLCAP250",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%20250.js",
+        "ordinal": 13,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Microcap 250",
+        "symbol": "NIFTY_MICROCAP250",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MICROCAP%20250.js",
+        "ordinal": 14,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "NIFTY LargeMidcap 250",
+        "symbol": "NIFTY_LARGEMID250",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20LARGEMIDCAP%20250.js",
+        "ordinal": 15,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty MidSmallcap 400",
+        "symbol": "NIFTYMIDSML400",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDSMALLCAP%20400.js",
+        "ordinal": 16,
+        "is_sector": false,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Auto",
+        "symbol": "CNXAUTO",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20AUTO.js",
+        "ordinal": 17,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Bank",
+        "symbol": "BANKNIFTY",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20BANK.js",
+        "ordinal": 18,
+        "is_sector": true,
+        "is_active": true,
+        "lot_size": 25
+      },
+      {
+        "name": "Nifty Financial Services",
+        "symbol": "FINNIFTY",
+        "chart_symbol": "CNXFINANCE",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20FINANCIAL%20SERVICES.js",
+        "ordinal": 19,
+        "is_sector": true,
+        "is_active": true,
+        "lot_size": 40
+      },
+      {
+        "name": "Nifty FMCG",
+        "symbol": "CNXFMCG",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20FMCG.js",
+        "ordinal": 20,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Healthcare Index",
+        "symbol": "NIFTY_HEALTHCARE",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20HEALTHCARE%20INDEX.js",
+        "ordinal": 21,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty IT",
+        "symbol": "CNXIT",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20IT.js",
+        "ordinal": 22,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Media",
+        "symbol": "CNXMEDIA",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MEDIA.js",
+        "ordinal": 23,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Metal",
+        "symbol": "CNXMETAL",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20METAL.js",
+        "ordinal": 24,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Pharma",
+        "symbol": "CNXPHARMA",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PHARMA.js",
+        "ordinal": 25,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Private Bank",
+        "symbol": "NIFTYPVTBANK",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PRIVATE%20BANK.js",
+        "ordinal": 26,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty PSU Bank",
+        "symbol": "CNXPSUBANK",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PSU%20BANK.js",
+        "ordinal": 27,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Realty",
+        "symbol": "CNXREALTY",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20REALTY.js",
+        "ordinal": 28,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Consumer Durables",
+        "symbol": "NIFTY_CONSR_DURBL",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20CONSUMER%20DURABLES.js",
+        "ordinal": 29,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Commodities",
+        "symbol": "CNXCOMMODITIES",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20COMMODITIES.js",
+        "ordinal": 30,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Energy",
+        "symbol": "CNXENERGY",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20ENERGY.js",
+        "ordinal": 31,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty India Consumption",
+        "symbol": "CNXCONSUMPTION",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20INDIA%20CONSUMPTION.js",
+        "ordinal": 32,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Infrastructure",
+        "symbol": "CNXINFRA",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20INFRASTRUCTURE.js",
+        "ordinal": 33,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty MNC",
+        "symbol": "CNXMNC",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MNC.js",
+        "ordinal": 34,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty PSE",
+        "symbol": "CNXPSE",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PSE.js",
+        "ordinal": 35,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Services Sector",
+        "symbol": "CNXSERVICE",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SERVICES%20SECTOR.js",
+        "ordinal": 36,
+        "is_sector": true,
+        "is_active": true
+      },
+      {
+        "name": "Nifty Oil & Gas",
+        "symbol": "NIFTY_OIL_AND_GAS",
+        "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20OIL%20&%20GAS.js",
+        "ordinal": 37,
+        "is_sector": true,
+        "is_active": true
+      }
+    ],
+    "equity_bhavcopy": {
+      "url": "https://archives.nseindia.com/products/content/sec_bhavdata_full_%d%m%Y.csv"
+    },
+    "indices_bhavcopy": {
+      "url": "https://archives.nseindia.com/content/indices/ind_close_all_%d%m%Y.csv"
+    },
+    "fo_participant_oi": {
+      "url": "https://archives.nseindia.com/content/nsccl/fao_participant_oi_%d%m%Y.csv"
+    },
+    "fii_stats": {
+      "url": "https://archives.nseindia.com/content/fo/fii_stats_%d-%b-%Y.xls"
+    },
+    "fo_bhavcopy": {
+      "url": "https://archives.nseindia.com/content/historical/DERIVATIVES/%Y/{0}/fo%d{0}%Ybhav.csv.zip",
+      "args": [
+        {
+          "format": "%b",
+          "is_upper": true
+        }
+      ]
+    },
+    "live_spurts_oi": {
+      "url": "https://www.nseindia.com/api/live-analysis-oi-spurts-underlyings",
+      "website": "https://www.nseindia.com/market-data/oi-spurts"
+    },
+    "live_equity_data": {
+      "url": "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20TOTAL%20MARKET",
+      "website": "https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%20TOTAL%20MARKET"
+    },
+    "live_nifty_future_data": {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nse50_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    },
+    "live_banknifty_future_data": {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nifty_bank_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    },
+    "live_top20_stock_future_data": {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=stock_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    },
+    "live_top20_contracts_data": {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=top20_contracts",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    },
+    "live_option_chain": {
+      "url": "https://www.nseindia.com/api/option-chain-{0}?symbol={1}",
+      "website": "https://www.nseindia.com/option-chain",
+      "arg1_options": [
+        "indices",
+        "equities"
+      ],
+      "arg2_options": [
+        "&",
+        "%26"
+      ]
+    },
+    "live_all_indices": {
+      "url": "https://www.nseindia.com/api/allIndices"
+    },
+    "corporates_pit": {
+      "url": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y"
+    },
+    "fortnightly_sector_wise_fii": {
+      "url": "https://www.fpi.nsdl.co.in/web/StaticReports/Fortnightly_Sector_wise_FII_Investment_Data/FIIInvestSector_%b%d%Y.html"
+    },
+    "corporate_share_holdings": {
+      "url": "https://www.nseindia.com/api/corporate-share-holdings-master?index=equities"
+    },
+    "global_major_indices_futures": "https://in.investing.com/indices/indices-futures",
+    "global_major_indices": "https://in.investing.com/indices/major-indices",
+    "mf_data": "https://www.amfiindia.com/spages/NAVAll.txt?t=11012017122537",
+    "nps_funds_manager": [
+      {
+        "funds_manager": "hdfc",
+        "url": "https://www.hdfcpension.com/nav/"
+      },
+      {
+        "funds_manager": "sbi",
+        "url": "https://www.sbipensionfunds.com/latest-nav-2/"
+      },
+      {
+        "funds_manager": "aditya_birla",
+        "url": "https://pensionfund.adityabirlacapital.com/nps-nav/latest-nav"
+      }
+    ]
+  }

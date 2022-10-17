@@ -1,28 +1,42 @@
-# import json
-# from django.conf import settings
+from unittest import mock
 
-# exchange = "NSE"
-# config_dir = settings.CONFIG_DIR
+from ontrack.utils.config import Configurations
 
-# def log_info(message):
-#     print(message)
 
-# def log_debug(message):
-#     print(message)
+def test_urls_config_caching():
+    with mock.patch.object(
+        Configurations, "_Configurations__get_config", return_value="value"
+    ) as obj_mock:
+        Configurations.get_urls_config()
+        Configurations.get_urls_config()
+        Configurations.get_urls_config()
+        obj_mock.assert_called_once()
 
-# def get_config(fileName:str):
-#   path = f'{str(config_dir)}\\{fileName}.json'
-#   log_debug(path)
 
-#   # read all the file content
-#   with open(path, 'r') as config:
-#     jsonServerData = json.load(config)
-#     return jsonServerData
+def test_urls_config():
+    url_config = Configurations.get_urls_config()
+    assert "holidays" in url_config
 
-# def test_get_exchange(exchange):
-#     # read the url config
-#     input_dictionary = get_config('exchanges')
-#     log_info(input_dictionary)
-#     output_dictionary = [x for x in input_dictionary if x["name"] == str(exchange)]
-#     log_info(output_dictionary)
-#     return output_dictionary[0]
+
+#     from unittest import mock
+
+# import pytest
+
+# from tut9.myapp.sample import guess_number, get_ip
+
+
+# @pytest.mark.parametrize("_input,expected", [(3, "You won!"), (4, "You lost!")])
+# @mock.patch("tut9.myapp.sample.roll_dice")
+# def test_guess_number(mock_roll_dice, _input, expected):
+#     mock_roll_dice.return_value = 3
+#     assert guess_number(_input) == expected
+#     mock_roll_dice.assert_called_once()
+
+
+# @mock.patch("tut9.myapp.sample.requests.get")
+# def test_get_ip(mock_requests_get):
+#     mock_requests_get.return_value = mock.Mock(name="mock response",
+#                                                **{"status_code": 200, "json.return_value": {"origin": "0.0.0.0"}})
+
+#     assert get_ip() == "0.0.0.0"
+#     mock_requests_get.assert_called_once_with("https://httpbin.org/ip")

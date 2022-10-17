@@ -8,6 +8,9 @@ import environ
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # ontrack/
 APPS_DIR = ROOT_DIR / "ontrack"
+LOGS_DIR = APPS_DIR / "logfiles"
+TEMP_DIR = LOGS_DIR / "temp"
+CONFIG_DIR = ROOT_DIR / "config/app"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
@@ -23,7 +26,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -40,13 +43,7 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-
-DATABASES = {
-    "default": env.db(
-        "DATABASE_URL",
-        default="postgres://localhost/ontrack",
-    ),
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -94,8 +91,6 @@ LOCAL_APPS = [
     "ontrack.user_lookup",
     "ontrack.user_trading",
     "ontrack.users",
-    # "ontrack.users",
-    # "ontrack.users",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -257,17 +252,61 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s "
-            "%(process)d %(thread)d %(message)s"
-        }
+        "standard": {
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
+        },
+        "application": {
+            "format": (
+                "%(module)s, %(processName)s[%(process)d], "
+                "%(threadName)s[%(thread)d], %(correlationid)s, "
+                "%(asctime)s, %(levelname)s, %(message)s"
+            )
+        },
     },
     "handlers": {
-        "console": {
+        "default": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "standard",
+            "filename": str(LOGS_DIR / "default.txt"),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+        },
+        "ontrack": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "application",
+            "filename": str(LOGS_DIR / "ontrack.txt"),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+        },
+        "request_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "standard",
+            "filename": str(LOGS_DIR / "request.txt"),
+            "maxBytes": 1024 * 1024 * 5,  # 5 MB
+            "backupCount": 5,
+        },
+        "console": {"class": "logging.StreamHandler", "formatter": "standard"},
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["default", "mail_admins", "console"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "django.request": {
+            "handlers": ["request_handler", "mail_admins"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "ontrack": {
+            "handlers": ["console", "ontrack", "mail_admins"],
             "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        }
+            "propagate": True,
+        },
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
@@ -313,8 +352,8 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "On Smart Project API API",
-    "DESCRIPTION": "Documentation of API endpoints of On Smart Project API",
+    "TITLE": "On Smart Track API",
+    "DESCRIPTION": "Documentation of API endpoints of On Smart Track",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SERVERS": [

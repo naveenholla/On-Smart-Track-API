@@ -62,7 +62,8 @@ target/
 # pyenv
 .python-version
 
-
+# celery beat schedule file
+celerybeat-schedule
 
 # Environments
 .venv
@@ -269,11 +270,15 @@ Session.vim
 tags
 
 ### Project template
-MailHog
 ontrack/media/
 
 .pytest_cache/
+.ipython/
 .env
 .envs/*
 !.envs/.local/
 !.envs/.production/
+certs/*
+ontrack/logfiles/*.txt
+ontrack/logfiles/temp/*.*
+.cache_ggshield

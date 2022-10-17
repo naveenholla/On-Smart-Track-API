@@ -201,3 +201,214 @@ class DerivativeEndOfDay(BaseModel):
 
     def __str__(self):
         return self.equity.name
+
+
+class LiveEquityData(BaseModel):
+    symbol = models.CharField(max_length=100)
+    date = models.DateTimeField()
+    prev_close = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    open_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    high_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    low_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    last_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    point_changed = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    percentage_changed = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    traded_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    traded_value = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    year_high = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    year_low = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    near_week_high = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    near_week_low = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    one_week_ago = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    one_month_ago = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    one_year_ago = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    declines = models.IntegerField(null=True, blank=True)
+    advances = models.IntegerField(null=True, blank=True)
+    unchanged = models.IntegerField(null=True, blank=True)
+    lastest_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    previous_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    change_in_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    average_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    volume_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    underlying_value = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.symbol
+
+
+class LiveOptionChain(BaseModel):
+    symbol = models.CharField(max_length=100)
+    date = models.DateTimeField()
+    pe_strike_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_expiry_date = models.DateField()
+    pe_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_change_in_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_total_traded_volume = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_implied_volatility = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_last_traded_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_change = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_total_buy_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_total_sell_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_bid_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_bid_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_ask_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_ask_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    pe_underlying_value = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_strike_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_expiry_date = models.DateField()
+    ce_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_change_in_open_interest = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_total_traded_volume = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_implied_volatility = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_last_traded_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_change = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_total_buy_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_total_sell_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_bid_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_bid_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_ask_quantity = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_ask_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    ce_underlying_value = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.symbol
+
+
+class LiveEquityDerivative(BaseModel):
+    symbol = models.CharField(max_length=100)
+    date = models.DateTimeField()
+    month = models.CharField(max_length=100)
+    prev_close = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    open_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    high_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    low_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    last_price = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    point_changed = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    percentage_changed = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    is_future = models.BooleanField(default=True)
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.symbol

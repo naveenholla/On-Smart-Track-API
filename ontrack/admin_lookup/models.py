@@ -18,6 +18,19 @@ class Currency(BaseModel):
         return self.name
 
 
+class Setting(BaseModel):
+    key = models.CharField(max_length=50, choices=AdminSettingKey.choices, unique=True)
+    value = models.CharField(max_length=200)
+
+    datapull_manager = SettingPullManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.key
+
+
 # class FieldDataType(BaseModel):
 #     name = models.CharField(max_length=50)
 
@@ -68,74 +81,3 @@ class Currency(BaseModel):
 
 #     def __str__(self):
 #         return self.name
-
-
-# class AccountType(BaseModel):
-#     name = models.CharField(max_length=50)
-#     parent = models.ForeignKey(
-#         "self",
-#         related_name="parent_record",
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#     )
-#     is_financial = models.BooleanField(default=False)
-#     icon = models.CharField(max_length=200, null=True, blank=True)
-#     is_active = models.BooleanField(default=True)
-#     ordinal = models.IntegerField()
-
-#     class Meta(BaseModel.Meta):
-#         ordering = ["-created_at"]
-
-#     def __str__(self):
-#         return self.name
-
-
-# class TransactionType(BaseModel):
-#     name = models.CharField(max_length=50)
-#     parent = models.ForeignKey(
-#         "self",
-#         related_name="parent_record",
-#         on_delete=models.SET_NULL,
-#         null=True,
-#         blank=True,
-#     )
-#     is_expenses = models.BooleanField(null=True)
-#     is_exclude_from_report = models.BooleanField(default=False)
-#     icon = models.CharField(max_length=200, null=True, blank=True)
-#     is_active = models.BooleanField(default=True)
-#     ordinal = models.IntegerField()
-
-#     class Meta(BaseModel.Meta):
-#         ordering = ["-created_at"]
-
-#     def __str__(self):
-#         return self.name
-
-
-# class InterestRate(BaseModel):
-#     account_type = models.ForeignKey(
-#         AccountType, related_name="interest_rates", on_delete=models.CASCADE
-#     )
-#     start_date = models.DateField()
-#     end_date = models.DateField(null=True, blank=True)
-#     imterest_rate = models.DecimalField(max_digits=18, decimal_places=4)
-
-#     class Meta(BaseModel.Meta):
-#         ordering = ["-created_at"]
-
-#     def __str__(self):
-#         return self.account_type
-
-
-class Setting(BaseModel):
-    key = models.CharField(max_length=50, choices=AdminSettingKey.choices, unique=True)
-    value = models.CharField(max_length=200)
-
-    datapull_manager = SettingPullManager()
-
-    class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
-
-    def __str__(self):
-        return self.key

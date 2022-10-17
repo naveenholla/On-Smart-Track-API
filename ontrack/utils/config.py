@@ -30,6 +30,14 @@ class Configurations:
         df.to_json(path, orient="records", compression="infer", index="true")
 
     @staticmethod
+    def clear_cache():
+        Configurations.get_urls_config.cache_clear()
+        Configurations.get_default_values_config.cache_clear()
+        Configurations.get_all_exchanges.cache_clear()
+        Configurations.get_exchange.cache_clear()
+        Configurations.get_exchange_days_by_type.cache_clear()
+
+    @staticmethod
     @lru_cache(1)
     def get_urls_config():
         return Configurations.__get_config("urlconfig")

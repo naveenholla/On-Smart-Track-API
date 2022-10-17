@@ -3,29 +3,9 @@ from unittest import mock
 from ontrack.utils.config import Configurations
 
 
-def test_urls_config_caching():
-    with mock.patch.object(
-        Configurations, "_Configurations__get_config", return_value="value"
-    ) as obj_mock:
-        Configurations.get_urls_config()
-        Configurations.get_urls_config()
-        Configurations.get_urls_config()
-        obj_mock.assert_called_once()
-
-
 def test_urls_config():
     url_config = Configurations.get_urls_config()
     assert "holidays" in url_config
-
-
-def test_get_default_values_config_caching():
-    with mock.patch.object(
-        Configurations, "_Configurations__get_config", return_value="value"
-    ) as obj_mock:
-        Configurations.get_default_values_config()
-        Configurations.get_default_values_config()
-        Configurations.get_default_values_config()
-        obj_mock.assert_called_once()
 
 
 def test_get_default_values_config():
@@ -38,6 +18,30 @@ def test_get_default_values_config():
     assert "default_time_format" in get_default_values_config
     assert "default_date_time_format" in get_default_values_config
     assert "average_days_count" in get_default_values_config
+
+
+def test_urls_config_caching():
+    Configurations.clear_cache()
+
+    with mock.patch.object(
+        Configurations, "_Configurations__get_config", return_value="value"
+    ) as obj_mock:
+        Configurations.get_urls_config()
+        Configurations.get_urls_config()
+        Configurations.get_urls_config()
+        obj_mock.assert_called_once()
+
+
+def test_get_default_values_config_caching():
+    Configurations.clear_cache()
+
+    with mock.patch.object(
+        Configurations, "_Configurations__get_config", return_value="value"
+    ) as obj_mock:
+        Configurations.get_default_values_config()
+        Configurations.get_default_values_config()
+        Configurations.get_default_values_config()
+        obj_mock.assert_called_once()
 
 
 #     from unittest import mock

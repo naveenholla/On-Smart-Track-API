@@ -54,24 +54,28 @@ test_time = time(
 )
 
 
+@pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date_freeze_time():
     date_obj = DateTimeHelper.current_date_time()
     assert date_obj == test_datetime
 
 
+@pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date():
     date_obj = DateTimeHelper.current_date()
     assert date_obj == test_date_obj
 
 
+@pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_time():
     time_obj = DateTimeHelper.current_time()
     assert time_obj == test_time
 
 
+@pytest.mark.unittest
 @pytest.mark.parametrize(
     "input_time_obj",
     [None, test_datetime_2],
@@ -116,5 +120,6 @@ def test_get_future_past_date_week(args, input_time_obj, is_future):
         assert result == expected
 
 
+@pytest.mark.unittest
 def test_set_time_to_date():
     pass

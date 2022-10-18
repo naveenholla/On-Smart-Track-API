@@ -1,13 +1,17 @@
 from unittest import mock
 
+import pytest
+
 from ontrack.utils.config import Configurations
 
 
+@pytest.mark.unittest
 def test_urls_config():
     url_config = Configurations.get_urls_config()
     assert "holidays" in url_config
 
 
+@pytest.mark.unittest
 def test_get_default_values_config():
     get_default_values_config = Configurations.get_default_values_config()
     assert "default_datapull_equity_lookup_pause" in get_default_values_config
@@ -20,6 +24,7 @@ def test_get_default_values_config():
     assert "average_days_count" in get_default_values_config
 
 
+@pytest.mark.unittest
 def test_urls_config_caching():
     Configurations.clear_cache()
 
@@ -32,6 +37,7 @@ def test_urls_config_caching():
         obj_mock.assert_called_once()
 
 
+@pytest.mark.unittest
 def test_get_default_values_config_caching():
     Configurations.clear_cache()
 

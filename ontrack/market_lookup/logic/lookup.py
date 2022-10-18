@@ -1,13 +1,9 @@
-import json
-from urllib.request import urlopen
-
 import pandas as pd
-import yaml
-from django.conf import settings
 from django.db import transaction
 from django.utils.text import slugify
 
 from ontrack.admin_lookup.models import Setting as AdminSetting
+from ontrack.market_lookup.logic.data_pull import DataPull
 from ontrack.utils.base.enum import AdminSettingKey, ExchangeType
 from ontrack.utils.config import Configurations
 from ontrack.utils.context import (
@@ -111,91 +107,50 @@ class LookupDataPullLogic:
         return data
 
     def pull_indices_market_cap(self, record):
-        temp_folder = settings.TEMP_DIR  # temp folder to store files
-
         # get indices details
-        indice_url = record["url"]
         indice_name = str(record["name"])
         indice_symbol = record["symbol"]
         indice_is_sectoral = bool(record["is_sector"])
-        sector_name_file_name = indice_name.replace(" ", "_")
 
-        self.logger.log_debug(f"Started with {sector_name_file_name}, {indice_url}.")
-        with urlopen(indice_url) as webpage:
-            content = (
-                webpage.read()
-                .decode()
-                .replace("'", "||||")
-                .replace("modelDataAvailable(", "[")
-                .replace(");", "]")
-                .replace("label:", '"label":')
-                .replace("label:", '"label":')
-                .replace("file:", '"file":')
+        data_updated = DataPull().pull_indices_market_cap(record)
+
+        try:
+            df = pd.json_normalize(
+                data_updated[0]["groups"],
+                "groups",
+                ["label", "weight", "id"],
+                record_prefix="_",
             )
+            df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
+            df["_label"] = df["_label"].str.rsplit(" ", n=1).str.get(0)
+            df = df.assign(name=indice_name)
+            df = df.assign(indice_symbol=indice_symbol)
+            df = df.assign(is_sector=indice_is_sectoral)
+            df.rename(
+                columns={
+                    "_label": "symbol",
+                    "_weight": "equity_weightage",
+                    "label": "sector_name",
+                    "weight": "sector_weightage",
+                },
+                inplace=True,
+            )  # rename the column name
+        except Exception:
+            # exception will be thrown if there is no nested records
+            df = pd.DataFrame(data_updated[0]["groups"])
+            df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
+            df = df.assign(sector_name=indice_name.replace("_", " "))
+            df = df.assign(name=indice_name)
+            df = df.assign(indice_symbol=indice_symbol)
+            df = df.assign(sector_weightage=100)
+            df = df.assign(is_sector=indice_is_sectoral)
+            df.rename(
+                columns={"label": "symbol", "weight": "equity_weightage"},
+                inplace=True,
+            )  # rename the column name
 
-            url_temp = f"{temp_folder}/{sector_name_file_name}_temp.json"
-
-            with open(url_temp, "w") as file_intermediate:
-                # Writing the replaced data in our
-                # text file
-                file_intermediate.write(
-                    json.dumps(content, ensure_ascii=True, indent=4).replace(
-                        '\\"', '"'
-                    )[1:-1]
-                )
-
-            with open(url_temp) as file_intermediate2:
-                # Writing the replaced data in our
-                # text file
-                data = yaml.safe_load(file_intermediate2)
-
-            with open(url_temp, "w") as file_final:
-                # Writing the replaced data in our
-                # text file
-                file_final.write(str(data).replace("'", '"').replace("||||", "'"))
-
-            with open(url_temp) as file_final2:
-                # Writing the replaced data in our
-                # text file
-                data_updated = json.load(file_final2)
-
-                try:
-                    df = pd.json_normalize(
-                        data_updated[0]["groups"],
-                        "groups",
-                        ["label", "weight", "id"],
-                        record_prefix="_",
-                    )
-                    df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
-                    df["_label"] = df["_label"].str.rsplit(" ", n=1).str.get(0)
-                    df = df.assign(name=indice_name)
-                    df = df.assign(indice_symbol=indice_symbol)
-                    df = df.assign(is_sector=indice_is_sectoral)
-                    df.rename(
-                        columns={
-                            "_label": "symbol",
-                            "_weight": "equity_weightage",
-                            "label": "sector_name",
-                            "weight": "sector_weightage",
-                        },
-                        inplace=True,
-                    )  # rename the column name
-                except Exception:
-                    # exception will be thrown if there is no nested records
-                    df = pd.DataFrame(data_updated[0]["groups"])
-                    df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
-                    df = df.assign(sector_name=indice_name.replace("_", " "))
-                    df = df.assign(name=indice_name)
-                    df = df.assign(indice_symbol=indice_symbol)
-                    df = df.assign(sector_weightage=100)
-                    df = df.assign(is_sector=indice_is_sectoral)
-                    df.rename(
-                        columns={"label": "symbol", "weight": "equity_weightage"},
-                        inplace=True,
-                    )  # rename the column name
-
-                self.logger.log_debug(f"{df.count}")
-                return df
+        self.logger.log_debug(f"{df.count}")
+        return df
 
     @transaction.atomic
     def save_equity_sectors_from_indices(self, data):

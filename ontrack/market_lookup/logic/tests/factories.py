@@ -1,4 +1,3 @@
-from factory import Faker
 from factory.django import DjangoModelFactory
 
 from ontrack.market_lookup.models import Equity, Exchange
@@ -6,8 +5,8 @@ from ontrack.market_lookup.models import Equity, Exchange
 
 class ExchangeFactory(DjangoModelFactory):
 
-    name = Faker("name")
-    symbol = Faker("cryptocurrency_code")
+    name = "NSE"
+    symbol = "nse"
     start_time = "09:15:00"
     end_time = "15:30:00"
     data_refresh_time = "20:00:00"
@@ -27,9 +26,9 @@ class ExchangeFactory(DjangoModelFactory):
 
 class EquityFactory(DjangoModelFactory):
 
-    name = Faker("name")
-    symbol = Faker("cryptocurrency_code")
-    chart_symbol = Faker("cryptocurrency_code")
+    name = "Reliance"
+    symbol = "Reliance"
+    chart_symbol = "Reliance"
     lot_size = 50
     strike_difference = 100
     is_active = True

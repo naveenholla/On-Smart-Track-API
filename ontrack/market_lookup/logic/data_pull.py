@@ -12,6 +12,7 @@ from ontrack.market_lookup.queryset import (
     IndexQuerySet,
 )
 from ontrack.utils.logic import LogicHelper
+from ontrack.utils.numbers import NumberHelper
 
 from ...utils.logger import ApplicationLogger
 
@@ -39,6 +40,14 @@ class PullEquityData:
             self.logger.log_warning("Exchange queyset is null.")
             return None
 
+        exchange = self.exchange_queryset.search_unique_record(exchange_symbol).first()
+
+        if exchange is None:
+            self.logger.log_warning(
+                f"Exchange with symbol '{exchange_symbol}' doesn't exists"
+            )
+            return None
+
         market_cap_records = self.pull_equity_marketlot_data(market_cap_url)
 
         # pull csv containing all the listed equities from web
@@ -48,38 +57,29 @@ class PullEquityData:
 
             # remove extra spaces in the dictionaty keys
             record = {k.strip(): v for (k, v) in record.items()}
-
-            exchange = self.exchange_queryset.search_unique_record(
-                exchange_symbol
-            ).first()
-
-            if exchange is None:
-                self.logger.log_warning(
-                    f"Exchange with symbol '{exchange_symbol}' doesn't exists"
-                )
-                continue
-
-            symbol = record["SYMBOL"]
+            symbol = record["SYMBOL"].strip()
             pk = None
-            lot_size = record["lot_size"] if "lot_size" in record else 0
+            lot_size = 0
             existing_equity = self.equity_queryset.search_unique_record(symbol).first()
             if existing_equity is not None:
                 pk = existing_equity.id
 
-            market_cap_record = [x for x in market_cap_records if x["symbol"] == symbol]
+            market_cap_record = [
+                x for x in market_cap_records if x["symbol"].lower() == symbol.lower()
+            ]
             if len(market_cap_record) > 0:
-                lot_size = market_cap_record[0]["lot_size"]
+                lot_size = NumberHelper.convert_string_to_float(
+                    market_cap_record[0]["lot_size"].strip()
+                )
 
             equity = {}
             equity["id"] = pk
             equity["exchange"] = exchange
-            equity["name"] = record["NAME OF COMPANY"]
+            equity["name"] = record["NAME OF COMPANY"].strip()
             equity["symbol"] = symbol
             equity["lot_size"] = lot_size
-            equity["chart_symbol"] = (
-                record["chart_symbol"] if "chart_symbol" in record else record["symbol"]
-            )
-            equity["slug"] = slugify(f"{exchange_symbol}_{record['symbol']}")
+            equity["chart_symbol"] = symbol
+            equity["slug"] = slugify(f"{exchange_symbol}_{symbol}")
             equity["strike_difference"] = (
                 record["strike_difference"] if "strike_difference" in record else 0
             )
@@ -93,14 +93,15 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
+        data.columns.values[2] = "lot_size"
         market_caps = []
         for _, record in data.iterrows():
 
             # remove extra spaces in the dictionaty keys
             record = {k.strip(): v for (k, v) in record.items()}
             market_cap = {}
-            market_cap["symbol"] = record["SYMBOL"]
-            market_cap["lot_size"] = record[2]
+            market_cap["symbol"] = record["SYMBOL"].strip()
+            market_cap["lot_size"] = record["lot_size"].strip()
 
             market_caps.append(market_cap)
 

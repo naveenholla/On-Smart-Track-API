@@ -10,7 +10,7 @@ class ExchangeQuerySet(models.QuerySet):
         if symbol is None:
             return self.none()
 
-        lookups = Q(symbol=symbol)
+        lookups = Q(symbol__iexact=symbol)
         return self.filter(lookups)
 
 
@@ -19,7 +19,7 @@ class EquityQuerySet(models.QuerySet):
         if symbol is None:
             return self.none()
 
-        lookups = Q(symbol=symbol)
+        lookups = Q(symbol__iexact=symbol)
         return self.filter(lookups)
 
 
@@ -28,7 +28,7 @@ class IndexQuerySet(models.QuerySet):
         if symbol is None:
             return self.none()
 
-        lookups = Q(symbol=symbol)
+        lookups = Q(symbol__iexact=symbol)
         return self.filter(lookups)
 
 
@@ -37,8 +37,8 @@ class EquityIndexQuerySet(models.QuerySet):
         if equity_symbol is None or equity_symbol is None:
             return self.none()
 
-        lookup_equity = Q(equity__symbol=equity_symbol)
-        lookup_index = Q(index__symbol=index_symbol)
+        lookup_equity = Q(equity__symbol__iexact=equity_symbol)
+        lookup_index = Q(index__symbol__iexact=index_symbol)
 
         return self.filter(lookup_equity & lookup_index)
 

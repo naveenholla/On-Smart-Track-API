@@ -5,17 +5,6 @@ from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper
 
 
-class EquityQuerySet(models.QuerySet):
-    def search_unique_record(self, query=None):
-        if query is None:
-            return self.none()
-
-        # lookups = Q(symbol_icontain=query) | Q(name_icontain=query)
-        symbol = str(query["symbol"]).strip()
-        lookups = Q(symbol=symbol)
-        return self.filter(lookups)
-
-
 class EquityEndOfDayQuerySet(models.QuerySet):
     def search_unique_record(self, query=None):
         if query is None:

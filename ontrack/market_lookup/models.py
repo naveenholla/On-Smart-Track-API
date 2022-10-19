@@ -11,21 +11,25 @@ from ontrack.utils.base.enum import (
 )
 from ontrack.utils.base.model import BaseModel
 
-from .manager import MarketExchangePullManager
+from .manager import (
+    EquityIndexPullManager,
+    EquityPullManager,
+    ExchangePullManager,
+    IndexPullManager,
+)
 
 
-class MarketExchange(BaseModel):
-    name = models.CharField(max_length=50, unique=True)
+class Exchange(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    symbol = models.CharField(max_length=50, unique=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     data_refresh_time = models.TimeField(null=True, blank=True)
     time_zone = TimeZoneField(default="Asia/Kolkata", choices_display="WITH_GMT_OFFSET")
 
-    datapull_manager = MarketExchangePullManager()
+    datapull_manager = ExchangePullManager()
 
     class Meta(BaseModel.Meta):
-        verbose_name = "Exchange"
-        verbose_name_plural = "Exchanges"
         ordering = ["-created_at"]
 
     def __str__(self):
@@ -35,7 +39,7 @@ class MarketExchange(BaseModel):
 class MarketDayType(BaseModel):
     name = models.CharField(max_length=50, choices=MarketDayTypeEnum.choices)
     exchange = models.ForeignKey(
-        MarketExchange, related_name="day_types", on_delete=models.CASCADE
+        Exchange, related_name="day_types", on_delete=models.CASCADE
     )
 
     class Meta(BaseModel.Meta):
@@ -145,12 +149,74 @@ class MarketTradingStrategy(BaseModel):
 
 
 class MarketTradingStrategySymbol(BaseModel):
-    symbol = models.CharField(
-        max_length=100
-    )  # List of stocks to be traded under this strategy
+    # List of stocks to be traded under this strategy
+    symbol = models.CharField(max_length=100)
     strategy = models.ForeignKey(
         MarketTradingStrategy, related_name="strategy_symbols", on_delete=models.CASCADE
     )
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.symbol
+
+
+class MarketEntity(BaseModel):
+    name = models.CharField(max_length=200)
+    symbol = models.CharField(max_length=200, unique=True)
+    chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    slug = models.SlugField(blank=True, null=True)
+    lot_size = models.IntegerField(default=0, null=True, blank=True)
+    strike_difference = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta(BaseModel.Meta):
+        abstract = True
+
+    def __str__(self):
+        return self.symbol
+
+
+class Equity(MarketEntity):
+    exchange = models.ForeignKey(
+        Exchange, related_name="equities", on_delete=models.CASCADE
+    )
+
+    datapull_manager = EquityPullManager()
+
+
+# Create your models here.
+class Index(MarketEntity):
+    exchange = models.ForeignKey(
+        Exchange, related_name="indices", on_delete=models.CASCADE
+    )
+
+    ordinal = models.IntegerField()
+    is_sectoral = models.BooleanField(default=False)
+
+    datapull_manager = IndexPullManager()
+
+
+class EquityIndex(BaseModel):
+    index = models.ForeignKey(
+        Index,
+        related_name="indices",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    equity = models.ForeignKey(
+        Equity, related_name="equity_indices", on_delete=models.CASCADE
+    )
+    equity_weightage = models.DecimalField(max_digits=18, decimal_places=4)
+    sector = models.CharField(max_length=100, null=True, blank=True)
+    sector_weightage = models.DecimalField(
+        max_digits=18, decimal_places=4, null=True, blank=True
+    )
+    last_update_date = models.DateField(null=True, blank=True, auto_now=True)
+
+    datapull_manager = EquityIndexPullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

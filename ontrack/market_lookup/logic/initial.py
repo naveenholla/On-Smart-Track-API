@@ -11,7 +11,7 @@ from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
 
-from ..models import MarketDay, MarketDayCategory, MarketDayType, MarketExchange
+from ..models import Exchange, MarketDay, MarketDayCategory, MarketDayType
 
 
 class InitialDataPullLogic:
@@ -32,14 +32,12 @@ class InitialDataPullLogic:
 
             self.logger.log_debug(f"Starting with {exchange_name}.")
 
-            exchange_obj = MarketExchange.datapull_manager.filter(
-                name=exchange_name
-            ).first()
+            exchange_obj = Exchange.datapull_manager.filter(name=exchange_name).first()
 
             if not exchange_obj:
                 self.logger.log_info("Exchange not exists. Creating.")
                 # ALTER SEQUENCE admin_lookup_marketbroker_id_seq RESTART WITH 1
-                exchange_obj = MarketExchange(
+                exchange_obj = Exchange(
                     id=exchange_id,
                     name=exchange_name,
                     start_time=exchange_start_time,

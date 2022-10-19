@@ -1,11 +1,6 @@
-from ontrack.utils.base.manager import EndOfDayPullManagerAbstract, PullManagerAbstarct
+from ontrack.utils.base.manager import EndOfDayPullManagerAbstract
 
-from .queryset import EquityEndOfDayQuerySet, EquityQuerySet
-
-
-class EquityPullManager(PullManagerAbstarct):
-    def get_queryset(self):
-        return EquityQuerySet(self.model, using=self._db)
+from .queryset import EquityEndOfDayQuerySet
 
 
 class EquityEndOfDayPullManager(EndOfDayPullManagerAbstract):

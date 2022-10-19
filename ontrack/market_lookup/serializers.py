@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import MarketDay, MarketDayCategory, MarketDayType, MarketExchange
+from .models import Exchange, MarketDay, MarketDayCategory, MarketDayType
 
 
 class MarketDaySerilizer(serializers.ModelSerializer):
@@ -25,9 +25,9 @@ class MarketDayTypeSerilizer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class MarketExchangeSerilizer(serializers.ModelSerializer):
+class ExchangeSerilizer(serializers.ModelSerializer):
     day_types = MarketDayTypeSerilizer(many=True)
 
     class Meta:
-        model = MarketExchange
+        model = Exchange
         fields = "__all__"

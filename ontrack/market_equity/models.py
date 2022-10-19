@@ -1,31 +1,10 @@
 from django.db import models
 
+from ontrack.market_lookup.models import Equity
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
 
-from ..market_lookup.models import MarketExchange
-from .manager import EquityEndOfDayPullManager, EquityPullManager
-
-
-# Create your models here.
-class Equity(BaseModel):
-    exchange = models.ForeignKey(
-        MarketExchange, related_name="equities", on_delete=models.CASCADE
-    )
-    name = models.CharField(max_length=200)
-    symbol = models.CharField(max_length=200, unique=True)
-    chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
-    slug = models.SlugField(blank=True, null=True)
-    lot_size = models.IntegerField(default=0, null=True, blank=True)
-    strike_difference = models.IntegerField(null=True, blank=True)
-
-    datapull_manager = EquityPullManager()
-
-    class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
-
-    def __str__(self):
-        return self.symbol
+from .manager import EquityEndOfDayPullManager
 
 
 class EquityInsiderTrade(BaseModel):

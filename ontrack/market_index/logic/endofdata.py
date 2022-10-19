@@ -20,7 +20,7 @@ from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper
 from ontrack.utils.string import StringHelper
 
-from ..models import Indice, IndiceEndOfDay
+from ..models import Index, IndexEndOfDay
 
 
 class IndicesDataPullLogic:
@@ -106,21 +106,21 @@ class IndicesDataPullLogic:
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            indice = indices.search_unique_record(record).first()
+            index = indices.search_unique_record(record).first()
 
-            if indice is None:
+            if index is None:
                 self.logger.log_warning(
-                    f"Can't find indice with name [name='{record['name']}',date='{record['date']}']."
+                    f"Can't find index with name [name='{record['name']}',date='{record['date']}']."
                 )
-                # indice = MarketIndicesSector(name=record['name'])
-                # indice.save()
+                # index = MarketIndicesSector(name=record['name'])
+                # index.save()
                 continue
 
             record["date"] = DateTimeHelper.convert_string_to_datetime(
                 record["date"], "%d-%m-%Y"
             )
-            d = IndiceEndOfDay(
-                indice=indice,
+            d = IndexEndOfDay(
+                index=index,
                 open_price=NumberHelper.convert_string_to_float(record["open_price"]),
                 high_price=NumberHelper.convert_string_to_float(record["high_price"]),
                 low_price=NumberHelper.convert_string_to_float(record["low_price"]),
@@ -149,11 +149,11 @@ class IndicesDataPullLogic:
 
             records_to_create.append(d)
 
-        IndiceEndOfDay.datapull_manager.bulk_create_or_update(
+        IndexEndOfDay.datapull_manager.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
-                "indice",
+                "index",
                 "open_price",
                 "high_price",
                 "low_price",
@@ -179,7 +179,7 @@ class IndicesDataPullLogic:
                 self.get_pull_indices_eod_data_task(), days=1
             )
             urls = Configurations.get_urls_config()  # get the urls from configurations
-            indices = Indice.datapull_manager.all()  # get all equities
+            indices = Index.datapull_manager.all()  # get all equities
 
             output = ""
             currentdate = DateTimeHelper.current_date()
@@ -187,7 +187,7 @@ class IndicesDataPullLogic:
             self.logger.log_debug(f"Current Date:{currentdate}")
             self.logger.log_debug(f"Date:{date}")
 
-            IndiceEndOfDay.datapull_manager.delete_records_after_date(
+            IndexEndOfDay.datapull_manager.delete_records_after_date(
                 date=date
             )  # delete all the future records
             while date <= currentdate:

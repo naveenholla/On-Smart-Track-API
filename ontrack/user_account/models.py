@@ -1,7 +1,7 @@
 from django.db import models
 from django_cryptography.fields import encrypt
 
-from ontrack.market_lookup.models import MarketExchange, MarketTradingStrategy
+from ontrack.market_lookup.models import Exchange, MarketTradingStrategy
 from ontrack.user_lookup.models import Account, AccountCheque, TodoTask, TransactionType
 from ontrack.utils.base.enum import (
     DirectionType,
@@ -116,7 +116,7 @@ class StrategyTrade(BaseModel):
         max_length=50, choices=OrderStatusType.choices, null=True, blank=True
     )
     exchange = models.ForeignKey(
-        MarketExchange, related_name="trades", on_delete=models.CASCADE
+        Exchange, related_name="trades", on_delete=models.CASCADE
     )
     symbol = models.CharField(max_length=100)
     symbol_current_market_price = models.DecimalField(

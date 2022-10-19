@@ -17,9 +17,10 @@ from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 
-from ...market_equity.models import Equity, EquityIndice, Indice
-from ..models import MarketExchange
-from ..serializers import MarketExchangeSerilizer
+from ...market_equity.models import Equity, Index
+from ...market_index.models import EquityIndex
+from ..models import Exchange
+from ..serializers import ExchangeSerilizer
 
 
 class LookupDataPullLogic:
@@ -27,10 +28,8 @@ class LookupDataPullLogic:
         self.logger = ApplicationLogger()
 
     def create_lookup_files(self):
-        exchanges = MarketExchange.datapull_manager.all()
-        Configurations.save_exchanges(
-            MarketExchangeSerilizer(exchanges, many=True).data
-        )
+        exchanges = Exchange.datapull_manager.all()
+        Configurations.save_exchanges(ExchangeSerilizer(exchanges, many=True).data)
 
     def can_run_pull_equity_lookup_data_task(self):
         date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
@@ -108,9 +107,9 @@ class LookupDataPullLogic:
 
     def pull_indices_market_cap(self, record):
         # get indices details
-        indice_name = str(record["name"])
-        indice_symbol = record["symbol"]
-        indice_is_sectoral = bool(record["is_sector"])
+        index_name = str(record["name"])
+        index_symbol = record["symbol"]
+        index_is_sectoral = bool(record["is_sector"])
 
         data_updated = DataPull().pull_indices_market_cap(record)
 
@@ -123,9 +122,9 @@ class LookupDataPullLogic:
             )
             df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
             df["_label"] = df["_label"].str.rsplit(" ", n=1).str.get(0)
-            df = df.assign(name=indice_name)
-            df = df.assign(indice_symbol=indice_symbol)
-            df = df.assign(is_sector=indice_is_sectoral)
+            df = df.assign(name=index_name)
+            df = df.assign(index_symbol=index_symbol)
+            df = df.assign(is_sector=index_is_sectoral)
             df.rename(
                 columns={
                     "_label": "symbol",
@@ -139,11 +138,11 @@ class LookupDataPullLogic:
             # exception will be thrown if there is no nested records
             df = pd.DataFrame(data_updated[0]["groups"])
             df["label"] = df["label"].str.rsplit(" ", n=1).str.get(0)
-            df = df.assign(sector_name=indice_name.replace("_", " "))
-            df = df.assign(name=indice_name)
-            df = df.assign(indice_symbol=indice_symbol)
+            df = df.assign(sector_name=index_name.replace("_", " "))
+            df = df.assign(name=index_name)
+            df = df.assign(index_symbol=index_symbol)
             df = df.assign(sector_weightage=100)
-            df = df.assign(is_sector=indice_is_sectoral)
+            df = df.assign(is_sector=index_is_sectoral)
             df.rename(
                 columns={"label": "symbol", "weight": "equity_weightage"},
                 inplace=True,
@@ -155,13 +154,13 @@ class LookupDataPullLogic:
     @transaction.atomic
     def save_equity_sectors_from_indices(self, data):
         equities = Equity.datapull_manager.all()
-        indices = Indice.datapull_manager.all()
+        indices = Index.datapull_manager.all()
 
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            obj = EquityIndice.datapull_manager.search_unique_record(record).first()
-            indice = indices.search_unique_record(record).first()
+            obj = EquityIndex.datapull_manager.search_unique_record(record).first()
+            index = indices.search_unique_record(record).first()
             equity = equities.search_unique_record(record).first()
 
             if equity is None:
@@ -171,17 +170,17 @@ class LookupDataPullLogic:
                 )
                 continue
 
-            if indice is None:
+            if index is None:
                 self.logger.log_warning(
                     f"Can't find sector with name [symbol='{record['symbol']}',"
                     "name='{record['name']}', sector_name='{record['sector_name']},"
-                    " indice_symbol='{record['indice_symbol']}']."
+                    " index_symbol='{record['index_symbol']}']."
                 )
                 continue
 
             if obj is None:
-                d = EquityIndice(
-                    indice=indice,
+                d = EquityIndex(
+                    index=index,
                     equity=equity,
                     equity_weightage=float(record["equity_weightage"]),
                     sector=record["sector_name"],
@@ -191,9 +190,9 @@ class LookupDataPullLogic:
                 )
                 records_to_create.append(d)
             else:
-                d = EquityIndice(
+                d = EquityIndex(
                     id=obj.id,
-                    indice=indice,
+                    index=index,
                     equity=equity,
                     equity_weightage=float(record["equity_weightage"]),
                     sector=record["sector_name"],
@@ -202,11 +201,11 @@ class LookupDataPullLogic:
                 )
                 records_to_update.append(d)
 
-        EquityIndice.datapull_manager.bulk_create_or_update(
+        EquityIndex.datapull_manager.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
-                "indice",
+                "index",
                 "equity",
                 "equity_weightage",
                 "sector",
@@ -230,7 +229,7 @@ class LookupDataPullLogic:
         )  # set 0 to null values
         # records = mergedRecords.to_dict('records') # convert to dictionary
 
-        exchanges = MarketExchange.datapull_manager.all()
+        exchanges = Exchange.datapull_manager.all()
 
         records_to_create = []
         records_to_update = []
@@ -293,12 +292,12 @@ class LookupDataPullLogic:
         )
         return f"{len(records_to_create)} records created, {len(records_to_update)} records updated."
 
-    def pull_and_save_indice_data(self):
+    def pull_and_save_index_data(self):
         urls = Configurations.get_urls_config()
         indices_percentage_urls = urls["indices_percentage"]
         data_marketlot = self.pull_equity_marketlot_data(urls)  # pull market lot size
 
-        exchanges = MarketExchange.datapull_manager.all()
+        exchanges = Exchange.datapull_manager.all()
 
         data_day_list = []
         records_to_create = []
@@ -314,19 +313,19 @@ class LookupDataPullLogic:
                     record["lot_size"] = record_lot["lot_size"]
                     break
 
-            obj = Indice.datapull_manager.search_unique_record(record).first()
+            obj = Index.datapull_manager.search_unique_record(record).first()
             exchange = exchanges.search_unique_record(record).first()
 
-            indice_name = str(record["name"])
-            indice_symbol = record["symbol"]
-            indice_chart_symbol = (
-                record["chart_symbol"] if "chart_symbol" in record else indice_symbol
+            index_name = str(record["name"])
+            index_symbol = record["symbol"]
+            index_chart_symbol = (
+                record["chart_symbol"] if "chart_symbol" in record else index_symbol
             )
-            indice_lot_size = record["lot_size"]
-            indice_ordinal = record["ordinal"]
-            indice_is_sectoral = bool(record["is_sector"])
-            indice_is_active = bool(record["is_active"])
-            indice_slug = slugify(f"{exchange.name}:{record['symbol']}")
+            index_lot_size = record["lot_size"]
+            index_ordinal = record["ordinal"]
+            index_is_sectoral = bool(record["is_sector"])
+            index_is_active = bool(record["is_active"])
+            index_slug = slugify(f"{exchange.name}:{record['symbol']}")
 
             if exchange is None:
                 self.logger.log_warning(
@@ -336,16 +335,16 @@ class LookupDataPullLogic:
                 continue
 
             if obj is None:
-                d = Indice(
+                d = Index(
                     exchange=exchange,
-                    name=indice_name,
-                    symbol=indice_symbol,
-                    chart_symbol=indice_chart_symbol,
-                    lot_size=indice_lot_size,
-                    ordinal=indice_ordinal,
-                    slug=indice_slug,
-                    is_sectoral=indice_is_sectoral,
-                    is_active=indice_is_active,
+                    name=index_name,
+                    symbol=index_symbol,
+                    chart_symbol=index_chart_symbol,
+                    lot_size=index_lot_size,
+                    ordinal=index_ordinal,
+                    slug=index_slug,
+                    is_sectoral=index_is_sectoral,
+                    is_active=index_is_active,
                     strike_difference=0,
                     updated_at=DateTimeHelper.current_date_time(),
                     created_at=DateTimeHelper.current_date_time(),
@@ -353,17 +352,17 @@ class LookupDataPullLogic:
                 records_to_create.append(d)
 
             else:
-                d = Indice(
+                d = Index(
                     id=obj.id,
                     exchange=exchange,
-                    name=indice_name,
-                    symbol=indice_symbol,
-                    chart_symbol=indice_chart_symbol,
-                    lot_size=indice_lot_size,
-                    ordinal=indice_ordinal,
-                    slug=indice_slug,
-                    is_sectoral=indice_is_sectoral,
-                    is_active=indice_is_active,
+                    name=index_name,
+                    symbol=index_symbol,
+                    chart_symbol=index_chart_symbol,
+                    lot_size=index_lot_size,
+                    ordinal=index_ordinal,
+                    slug=index_slug,
+                    is_sectoral=index_is_sectoral,
+                    is_active=index_is_active,
                     strike_difference=0,
                     updated_at=DateTimeHelper.current_date_time(),
                 )
@@ -376,7 +375,7 @@ class LookupDataPullLogic:
                     f"{len(data_day_list)} records found for {record['name']}."
                 )
 
-        Indice.datapull_manager.bulk_create_or_update(
+        Index.datapull_manager.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -399,7 +398,7 @@ class LookupDataPullLogic:
         return concatenate_dataframe
 
     def pull_and_save_indices_percentages(self):
-        records = self.pull_and_save_indice_data()
+        records = self.pull_and_save_index_data()
 
         output = ""
         result = self.save_equity_sectors_from_indices(records)
@@ -408,7 +407,7 @@ class LookupDataPullLogic:
         return output
 
     def delete_old_records(self):
-        EquityIndice.datapull_manager.delete_old_records()
+        EquityIndex.datapull_manager.delete_old_records()
 
     def execute_equity_lookup_data_task(self):
         try:

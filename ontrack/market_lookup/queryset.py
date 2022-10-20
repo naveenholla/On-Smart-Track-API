@@ -6,7 +6,7 @@ from ontrack.utils.datetime import DateTimeHelper
 
 
 class ExchangeQuerySet(models.QuerySet):
-    def search_unique_record(self, symbol=None):
+    def unique_search(self, symbol=None):
         if symbol is None:
             return self.none()
 
@@ -15,7 +15,7 @@ class ExchangeQuerySet(models.QuerySet):
 
 
 class EquityQuerySet(models.QuerySet):
-    def search_unique_record(self, symbol=None):
+    def unique_search(self, symbol=None):
         if symbol is None:
             return self.none()
 
@@ -24,7 +24,7 @@ class EquityQuerySet(models.QuerySet):
 
 
 class IndexQuerySet(models.QuerySet):
-    def search_unique_record(self, symbol=None):
+    def unique_search(self, symbol=None):
         if symbol is None:
             return self.none()
 
@@ -33,7 +33,7 @@ class IndexQuerySet(models.QuerySet):
 
 
 class EquityIndexQuerySet(models.QuerySet):
-    def search_unique_record(self, index_symbol=None, equity_symbol=None):
+    def unique_search(self, index_symbol=None, equity_symbol=None):
         if equity_symbol is None or equity_symbol is None:
             return self.none()
 

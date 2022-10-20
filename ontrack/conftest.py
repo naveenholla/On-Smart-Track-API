@@ -1,7 +1,5 @@
 import pytest
 
-from ontrack.market_lookup.logic.tests.factories import EquityFactory, ExchangeFactory
-from ontrack.market_lookup.models import Equity, Exchange
 from ontrack.users.models import User
 from ontrack.users.tests.factories import UserFactory
 
@@ -14,13 +12,3 @@ def media_storage(settings, tmpdir):
 @pytest.fixture
 def user(db) -> User:
     return UserFactory()
-
-
-@pytest.fixture
-def exchange_fixture(db) -> Exchange:
-    return ExchangeFactory()
-
-
-@pytest.fixture
-def equity_fixture(db) -> Equity:
-    return EquityFactory()

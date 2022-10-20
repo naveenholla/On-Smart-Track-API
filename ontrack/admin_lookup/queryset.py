@@ -3,7 +3,7 @@ from django.db.models import Q
 
 
 class SettingQuerySet(models.QuerySet):
-    def search_unique_record(self, query=None):
+    def unique_search(self, query=None):
         if query is None:
             return self.none()
 

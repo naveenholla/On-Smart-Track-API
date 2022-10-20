@@ -110,7 +110,7 @@ class EquityDataPullLogic:
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            equity = equities.search_unique_record(record).first()
+            equity = equities.unique_search(record).first()
 
             if equity is None:
                 self.logger.log_warning(
@@ -133,26 +133,22 @@ class EquityDataPullLogic:
             )
             d = EquityEndOfDay(
                 equity=equity,
-                prev_close=NumberHelper.convert_string_to_float(record["prev_close"]),
-                open_price=NumberHelper.convert_string_to_float(record["open_price"]),
-                high_price=NumberHelper.convert_string_to_float(record["high_price"]),
-                low_price=NumberHelper.convert_string_to_float(record["low_price"]),
-                last_price=NumberHelper.convert_string_to_float(record["last_price"]),
-                close_price=NumberHelper.convert_string_to_float(record["close_price"]),
-                avg_price=NumberHelper.convert_string_to_float(record["avg_price"]),
-                traded_quantity=NumberHelper.convert_string_to_float(
-                    record["traded_quantity"]
-                ),
-                turn_overs_in_lacs=NumberHelper.convert_string_to_float(
+                prev_close=NumberHelper.str_to_float(record["prev_close"]),
+                open_price=NumberHelper.str_to_float(record["open_price"]),
+                high_price=NumberHelper.str_to_float(record["high_price"]),
+                low_price=NumberHelper.str_to_float(record["low_price"]),
+                last_price=NumberHelper.str_to_float(record["last_price"]),
+                close_price=NumberHelper.str_to_float(record["close_price"]),
+                avg_price=NumberHelper.str_to_float(record["avg_price"]),
+                traded_quantity=NumberHelper.str_to_float(record["traded_quantity"]),
+                turn_overs_in_lacs=NumberHelper.str_to_float(
                     record["turn_overs_in_lacs"]
                 ),
-                number_of_trades=NumberHelper.convert_string_to_float(
-                    record["number_of_trades"]
-                ),
-                delivery_quantity=NumberHelper.convert_string_to_float(
+                number_of_trades=NumberHelper.str_to_float(record["number_of_trades"]),
+                delivery_quantity=NumberHelper.str_to_float(
                     record["delivery_quantity"]
                 ),
-                delivery_percentage=NumberHelper.convert_string_to_float(
+                delivery_percentage=NumberHelper.str_to_float(
                     record["delivery_percentage"]
                 ),
                 date=record["date"],

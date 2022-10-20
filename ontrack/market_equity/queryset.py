@@ -6,7 +6,7 @@ from ontrack.utils.datetime import DateTimeHelper
 
 
 class EquityEndOfDayQuerySet(models.QuerySet):
-    def search_unique_record(self, query=None):
+    def unique_search(self, query=None):
         if query is None:
             return self.none()
 

@@ -2,8 +2,8 @@ from django.db import models
 
 
 class PullManagerAbstarct(models.Manager):
-    def search_unique_record(self, query):
-        return self.get_queryset().search_unique_record(query=query)
+    def unique_search(self, query):
+        return self.get_queryset().unique_search(query=query)
 
     def bulk_create_or_update(
         self, records_to_create, records_to_update, fields_to_update

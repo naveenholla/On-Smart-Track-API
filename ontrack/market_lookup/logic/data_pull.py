@@ -20,70 +20,67 @@ from ...utils.logger import ApplicationLogger
 class PullEquityData:
     def __init__(
         self,
-        exchange_queryset: ExchangeQuerySet = None,
-        equity_queryset: EquityQuerySet = None,
+        exchange_qs: ExchangeQuerySet,
+        equity_qs: EquityQuerySet,
+        equity_listing_url: str,
+        market_cap_url: str,
+        exchange_symbol: str,
     ):
         self.logger = ApplicationLogger()
-        self.exchange_queryset = exchange_queryset
-        self.equity_queryset = equity_queryset
+        self.exchange_qs = exchange_qs
+        self.equity_qs = equity_qs
+        self.market_cap_url = market_cap_url
+        self.equity_listing_url = equity_listing_url
+        self.exchange_symbol = exchange_symbol
 
-    def pull_and_parse_equity_data(
-        self, exchange_symbol: str, url: str, market_cap_url: str
-    ):
-        self.logger.log_debug(f"Started with {url}.")
+    def parse_equity_data(self, record):
+        # remove extra spaces in the dictionaty keys
+        record = {k.strip(): v for (k, v) in record.items()}
+        symbol = record["SYMBOL"].strip()
+        pk = None
+        lot_size = 0
+        existing_equity = self.equity_qs.unique_search(symbol).first()
+        if existing_equity is not None:
+            pk = existing_equity.id
 
-        if url is None or market_cap_url is None:
-            self.logger.log_debug("url and market_cap_url is required.")
-            return None
+        market_cap_record = [
+            x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
+        ]
+        if len(market_cap_record) > 0:
+            lot_size_str = market_cap_record[0]["lot_size"].strip()
+            lot_size = NumberHelper.str_to_float(lot_size_str)
 
-        if self.exchange_queryset is None:
-            self.logger.log_warning("Exchange queyset is null.")
-            return None
+        equity = {}
+        equity["id"] = pk
+        equity["exchange"] = self.exchange
+        equity["name"] = record["NAME OF COMPANY"].strip()
+        equity["symbol"] = symbol
+        equity["lot_size"] = lot_size
+        equity["chart_symbol"] = symbol
+        equity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
+        equity["strike_difference"] = (
+            record["strike_difference"] if "strike_difference" in record else 0
+        )
 
-        exchange = self.exchange_queryset.search_unique_record(exchange_symbol).first()
+        return equity
 
-        if exchange is None:
+    def pull_and_parse_equity_data(self):
+        self.logger.log_debug(f"Started with {self.equity_listing_url}.")
+
+        self.market_cap_records = self.pull_equity_marketlot_data(self.market_cap_url)
+        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+
+        if self.exchange is None:
             self.logger.log_warning(
-                f"Exchange with symbol '{exchange_symbol}' doesn't exists"
+                f"Exchange with symbol '{self.exchange_symbol}' doesn't exists"
             )
             return None
-
-        market_cap_records = self.pull_equity_marketlot_data(market_cap_url)
 
         # pull csv containing all the listed equities from web
-        data = LogicHelper.reading_csv_pandas_web(url=url)
+        data = LogicHelper.reading_csv_pandas_web(url=self.equity_listing_url)
         equities = []
         for _, record in data.iterrows():
-
-            # remove extra spaces in the dictionaty keys
-            record = {k.strip(): v for (k, v) in record.items()}
-            symbol = record["SYMBOL"].strip()
-            pk = None
-            lot_size = 0
-            existing_equity = self.equity_queryset.search_unique_record(symbol).first()
-            if existing_equity is not None:
-                pk = existing_equity.id
-
-            market_cap_record = [
-                x for x in market_cap_records if x["symbol"].lower() == symbol.lower()
-            ]
-            if len(market_cap_record) > 0:
-                lot_size = NumberHelper.convert_string_to_float(
-                    market_cap_record[0]["lot_size"].strip()
-                )
-
-            equity = {}
-            equity["id"] = pk
-            equity["exchange"] = exchange
-            equity["name"] = record["NAME OF COMPANY"].strip()
-            equity["symbol"] = symbol
-            equity["lot_size"] = lot_size
-            equity["chart_symbol"] = symbol
-            equity["slug"] = slugify(f"{exchange_symbol}_{symbol}")
-            equity["strike_difference"] = (
-                record["strike_difference"] if "strike_difference" in record else 0
-            )
-
+            equity = self.parse_equity_data(record)
             equities.append(equity)
 
         return equities
@@ -111,22 +108,22 @@ class PullEquityData:
 class PullIndexData:
     def __init__(
         self,
-        exchange_queryset: ExchangeQuerySet = None,
-        index_queryset: IndexQuerySet = None,
+        exchange_qs: ExchangeQuerySet = None,
+        index_qs: IndexQuerySet = None,
     ):
         self.logger = ApplicationLogger()
-        self.exchange_queryset = exchange_queryset
-        self.index_queryset = index_queryset
+        self.exchange_qs = exchange_qs
+        self.index_qs = index_qs
 
     def pull_index_marketlot_data(self, url: str):
         return PullEquityData().pull_equity_marketlot_data(url)
 
     def parse_index_data(self, exchange_symbol: str, record: dict, market_cap_url: str):
-        if self.exchange_queryset is None:
+        if self.exchange_qs is None:
             self.logger.log_warning("Exchange queyset is null.")
             return None
 
-        exchange = self.exchange_queryset.search_unique_record(exchange_symbol).first()
+        exchange = self.exchange_qs.unique_search(exchange_symbol).first()
         if exchange is None:
             self.logger.log_warning(
                 f"Exchange with symbol '{exchange_symbol}' doesn't exists"
@@ -138,7 +135,7 @@ class PullIndexData:
         symbol = record["symbol"]
         pk = None
         lot_size = record["lot_size"] if "lot_size" in record else 0
-        existing_index = self.index_queryset.search_unique_record(symbol).first()
+        existing_index = self.index_qs.unique_search(symbol).first()
         if existing_index is not None:
             pk = existing_index.id
 
@@ -169,14 +166,14 @@ class PullIndexData:
 class PullEquityIndexDataPull:
     def __init__(
         self,
-        exchange_queryset: ExchangeQuerySet = None,
-        index_queryset: IndexQuerySet = None,
-        equity_queryset: EquityQuerySet = None,
+        exchange_qs: ExchangeQuerySet = None,
+        index_qs: IndexQuerySet = None,
+        equity_qs: EquityQuerySet = None,
     ):
         self.logger = ApplicationLogger()
-        self.exchange_queryset = exchange_queryset
-        self.index_queryset = index_queryset
-        self.equity_queryset = equity_queryset
+        self.exchange_qs = exchange_qs
+        self.index_qs = index_qs
+        self.equity_qs = equity_qs
 
     def __get_name_from_weightage_label(
         self, label: str, delimitor: str = " ", maxsplit=1
@@ -189,15 +186,15 @@ class PullEquityIndexDataPull:
         self, index_symbol: str, record: dict, parent_record: dict = None
     ) -> dict:
 
-        if self.index_queryset is None:
+        if self.index_qs is None:
             self.logger.log_warning("Index queyset is null.")
             return None
 
-        if self.equity_queryset is None:
+        if self.equity_qs is None:
             self.logger.log_warning("Equity queyset is null.")
             return None
 
-        index = self.index_queryset.search_unique_record(index_symbol).first()
+        index = self.index_qs.unique_search(index_symbol).first()
         if index is None:
             self.logger.log_warning(
                 f"Index with symbol '{index_symbol}' doesn't exists"
@@ -205,7 +202,7 @@ class PullEquityIndexDataPull:
             return None
 
         equity_symbol = self.__get_name_from_weightage_label(record["label"])
-        equity = self.equity_queryset.search_unique_record(equity_symbol).first()
+        equity = self.equity_qs.unique_search(equity_symbol).first()
         if equity is None:
             self.logger.log_warning(
                 f"Equity with symbol '{equity_symbol}' doesn't exists"

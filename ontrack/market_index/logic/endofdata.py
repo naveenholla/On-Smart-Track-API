@@ -106,7 +106,7 @@ class IndicesDataPullLogic:
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            index = indices.search_unique_record(record).first()
+            index = indices.unique_search(record).first()
 
             if index is None:
                 self.logger.log_warning(
@@ -121,27 +121,19 @@ class IndicesDataPullLogic:
             )
             d = IndexEndOfDay(
                 index=index,
-                open_price=NumberHelper.convert_string_to_float(record["open_price"]),
-                high_price=NumberHelper.convert_string_to_float(record["high_price"]),
-                low_price=NumberHelper.convert_string_to_float(record["low_price"]),
-                close_price=NumberHelper.convert_string_to_float(record["close_price"]),
-                point_changed=NumberHelper.convert_string_to_float(
-                    record["point_changed"]
-                ),
-                percentage_changed=NumberHelper.convert_string_to_float(
+                open_price=NumberHelper.str_to_float(record["open_price"]),
+                high_price=NumberHelper.str_to_float(record["high_price"]),
+                low_price=NumberHelper.str_to_float(record["low_price"]),
+                close_price=NumberHelper.str_to_float(record["close_price"]),
+                point_changed=NumberHelper.str_to_float(record["point_changed"]),
+                percentage_changed=NumberHelper.str_to_float(
                     record["percentage_changed"]
                 ),
-                traded_quantity=NumberHelper.convert_string_to_float(
-                    record["traded_quantity"]
-                ),
-                turn_overs_in_cr=NumberHelper.convert_string_to_float(
-                    record["turn_overs_in_cr"]
-                ),
-                index_pe=NumberHelper.convert_string_to_float(record["index_pe"]),
-                index_pb=NumberHelper.convert_string_to_float(record["index_pb"]),
-                index_div_yield=NumberHelper.convert_string_to_float(
-                    record["index_div_yield"]
-                ),
+                traded_quantity=NumberHelper.str_to_float(record["traded_quantity"]),
+                turn_overs_in_cr=NumberHelper.str_to_float(record["turn_overs_in_cr"]),
+                index_pe=NumberHelper.str_to_float(record["index_pe"]),
+                index_pb=NumberHelper.str_to_float(record["index_pb"]),
+                index_div_yield=NumberHelper.str_to_float(record["index_div_yield"]),
                 date=record["date"],
                 updated_at=DateTimeHelper.current_date_time(),
                 created_at=DateTimeHelper.current_date_time(),

@@ -25,7 +25,7 @@ class NumberHelper:
             return inputPrice + (nearestMultiple - remainder)
 
     @staticmethod
-    def convert_string_to_float(value):
+    def str_to_float(value):
         if value is None:
             return 0.00
 

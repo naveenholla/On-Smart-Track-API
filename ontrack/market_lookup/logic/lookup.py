@@ -159,9 +159,9 @@ class LookupDataPullLogic:
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            obj = EquityIndex.datapull_manager.search_unique_record(record).first()
-            index = indices.search_unique_record(record).first()
-            equity = equities.search_unique_record(record).first()
+            obj = EquityIndex.datapull_manager.unique_search(record).first()
+            index = indices.unique_search(record).first()
+            equity = equities.unique_search(record).first()
 
             if equity is None:
                 self.logger.log_warning(
@@ -234,8 +234,8 @@ class LookupDataPullLogic:
         records_to_create = []
         records_to_update = []
         for _, record in mergedRecords.iterrows():
-            obj = Equity.datapull_manager.search_unique_record(record).first()
-            exchange = exchanges.search_unique_record(record).first()
+            obj = Equity.datapull_manager.unique_search(record).first()
+            exchange = exchanges.unique_search(record).first()
 
             if exchange is None:
                 self.logger.log_warning(
@@ -313,8 +313,8 @@ class LookupDataPullLogic:
                     record["lot_size"] = record_lot["lot_size"]
                     break
 
-            obj = Index.datapull_manager.search_unique_record(record).first()
-            exchange = exchanges.search_unique_record(record).first()
+            obj = Index.datapull_manager.unique_search(record).first()
+            exchange = exchanges.unique_search(record).first()
 
             index_name = str(record["name"])
             index_symbol = record["symbol"]

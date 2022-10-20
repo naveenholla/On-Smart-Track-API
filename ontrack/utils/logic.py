@@ -23,10 +23,8 @@ class LogicHelper:
         # and add primary keys to the objects if they do
         records = [
             {
-                "id": database_entity.datapull_manager.search_unique_record(record)
-                .first()
-                .id
-                if database_entity.datapull_manager.search_unique_record(record).first()
+                "id": database_entity.datapull_manager.unique_search(record).first().id
+                if database_entity.datapull_manager.unique_search(record).first()
                 is not None
                 else None,
                 **record,

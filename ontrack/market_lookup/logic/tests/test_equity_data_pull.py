@@ -1,64 +1,55 @@
+import pytest
+
 from ontrack.market_lookup.logic.data_pull import PullEquityData
-from ontrack.market_lookup.logic.tests.factories import EquityFactory, ExchangeFactory
 from ontrack.market_lookup.models import Equity, Exchange
 from ontrack.utils.config import Configurations
 
 
 class TestPullEquityData:
-    def test_pull_and_parse_equity_data_exchange_None(self):
-        pull_equity_obj = PullEquityData()
-        result = pull_equity_obj.pull_and_parse_equity_data(
-            None, "Url", "Market Cap Url"
-        )
+    @pytest.fixture(autouse=True)
+    def injector(self, exchange_fixture, equity_fixture):
+        self.exchange_fixture = exchange_fixture
+        self.equity_fixture = equity_fixture
+
+    @pytest.fixture
+    def equity_data_fixture(self):
+        def _method(exchange_symbol):
+            exchange_queryset = Exchange.datapull_manager.all()
+            equity_queryset = Equity.datapull_manager.all()
+            assert exchange_queryset.count() == 1
+
+            urls = Configurations.get_urls_config()
+            listed_equities = urls["listed_equities"]
+            fo_marketlot = urls["fo_marketlot"]
+
+            pull_equity_obj = PullEquityData(
+                exchange_queryset,
+                equity_queryset,
+                listed_equities,
+                fo_marketlot,
+                exchange_symbol,
+            )
+            return pull_equity_obj.pull_and_parse_equity_data()
+
+        return _method
+
+    def test_pull_and_parse_equity_data_invalid(self, equity_data_fixture):
+        result = equity_data_fixture("Exchange-not-Exists")
         assert result is None
 
-    def test_pull_and_parse_equity_data_url_None(self):
-        pull_equity_obj = PullEquityData()
-        result = pull_equity_obj.pull_and_parse_equity_data(
-            "Exchange", None, "Market Cap Url"
-        )
-        assert result is None
+    def test_pull_and_parse_equity_data(self, equity_data_fixture):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
 
-    def test_pull_and_parse_equity_data_market_url_none(self):
-        pull_equity_obj = PullEquityData()
-        result = pull_equity_obj.pull_and_parse_equity_data("Exchange", "Url", None)
-        assert result is None
-
-    def test_pull_and_parse_equity_data_Exchange_Not_Exists(
-        self, equity_fixture: EquityFactory, exchange_fixture: ExchangeFactory
-    ):
-        exchange_queryset = Exchange.datapull_manager.all()
-        assert exchange_queryset.count() == 1
-
-        pull_equity_obj = PullEquityData(exchange_queryset)
-        result = pull_equity_obj.pull_and_parse_equity_data(
-            "Exchange-not-Exists", "Url", None
-        )
-        assert result is None
-
-    def test_pull_and_parse_equity_data_Exchange(
-        self, equity_fixture: EquityFactory, exchange_fixture: ExchangeFactory
-    ):
-        exchange_queryset = Exchange.datapull_manager.all()
-        equity_queryset = Equity.datapull_manager.all()
-        assert exchange_queryset.count() == 1
-
-        urls = Configurations.get_urls_config()
-        listed_equities = urls["listed_equities"]
-        fo_marketlot = urls["fo_marketlot"]
-
-        pull_equity_obj = PullEquityData(exchange_queryset, equity_queryset)
-        result = pull_equity_obj.pull_and_parse_equity_data(
-            exchange_fixture.symbol, listed_equities, fo_marketlot
-        )
+        result = equity_data_fixture(self.exchange_fixture.symbol)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]
         stock = [x for x in result if x["symbol"].lower() == "hdfcbank"][0]
-        stock2 = [
-            x for x in result if x["symbol"].lower() == equity_fixture.symbol.lower()
-        ][0]
+
+        symbol = self.equity_fixture.symbol.lower()
+        stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
 
         assert len(stocks_with_lot_size) > 150
         assert stock["lot_size"] > 0
-        assert stock2["id"] == equity_fixture.pk
+        assert stock2["id"] == self.equity_fixture.pk

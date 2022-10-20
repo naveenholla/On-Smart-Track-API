@@ -225,7 +225,7 @@ class PullEquityIndexDataPull:
 
         return dict_record
 
-    def pull_indices_market_cap(self, record: dict) -> dict | None:
+    def pull_indices_market_cap(self, record: dict):
         temp_folder = settings.TEMP_DIR  # temp folder to store files
 
         if "url" not in record:

@@ -1,48 +1,27 @@
 import pytest
 
 from ontrack.market.data.common import CommonDataPull
-from ontrack.market.data.equity import PullEquityData
 from ontrack.market.models.lookup import Equity, Exchange
-from ontrack.utils.config import Configurations
 
 
 class TestPullEquityData:
     @pytest.fixture(autouse=True)
-    def injector(self, exchange_fixture, equity_fixture):
+    def injector(self, exchange_fixture, equity_fixture, equity_data_fixture):
         self.exchange_fixture = exchange_fixture
         self.equity_fixture = equity_fixture
+        self.equity_data_fixture = equity_data_fixture
         self.exchange_queryset = Exchange.datapull_manager.all()
         self.equity_queryset = Equity.datapull_manager.get_queryset()
 
-    @pytest.fixture
-    def equity_data_fixture(self):
-        def _method(exchange_symbol):
-            assert self.exchange_queryset.count() == 1
-
-            urls = Configurations.get_urls_config()
-            listed_equities = urls["listed_equities"]
-            fo_marketlot = urls["fo_marketlot"]
-
-            pull_equity_obj = PullEquityData(
-                self.exchange_queryset,
-                self.equity_queryset,
-                listed_equities,
-                fo_marketlot,
-                exchange_symbol,
-            )
-            return pull_equity_obj.pull_and_parse_equity_data()
-
-        return _method
-
-    def test_pull_and_parse_equity_data_invalid(self, equity_data_fixture):
-        result = equity_data_fixture("Exchange-not-Exists")
+    def test_pull_and_parse_equity_data_invalid(self):
+        result = self.equity_data_fixture("Exchange-not-Exists")
         assert result is None
 
-    def test_pull_and_parse_equity_data(self, equity_data_fixture):
+    def test_pull_and_parse_equity_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = equity_data_fixture(self.exchange_fixture.symbol)
+        result = self.equity_data_fixture(self.exchange_fixture.symbol)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]

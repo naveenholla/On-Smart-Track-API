@@ -12,7 +12,6 @@ from ontrack.market.querysets.lookup import (
     IndexQuerySet,
 )
 from ontrack.utils.logger import ApplicationLogger
-from ontrack.utils.numbers import NumberHelper
 
 
 class PullEquityIndexDataPull:
@@ -39,7 +38,7 @@ class PullEquityIndexDataPull:
     ) -> dict:
 
         equity_symbol = self.__get_name_from_label(record["label"])
-        weight = NumberHelper.str_to_float(record["weight"].strip())
+        weight = record["weight"]
 
         index = self.index_qs.unique_search(index_symbol).first()
         if index is None:
@@ -70,7 +69,7 @@ class PullEquityIndexDataPull:
 
         if parent is not None:
             label = self.__get_name_from_label(parent["label"])
-            weight = NumberHelper.str_to_float(parent["weight"].strip())
+            weight = parent["weight"]
             entity["sector"] = label
             entity["sector_weightage"] = weight
 

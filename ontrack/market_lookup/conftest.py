@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.market_lookup.logic.tests.factories import EquityFactory, ExchangeFactory
+from ontrack.market_lookup.data.tests.factories import EquityFactory, ExchangeFactory
 from ontrack.market_lookup.models import Equity, Exchange
 
 

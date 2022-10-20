@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 
 
 class TestUserAdmin:

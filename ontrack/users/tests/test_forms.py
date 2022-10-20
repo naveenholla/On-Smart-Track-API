@@ -4,7 +4,7 @@ Module for all Form Tests.
 from django.utils.translation import gettext_lazy as _
 
 from ontrack.users.forms import UserAdminCreationForm
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 
 
 class TestUserAdminCreationForm:

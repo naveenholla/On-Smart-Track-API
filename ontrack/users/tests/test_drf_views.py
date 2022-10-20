@@ -1,7 +1,7 @@
 from django.test import RequestFactory
 
 from ontrack.users.api.views import UserViewSet
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 
 
 class TestUserViewSet:

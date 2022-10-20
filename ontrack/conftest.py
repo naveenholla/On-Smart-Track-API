@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 from ontrack.users.tests.factories import UserFactory
 
 

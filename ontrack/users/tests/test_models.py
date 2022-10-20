@@ -1,4 +1,4 @@
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 
 
 def test_user_get_absolute_url(user: User):

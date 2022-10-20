@@ -4,6 +4,18 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 from ontrack.users.forms import UserAdminChangeForm, UserAdminCreationForm
+from ontrack.users.models.lookup import (
+    Account,
+    AccountCheque,
+    AccountInterestRate,
+    AccountType,
+    DematAccount,
+    InterestRate,
+    Person,
+    TodoFolder,
+    TodoTask,
+    TransactionType,
+)
 
 User = get_user_model()
 
@@ -32,3 +44,18 @@ class UserAdmin(auth_admin.UserAdmin):
     )
     list_display = ["username", "name", "is_superuser"]
     search_fields = ["name"]
+
+
+# Register your models here.
+
+
+admin.site.register(AccountType)
+admin.site.register(TransactionType)
+admin.site.register(InterestRate)
+admin.site.register(Person)
+admin.site.register(Account)
+admin.site.register(DematAccount)
+admin.site.register(AccountInterestRate)
+admin.site.register(AccountCheque)
+admin.site.register(TodoFolder)
+admin.site.register(TodoTask)

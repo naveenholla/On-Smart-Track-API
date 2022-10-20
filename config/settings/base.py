@@ -81,15 +81,8 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "ontrack.admin_lookup",
-    "ontrack.market_equity",
-    "ontrack.market_index",
-    "ontrack.market_lookup",
-    "ontrack.market_participant",
-    "ontrack.user_account",
-    "ontrack.user_event",
-    "ontrack.user_lookup",
-    "ontrack.user_trading",
+    "ontrack.lookup",
+    "ontrack.market",
     "ontrack.users",
     # Your stuff: custom apps go here
 ]

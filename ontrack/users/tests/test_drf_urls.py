@@ -1,6 +1,6 @@
 from django.urls import resolve, reverse
 
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 
 
 def test_user_detail(user: User):

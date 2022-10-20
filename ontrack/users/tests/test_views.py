@@ -9,7 +9,7 @@ from django.test import RequestFactory
 from django.urls import reverse
 
 from ontrack.users.forms import UserAdminChangeForm
-from ontrack.users.models import User
+from ontrack.users.models.user import User
 from ontrack.users.tests.factories import UserFactory
 from ontrack.users.views import UserRedirectView, UserUpdateView, user_detail_view
 

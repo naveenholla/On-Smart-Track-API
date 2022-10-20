@@ -6,12 +6,13 @@ import yaml
 from django.conf import settings
 
 from ontrack.market.querysets.lookup import (
+    EquityIndexQuerySet,
     EquityQuerySet,
     ExchangeQuerySet,
     IndexQuerySet,
 )
-
-from ...utils.logger import ApplicationLogger
+from ontrack.utils.logger import ApplicationLogger
+from ontrack.utils.numbers import NumberHelper
 
 
 class PullEquityIndexDataPull:
@@ -20,30 +21,25 @@ class PullEquityIndexDataPull:
         exchange_qs: ExchangeQuerySet = None,
         index_qs: IndexQuerySet = None,
         equity_qs: EquityQuerySet = None,
+        equityindex_qs: EquityIndexQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.index_qs = index_qs
         self.equity_qs = equity_qs
+        self.equityindex_qs = equityindex_qs
 
-    def __get_name_from_weightage_label(
-        self, label: str, delimitor: str = " ", maxsplit=1
-    ) -> str:
+    def __get_name_from_label(self, label: str) -> str:
         # remove only the last instance of space
-        result = label.rsplit(delimitor, maxsplit)
+        result = label.rsplit(" ", 1)
         return result[0].strip()
 
-    def __process_equity_index_record(
-        self, index_symbol: str, record: dict, parent_record: dict = None
+    def __process_record(
+        self, index_symbol: str, record: dict, parent: dict = None
     ) -> dict:
 
-        if self.index_qs is None:
-            self.logger.log_warning("Index queyset is null.")
-            return None
-
-        if self.equity_qs is None:
-            self.logger.log_warning("Equity queyset is null.")
-            return None
+        equity_symbol = self.__get_name_from_label(record["label"])
+        weight = NumberHelper.str_to_float(record["weight"].strip())
 
         index = self.index_qs.unique_search(index_symbol).first()
         if index is None:
@@ -52,7 +48,6 @@ class PullEquityIndexDataPull:
             )
             return None
 
-        equity_symbol = self.__get_name_from_weightage_label(record["label"])
         equity = self.equity_qs.unique_search(equity_symbol).first()
         if equity is None:
             self.logger.log_warning(
@@ -60,18 +55,26 @@ class PullEquityIndexDataPull:
             )
             return None
 
-        dict_record = {}
-        dict_record["index"] = index
-        dict_record["equity"] = equity
-        dict_record["equity_weightage"] = record["weight"]
+        pk = None
+        existing_entity = self.equityindex_qs.unique_search(
+            index_symbol, equity_symbol
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
 
-        if parent_record is not None:
-            dict_record["sector"] = self.__get_name_from_weightage_label(
-                parent_record["label"]
-            )
-            dict_record["sector_weightage"] = record["weight"]
+        entity = {}
+        entity["id"] = pk
+        entity["index"] = index
+        entity["equity"] = equity
+        entity["equity_weightage"] = weight
 
-        return dict_record
+        if parent is not None:
+            label = self.__get_name_from_label(parent["label"])
+            weight = NumberHelper.str_to_float(parent["weight"].strip())
+            entity["sector"] = label
+            entity["sector_weightage"] = weight
+
+        return entity
 
     def pull_indices_market_cap(self, record: dict):
         temp_folder = settings.TEMP_DIR  # temp folder to store files
@@ -125,25 +128,21 @@ class PullEquityIndexDataPull:
                 return json.load(file_final2)
 
     def parse_indices_market_cap(self, index_name: str, record: dict) -> array:
-        equities = []
+        entities = []
 
-        for outer_group in record["groups"]:
+        for ogroup in record["groups"]:
 
             # remove extra spaces in the dictionaty keys
             record = {k.strip(): v for (k, v) in record.items()}
 
-            if "groups" in outer_group:
-                for inner_group in outer_group["groups"]:
-                    equity = self.__process_equity_index_record(
-                        index_name, inner_group, outer_group
-                    )
-                    if equity is not None:
-                        equities.append(equity)
+            if "groups" in ogroup:
+                for igroup in ogroup["groups"]:
+                    entity = self.__process_record(index_name, igroup, ogroup)
+                    if entity is not None:
+                        entities.append(entity)
             else:
-                equity = self.__process_equity_index_record(
-                    index_name, outer_group, None
-                )
-                if equity is not None:
-                    equities.append(equity)
+                entity = self.__process_record(index_name, ogroup, None)
+                if entity is not None:
+                    entities.append(entity)
 
-        return equities
+        return entities

@@ -1,5 +1,6 @@
 import pytest
 
+from ontrack.market.data.common import CommonDataPull
 from ontrack.market.data.equity import PullEquityData
 from ontrack.market.models.lookup import Equity, Exchange
 from ontrack.utils.config import Configurations
@@ -10,21 +11,21 @@ class TestPullEquityData:
     def injector(self, exchange_fixture, equity_fixture):
         self.exchange_fixture = exchange_fixture
         self.equity_fixture = equity_fixture
+        self.exchange_queryset = Exchange.datapull_manager.all()
+        self.equity_queryset = Equity.datapull_manager.get_queryset()
 
     @pytest.fixture
     def equity_data_fixture(self):
         def _method(exchange_symbol):
-            exchange_queryset = Exchange.datapull_manager.all()
-            equity_queryset = Equity.datapull_manager.all()
-            assert exchange_queryset.count() == 1
+            assert self.exchange_queryset.count() == 1
 
             urls = Configurations.get_urls_config()
             listed_equities = urls["listed_equities"]
             fo_marketlot = urls["fo_marketlot"]
 
             pull_equity_obj = PullEquityData(
-                exchange_queryset,
-                equity_queryset,
+                self.exchange_queryset,
+                self.equity_queryset,
                 listed_equities,
                 fo_marketlot,
                 exchange_symbol,
@@ -53,3 +54,7 @@ class TestPullEquityData:
         symbol = self.equity_fixture.symbol.lower()
         stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
         assert stock2["id"] == self.equity_fixture.pk
+
+        CommonDataPull().create_or_update(result, Equity, Equity.datapull_manager)
+
+        assert self.equity_queryset.count() == len(result)

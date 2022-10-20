@@ -1,10 +1,10 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
+from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper
 
-from ...utils.logger import ApplicationLogger
 from .common import CommonDataPull
 
 
@@ -31,12 +31,13 @@ class PullEquityData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip()
+
         pk = None
-        lot_size = 0
         existing_entity = self.equity_qs.unique_search(symbol).first()
         if existing_entity is not None:
             pk = existing_entity.id
 
+        lot_size = 0
         market_cap_record = [
             x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
         ]

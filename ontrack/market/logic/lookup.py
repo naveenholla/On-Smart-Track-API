@@ -20,7 +20,7 @@ from ontrack.utils.logic import LogicHelper
 from ..models.equity import Equity, Index
 from ..models.index import EquityIndex
 from ..models.lookup import Exchange
-from ..serializers.lookup import ExchangeSerilizer
+from ..serializers.lookup import ExchangeSerializer
 
 
 class LookupDataPullLogic:
@@ -29,7 +29,7 @@ class LookupDataPullLogic:
 
     def create_lookup_files(self):
         exchanges = Exchange.datapull_manager.all()
-        Configurations.save_exchanges(ExchangeSerilizer(exchanges, many=True).data)
+        Configurations.save_exchanges(ExchangeSerializer(exchanges, many=True).data)
 
     def can_run_pull_equity_lookup_data_task(self):
         date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE

@@ -1,5 +1,6 @@
 import pytest
 
+from ontrack.market.data.common import CommonDataPull
 from ontrack.market.data.index import PullIndexData
 from ontrack.market.models.lookup import Exchange, Index
 from ontrack.utils.config import Configurations
@@ -10,21 +11,21 @@ class TestPullIndexData:
     def injector(self, exchange_fixture, index_fixture):
         self.exchange_fixture = exchange_fixture
         self.index_fixture = index_fixture
+        self.exchange_queryset = Exchange.datapull_manager.all()
+        self.index_queryset = Index.datapull_manager.all()
 
     @pytest.fixture
     def index_data_fixture(self):
         def _method(exchange_symbol):
-            exchange_queryset = Exchange.datapull_manager.all()
-            index_queryset = Index.datapull_manager.all()
-            assert exchange_queryset.count() == 1
+            assert self.exchange_queryset.count() == 1
 
             urls = Configurations.get_urls_config()
             indices_percentage = urls["indices_percentage"]
             fo_marketlot = urls["fo_marketlot"]
 
             pull_index_obj = PullIndexData(
-                exchange_queryset,
-                index_queryset,
+                self.exchange_queryset,
+                self.index_queryset,
                 indices_percentage,
                 fo_marketlot,
                 exchange_symbol,
@@ -57,64 +58,6 @@ class TestPullIndexData:
         stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
         assert stock2["id"] == self.index_fixture.pk
 
+        CommonDataPull().create_or_update(result, Index, Index.datapull_manager)
 
-# import pytest
-
-# from ontrack.market.logic.data_pull import DataPull
-# from ontrack.market.logic.tests.factories import EquityFactory
-# from ontrack.utils.config import Configurations
-# from ontrack.market.models import Exchange
-
-# class TestDataPull:
-#     @pytest.mark.integration
-#     @pytest.mark.parametrize(
-#         "index_name",
-#         [
-#             "India Vix",
-#             "Nifty 50",
-#             "Nifty Total Market",
-#             "Nifty Bank",
-#             "Nifty Pharma",
-#             "Nifty Realty",
-#         ],
-#     )
-#     def test_pull_indices_market_cap(self, equity_fixture:EquityFactory, index_name):
-#         obj = equity_fixture.create_batch()
-#         assert Exchange.objects.all().count() > 0
-
-#         urls = Configurations.get_urls_config()
-
-#         datapull_obj = DataPull()
-#         indices_percentage_urls = urls["indices_percentage"]
-#         record = [x for x in indices_percentage_urls if x["name"] == index_name][0]
-#         weightage_obj = datapull_obj.pull_indices_market_cap(record)
-#         index_record = datapull_obj.parse_index_data("NSE", record)
-
-#         if "url" not in record:
-#             assert index_record is not None
-#             assert index_record["name"] == index_name
-
-#             assert weightage_obj is None
-
-#         else:
-#             assert index_record is not None
-#             assert index_record["name"] == index_name
-
-#             assert weightage_obj is not None
-#             assert len(weightage_obj) == 2
-
-#             records = datapull_obj.parse_indices_market_cap(
-#                 record["name"], weightage_obj[0]
-#             )
-#             assert records is not None
-#             assert len(records) > 0
-
-
-#     @pytest.mark.integration
-#     @pytest.mark.slow
-#     def test_pull_indices_market_cap_all():
-#         urls = Configurations.get_urls_config()
-
-#         indices_percentage_urls = urls["indices_percentage"]
-#         for record in indices_percentage_urls:
-#             test_pull_indices_market_cap(record["name"])
+        assert self.index_queryset.count() == len(result)

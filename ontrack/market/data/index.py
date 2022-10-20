@@ -1,9 +1,9 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
+from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.numbers import NumberHelper
 
-from ...utils.logger import ApplicationLogger
 from .common import CommonDataPull
 
 
@@ -28,12 +28,13 @@ class PullIndexData:
 
     def __parse_index_data(self, record):
         symbol = record["symbol"].strip()
+
         pk = None
-        lot_size = 0
         existing_entity = self.index_qs.unique_search(symbol).first()
         if existing_entity is not None:
             pk = existing_entity.id
 
+        lot_size = 0
         market_cap_record = [
             x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
         ]

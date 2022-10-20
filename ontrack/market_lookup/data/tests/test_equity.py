@@ -1,7 +1,7 @@
 import pytest
 
 from ontrack.market_lookup.data.equity import PullEquityData
-from ontrack.market_lookup.models import Equity, Exchange
+from ontrack.market_lookup.models.lookup import Equity, Exchange
 from ontrack.utils.config import Configurations
 
 

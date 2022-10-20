@@ -1,7 +1,7 @@
 import pytest
 
 from ontrack.market_lookup.data.tests.factories import EquityFactory, ExchangeFactory
-from ontrack.market_lookup.models import Equity, Exchange
+from ontrack.market_lookup.models.lookup import Equity, Exchange
 
 
 @pytest.fixture(autouse=True)

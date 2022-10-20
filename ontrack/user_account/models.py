@@ -1,7 +1,7 @@
 from django.db import models
 from django_cryptography.fields import encrypt
 
-from ontrack.market_lookup.models import Exchange, MarketTradingStrategy
+from ontrack.market_lookup.models.lookup import Exchange, MarketTradingStrategy
 from ontrack.user_lookup.models import Account, AccountCheque, TodoTask, TransactionType
 from ontrack.utils.base.enum import (
     DirectionType,

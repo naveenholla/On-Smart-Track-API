@@ -1,6 +1,6 @@
 from django.db import models
 
-from ontrack.market_lookup.models import Index
+from ontrack.market_lookup.models.lookup import Index
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
 

@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 
-from ontrack.market_lookup.models import Equity, Exchange
+from ontrack.market_lookup.models.lookup import Equity, Exchange
 
 
 class ExchangeFactory(DjangoModelFactory):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Exchange, MarketDay, MarketDayCategory, MarketDayType
+from .models.lookup import Exchange, MarketDay, MarketDayCategory, MarketDayType
 
 
 class MarketDaySerilizer(serializers.ModelSerializer):

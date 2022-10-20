@@ -2,7 +2,7 @@ from django.db import models
 from django_cryptography.fields import encrypt
 
 from ontrack.admin_lookup.models import Currency
-from ontrack.market_lookup.models import MarketBroker
+from ontrack.market_lookup.models.lookup import MarketBroker
 from ontrack.users.models import User
 from ontrack.utils.base.enum import FrequencyType
 from ontrack.utils.base.model import BaseModel

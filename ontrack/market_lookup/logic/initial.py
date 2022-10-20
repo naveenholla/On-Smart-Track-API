@@ -11,7 +11,7 @@ from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
 
-from ..models import Exchange, MarketDay, MarketDayCategory, MarketDayType
+from ..models.lookup import Exchange, MarketDay, MarketDayCategory, MarketDayType
 
 
 class InitialDataPullLogic:

@@ -11,7 +11,7 @@ from ontrack.utils.base.enum import (
 )
 from ontrack.utils.base.model import BaseModel
 
-from .manager import (
+from ..manager import (
     EquityIndexPullManager,
     EquityPullManager,
     ExchangePullManager,

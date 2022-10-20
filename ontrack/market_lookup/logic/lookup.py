@@ -19,7 +19,7 @@ from ontrack.utils.logic import LogicHelper
 
 from ...market_equity.models import Equity, Index
 from ...market_index.models import EquityIndex
-from ..models import Exchange
+from ..models.lookup import Exchange
 from ..serializers import ExchangeSerilizer
 
 

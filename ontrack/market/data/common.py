@@ -6,7 +6,7 @@ class CommonDataPull:
     def __init__(self):
         self.logger = ApplicationLogger()
 
-    def pull_equity_marketlot_data(self, url: str):
+    def pull_marketlot_data(self, url: str):
         self.logger.log_debug(f"Started with {url}.")
 
         # pull csv containing all the listed equities from web

@@ -20,19 +20,22 @@ class PullEquityData:
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.equity_qs = equity_qs
-        self.market_cap_url = market_cap_url
         self.equity_listing_url = equity_listing_url
         self.exchange_symbol = exchange_symbol
 
-    def parse_equity_data(self, record):
+        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        commonobj = CommonDataPull()
+        self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
+
+    def __parse_equity_data(self, record):
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip()
         pk = None
         lot_size = 0
-        existing_equity = self.equity_qs.unique_search(symbol).first()
-        if existing_equity is not None:
-            pk = existing_equity.id
+        existing_entity = self.equity_qs.unique_search(symbol).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
 
         market_cap_record = [
             x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
@@ -41,27 +44,22 @@ class PullEquityData:
             lot_size_str = market_cap_record[0]["lot_size"].strip()
             lot_size = NumberHelper.str_to_float(lot_size_str)
 
-        equity = {}
-        equity["id"] = pk
-        equity["exchange"] = self.exchange
-        equity["name"] = record["NAME OF COMPANY"].strip()
-        equity["symbol"] = symbol
-        equity["lot_size"] = lot_size
-        equity["chart_symbol"] = symbol
-        equity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
-        equity["strike_difference"] = (
+        entity = {}
+        entity["id"] = pk
+        entity["exchange"] = self.exchange
+        entity["name"] = record["NAME OF COMPANY"].strip()
+        entity["symbol"] = symbol
+        entity["lot_size"] = lot_size
+        entity["chart_symbol"] = symbol
+        entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
+        entity["strike_difference"] = (
             record["strike_difference"] if "strike_difference" in record else 0
         )
 
-        return equity
+        return entity
 
     def pull_and_parse_equity_data(self):
         self.logger.log_debug(f"Started with {self.equity_listing_url}.")
-
-        self.market_cap_records = CommonDataPull().pull_equity_marketlot_data(
-            self.market_cap_url
-        )
-        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
 
         if self.exchange is None:
             self.logger.log_warning(
@@ -71,9 +69,9 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=self.equity_listing_url)
-        equities = []
+        entities = []
         for _, record in data.iterrows():
-            equity = self.parse_equity_data(record)
-            equities.append(equity)
+            entity = self.__parse_equity_data(record)
+            entities.append(entity)
 
-        return equities
+        return entities

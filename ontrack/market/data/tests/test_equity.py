@@ -45,11 +45,11 @@ class TestPullEquityData:
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]
+        assert len(stocks_with_lot_size) > 150
+
         stock = [x for x in result if x["symbol"].lower() == "hdfcbank"][0]
+        assert stock["lot_size"] > 0
 
         symbol = self.equity_fixture.symbol.lower()
         stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
-
-        assert len(stocks_with_lot_size) > 150
-        assert stock["lot_size"] > 0
         assert stock2["id"] == self.equity_fixture.pk

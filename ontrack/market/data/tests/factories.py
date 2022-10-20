@@ -1,6 +1,6 @@
 from factory.django import DjangoModelFactory
 
-from ontrack.market.models.lookup import Equity, Exchange
+from ontrack.market.models.lookup import Equity, Exchange, Index
 
 
 class ExchangeFactory(DjangoModelFactory):
@@ -43,4 +43,28 @@ class EquityFactory(DjangoModelFactory):
             "lot_size",
             "strike_difference",
             "is_active",
+        ]
+
+
+class IndexFactory(DjangoModelFactory):
+
+    name = "Nifty 50"
+    symbol = "nifty"
+    chart_symbol = "nifty"
+    lot_size = 50
+    strike_difference = 100
+    is_active = True
+    exchange = ExchangeFactory
+    ordinal = 1
+
+    class Meta:
+        model = Index
+        django_get_or_create = [
+            "name",
+            "symbol",
+            "chart_symbol",
+            "lot_size",
+            "strike_difference",
+            "is_active",
+            "ordinal",
         ]

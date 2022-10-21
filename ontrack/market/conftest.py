@@ -15,11 +15,15 @@ from ontrack.utils.config import Configurations
 
 
 @pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker, tmp_path):
+def django_db_setup(django_db_setup, django_db_blocker, tmp_path_factory):
+    template_dir = tmp_path_factory.mktemp("fixtures")
+    fixtures_dir = template_dir / "fixtures"
+    fixtures_dir.mkdir()
+    path = fixtures_dir / "exchange.json"
+
     with open("ontrack/market/fixtures/Exchange.json", "rb") as f:
         data = f.read()
 
-    path = tmp_path / "exchange.json"
     with open(path, "wb") as f_new:
         f_new.write(data)
 

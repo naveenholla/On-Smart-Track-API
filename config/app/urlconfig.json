@@ -15,152 +15,16 @@
     "fo_marketlot": "https://archives.nseindia.com/content/fo/fo_mktlots.csv",
     "holidays": [
       {
-        "exchange": "NSE",
+        "exchange_symbol": "nse",
         "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
         "url": "https://www.nseindia.com/api/holiday-master?type=trading",
-        "type": "Trading Holidays",
-        "categories": [
-          {
-            "display_name": "Corporate Bonds",
-            "code": "CBM",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Currency Derivatives",
-            "code": "CD",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Equities",
-            "code": "CM",
-            "parent_name":"Capital Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Unknown",
-            "code": "CMOT",
-            "parent_name":"Unknown",
-            "enabled": false
-          },
-          {
-            "display_name": "Commodity Derivatives",
-            "code": "COM",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Equity Derivatives",
-            "code": "FO",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Interest Rate Derivatives",
-            "code": "IRD",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Mutual Funds",
-            "code": "MF",
-            "parent_name":"Capital Market",
-            "enabled": true
-          },
-          {
-            "display_name": "New Debt Segment",
-            "code": "NDM",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Negotiated Trade Reporting Platform",
-            "code": "NTRP",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Securities Lending & Borrowing Schemes",
-            "code": "SLBS",
-            "parent_name":"Capital Market",
-            "enabled": true
-          }
-        ]
+        "type": "Trading Holidays"
       },
       {
-        "exchange": "NSE",
+        "exchange_symbol": "nse",
         "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
         "url": "https://www.nseindia.com/api/holiday-master?type=clearing",
-        "type": "Clearing Holidays",
-        "categories": [
-          {
-            "display_name": "Corporate Bonds",
-            "code": "CBM",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Currency Derivatives",
-            "code": "CD",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Equities",
-            "code": "CM",
-            "parent_name":"Capital Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Unknown",
-            "code": "CMOT",
-            "parent_name":"Unknown",
-            "enabled": false
-          },
-          {
-            "display_name": "Commodity Derivatives",
-            "code": "COM",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Equity Derivatives",
-            "code": "FO",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Interest Rate Derivatives",
-            "code": "IRD",
-            "parent_name":"Derivatives Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Mutual Funds",
-            "code": "MF",
-            "parent_name":"Capital Market",
-            "enabled": true
-          },
-          {
-            "display_name": "New Debt Segment",
-            "code": "NDM",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Negotiated Trade Reporting Platform",
-            "code": "NTRP",
-            "parent_name":"Debt Market",
-            "enabled": true
-          },
-          {
-            "display_name": "Securities Lending & Borrowing Schemes",
-            "code": "SLBS",
-            "parent_name":"Capital Market",
-            "enabled": true
-          }
-        ]
+        "type": "Clearing Holidays"
       }
     ],
     "indices_percentage": [

@@ -7,7 +7,7 @@ from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 
 
-class CommonDataPull:
+class CommonData:
     def __init__(self):
         self.logger = ApplicationLogger()
 

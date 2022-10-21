@@ -106,7 +106,7 @@ class DateTimeHelper:
         return datetimeObj.strftime(f)
 
     @staticmethod
-    def convert_string_to_datetime(datetimeStr, dateFormat=None) -> datetime:
+    def string_to_datetime(datetimeStr, dateFormat=None) -> datetime:
         if datetimeStr is None:
             return None
 

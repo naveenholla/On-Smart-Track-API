@@ -189,10 +189,8 @@ class InitialDataPullLogic:
 
                         category_days = holiday_data_all[category_code]
                         for category_day in category_days:
-                            category_day_date = (
-                                DateTimeHelper.convert_string_to_datetime(
-                                    category_day["tradingDate"], "%d-%b-%Y"
-                                )
+                            category_day_date = DateTimeHelper.string_to_datetime(
+                                category_day["tradingDate"], "%d-%b-%Y"
                             )
                             category_day_day = None
                             category_day_is_working_day = False

@@ -44,7 +44,7 @@ class LookupDataPullLogic:
             ]
 
         if last_pull_date is not None:
-            date = DateTimeHelper.convert_string_to_datetime(last_pull_date)
+            date = DateTimeHelper.string_to_datetime(last_pull_date)
             if DateTimeHelper.current_date_time() < DateTimeHelper.get_future_date(
                 date=date, days=days_pause
             ):

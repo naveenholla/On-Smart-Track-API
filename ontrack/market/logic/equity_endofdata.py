@@ -33,13 +33,13 @@ class EquityDataPullLogic:
         last_pull_date = AdminSetting.datapull_manager.get_setting(date_key)
 
         if last_pull_date is None:
-            return DateTimeHelper.convert_string_to_datetime(
+            return DateTimeHelper.string_to_datetime(
                 Configurations.get_default_values_config()[
                     "default_start_date_equity_data_pull"
                 ]
             )
 
-        return DateTimeHelper.convert_string_to_datetime(last_pull_date)
+        return DateTimeHelper.string_to_datetime(last_pull_date)
 
     def save_pull_equity_eod_data_task_time(self, date):
         date_key = AdminSettingKey.DATAPULL_EQUITY_EOD_DATA_DATE
@@ -119,7 +119,7 @@ class EquityDataPullLogic:
                 equity = Equity(name=record["symbol"], symbol=record["symbol"])
                 equity.save()
 
-            record["date"] = DateTimeHelper.convert_string_to_datetime(
+            record["date"] = DateTimeHelper.string_to_datetime(
                 record["date"], "%d-%b-%Y"
             )
             records_for_average = (

@@ -1,7 +1,7 @@
 import pytest
 from _pytest.mark import Mark
 
-from ontrack.market.data.common import CommonDataPull
+from ontrack.market.data.common import CommonData
 from ontrack.market.data.equity import PullEquityData
 from ontrack.market.data.index import PullIndexData
 from ontrack.market.data.tests.factories import (
@@ -16,7 +16,7 @@ from ontrack.utils.config import Configurations
 @pytest.fixture(scope="session")
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        CommonDataPull().load_lookup_data()
+        CommonData().load_lookup_data()
 
 
 # # conftest.py
@@ -122,7 +122,7 @@ def equity_index_data_fixture(
 ):
     indices = index_data_fixture(exchange_fixture.symbol)
     equities = equity_data_fixture(exchange_fixture.symbol)
-    datapull = CommonDataPull()
+    datapull = CommonData()
 
     datapull.create_or_update(indices, Index, Index.datapull_manager)
     datapull.create_or_update(equities, Equity, Equity.datapull_manager)

@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.market.data.index_equity import PullEquityIndexDataPull
+from ontrack.market.data.index_equity import PullEquityIndexData
 from ontrack.market.models.lookup import Equity, EquityIndex, Exchange, Index
 from ontrack.utils.config import Configurations
 
@@ -29,7 +29,7 @@ class TestPullEquityIndexData:
     def test_pull_indices_market_cap(self, index_symbol):
         urls = Configurations.get_urls_config()
 
-        datapull_obj = PullEquityIndexDataPull(
+        datapull_obj = PullEquityIndexData(
             self.exchange_qs, self.index_qs, self.equity_qs, self.equityindex_qs
         )
         indices_percentage_urls = urls["indices_percentage"]

@@ -4,7 +4,7 @@ from urllib.request import urlopen
 
 import yaml
 
-from ontrack.market.data.common import CommonDataPull
+from ontrack.market.data.common import CommonData
 from ontrack.market.querysets.lookup import (
     EquityIndexQuerySet,
     EquityQuerySet,
@@ -14,7 +14,7 @@ from ontrack.market.querysets.lookup import (
 from ontrack.utils.logger import ApplicationLogger
 
 
-class PullEquityIndexDataPull:
+class PullEquityIndexData:
     def __init__(
         self,
         exchange_qs: ExchangeQuerySet = None,
@@ -76,7 +76,7 @@ class PullEquityIndexDataPull:
         return entity
 
     def pull_indices_market_cap(self, record: dict):
-        temp_folder = CommonDataPull().create_temp_folder("IndexWeightage")
+        temp_folder = CommonData().create_temp_folder("IndexWeightage")
 
         if "url" not in record:
             self.logger.log_debug("No url exists for '%s'." % record["name"])

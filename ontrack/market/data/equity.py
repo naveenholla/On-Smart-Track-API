@@ -5,7 +5,7 @@ from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper
 
-from .common import CommonDataPull
+from .common import CommonData
 
 
 class PullEquityData:
@@ -24,7 +24,7 @@ class PullEquityData:
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
-        commonobj = CommonDataPull()
+        commonobj = CommonData()
         self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 
     def __parse_equity_data(self, record):

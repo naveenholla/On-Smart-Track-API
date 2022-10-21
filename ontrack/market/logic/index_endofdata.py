@@ -32,13 +32,13 @@ class IndicesDataPullLogic:
         last_pull_date = AdminSetting.datapull_manager.get_setting(date_key)
 
         if last_pull_date is None:
-            return DateTimeHelper.convert_string_to_datetime(
+            return DateTimeHelper.string_to_datetime(
                 Configurations.get_default_values_config()[
                     "default_start_date_indices_data_pull"
                 ]
             )
 
-        return DateTimeHelper.convert_string_to_datetime(last_pull_date)
+        return DateTimeHelper.string_to_datetime(last_pull_date)
 
     def save_pull_indices_eod_data_task_time(self, date):
         date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
@@ -116,7 +116,7 @@ class IndicesDataPullLogic:
                 # index.save()
                 continue
 
-            record["date"] = DateTimeHelper.convert_string_to_datetime(
+            record["date"] = DateTimeHelper.string_to_datetime(
                 record["date"], "%d-%m-%Y"
             )
             d = IndexEndOfDay(

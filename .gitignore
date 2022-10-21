@@ -280,6 +280,5 @@ ontrack/media/
 !.envs/.production/
 certs/*
 ontrack/logfiles/*.txt
-ontrack/logfiles/temp/*.json
-ontrack/logfiles/temp/*.txt
+ontrack/logfiles/temp/**
 .cache_ggshield

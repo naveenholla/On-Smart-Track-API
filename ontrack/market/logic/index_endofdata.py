@@ -216,7 +216,7 @@ class IndicesDataPullLogic:
                 correlationid=correlationid,
                 exchange_name=ExchangeType.NSE,
                 holiday_category_name=HolidayCategoryType.EQUITIES,
-                holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAY,
+                holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAYS,
             ):
                 self.logger.log_info("Started execute_pull_indices_eod_data_task task.")
 

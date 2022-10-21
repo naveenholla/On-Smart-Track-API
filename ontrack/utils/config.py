@@ -142,7 +142,7 @@ class Configurations:
 
     @staticmethod
     def get_exchange_trading_holidays(exchange_name, category_name):
-        day_type_name = MarketDayTypeEnum.TRADING_HOLIDAY
+        day_type_name = MarketDayTypeEnum.TRADING_HOLIDAYS
 
         return Configurations.get_exchange_days_by_type(
             exchange_name, day_type_name, category_name
@@ -150,7 +150,7 @@ class Configurations:
 
     @staticmethod
     def get_exchange_clearing_holidays(exchange_name, category_name):
-        day_type_name = MarketDayTypeEnum.CLEARING_HOLIDAY
+        day_type_name = MarketDayTypeEnum.CLEARING_HOLIDAYS
 
         return Configurations.get_exchange_days_by_type(
             exchange_name, day_type_name, category_name

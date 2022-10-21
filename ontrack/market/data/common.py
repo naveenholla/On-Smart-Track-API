@@ -1,3 +1,8 @@
+import os
+
+from django.conf import settings
+from django.core.management import call_command
+
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 
@@ -5,6 +10,41 @@ from ontrack.utils.logic import LogicHelper
 class CommonDataPull:
     def __init__(self):
         self.logger = ApplicationLogger()
+
+    def create_temp_folder(self, folder_name):
+        # temp folder to store files
+        template_dir = settings.TEMP_DIR
+        fixtures_dir = template_dir / folder_name
+        if not os.path.exists(fixtures_dir):
+            fixtures_dir.mkdir()
+        return fixtures_dir
+
+    def load_lookup_data(self):
+        fixtures = [
+            "market.exchange",
+            "market.marketdaytype",
+            "market.marketdaycategory",
+        ]
+        temp_folder = self.create_temp_folder("fixtures")
+
+        app_folder = settings.APPS_DIR
+
+        for fixture in fixtures:
+            fixture_details = fixture.split(".")
+            source = (
+                f"{app_folder}/{fixture_details[0]}/fixtures/{fixture_details[1]}.json"
+            )
+            destination = temp_folder / f"{fixture_details[1]}.json"
+            print(source)
+            print(destination)
+
+            with open(source, "rb") as f:
+                data = f.read()
+
+            with open(destination, "wb") as f_new:
+                f_new.write(data)
+
+            call_command("loaddata", destination)
 
     def pull_marketlot_data(self, url: str):
         self.logger.log_debug(f"Started with {url}.")

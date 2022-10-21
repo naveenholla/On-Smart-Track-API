@@ -2566,7 +2566,7 @@
                 ],
                 "updated_at": "2022-10-09T21:23:22.649121+05:30",
                 "created_at": "2022-10-09T21:23:22.649156+05:30",
-                "name": "Trading Holiday",
+                "name": "Trading Holidays",
                 "exchange": 1
             },
             {
@@ -4402,7 +4402,7 @@
                 ],
                 "updated_at": "2022-10-09T21:21:10.544492+05:30",
                 "created_at": "2022-10-09T21:21:10.544574+05:30",
-                "name": "Clearing Holiday",
+                "name": "Clearing Holidays",
                 "exchange": 1
             },
             {
@@ -4454,7 +4454,7 @@
                 "categories": [],
                 "updated_at": "2022-10-09T21:21:05.083680+05:30",
                 "created_at": "2022-10-09T21:21:05.083751+05:30",
-                "name": "Special Trading Day",
+                "name": "Special Trading Days",
                 "exchange": 1
             }
         ],

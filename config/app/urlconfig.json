@@ -18,7 +18,7 @@
         "exchange": "NSE",
         "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
         "url": "https://www.nseindia.com/api/holiday-master?type=trading",
-        "type": "Trading Holiday",
+        "type": "Trading Holidays",
         "categories": [
           {
             "display_name": "Corporate Bonds",
@@ -92,7 +92,7 @@
         "exchange": "NSE",
         "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
         "url": "https://www.nseindia.com/api/holiday-master?type=clearing",
-        "type": "Clearing Holiday",
+        "type": "Clearing Holidays",
         "categories": [
           {
             "display_name": "Corporate Bonds",

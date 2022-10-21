@@ -1,6 +1,5 @@
 import pytest
 from _pytest.mark import Mark
-from django.core.management import call_command
 
 from ontrack.market.data.common import CommonDataPull
 from ontrack.market.data.equity import PullEquityData
@@ -15,20 +14,9 @@ from ontrack.utils.config import Configurations
 
 
 @pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker, tmp_path_factory):
-    template_dir = tmp_path_factory.mktemp("fixtures")
-    fixtures_dir = template_dir / "fixtures"
-    fixtures_dir.mkdir()
-    path = fixtures_dir / "exchange.json"
-
-    with open("ontrack/market/fixtures/Exchange.json", "rb") as f:
-        data = f.read()
-
-    with open(path, "wb") as f_new:
-        f_new.write(data)
-
+def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        call_command("loaddata", path)
+        CommonDataPull().load_lookup_data()
 
 
 # # conftest.py

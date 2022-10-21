@@ -29,10 +29,10 @@ class OrderValidityType(models.TextChoices):
 
 
 class MarketDayTypeEnum(models.TextChoices):
-    TRADING_HOLIDAY = "Trading Holiday"
-    CLEARING_HOLIDAY = "Clearing Holiday"
+    TRADING_HOLIDAYS = "Trading Holidays"
+    CLEARING_HOLIDAYS = "Clearing Holidays"
     WEEKLY_OFF_DAYS = "Weekly Off Days"
-    SPECIAL_TRADING_DAY = "Special Trading Day"
+    SPECIAL_TRADING_DAYS = "Special Trading Days"
 
 
 class HolidayParentCategoryType(models.TextChoices):

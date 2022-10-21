@@ -248,7 +248,7 @@ class EquityDataPullLogic:
                 correlationid=correlationid,
                 exchange_name=ExchangeType.NSE,
                 holiday_category_name=HolidayCategoryType.EQUITIES,
-                holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAY,
+                holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAYS,
             ):
                 self.logger.log_info("Started pull_equity_eod_data task.")
 

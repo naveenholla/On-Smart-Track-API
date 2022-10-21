@@ -50,18 +50,15 @@ class MarketDayType(BaseModel):
 
 
 class MarketDayCategory(BaseModel):
-    day_type = models.ForeignKey(
-        MarketDayType, related_name="categories", on_delete=models.CASCADE
-    )
+    daytype = models.ManyToManyField(MarketDayType, related_name="categories")
     parent_name = models.CharField(
         max_length=50, choices=HolidayParentCategoryType.choices
     )
     display_name = models.CharField(max_length=50, choices=HolidayCategoryType.choices)
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=50, unique=True)
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
-        unique_together = ("day_type", "code")
 
     def __str__(self):
         return f"{self.day_type} - {self.display_name}"

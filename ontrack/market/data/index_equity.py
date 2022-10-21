@@ -3,8 +3,8 @@ import json
 from urllib.request import urlopen
 
 import yaml
-from django.conf import settings
 
+from ontrack.market.data.common import CommonDataPull
 from ontrack.market.querysets.lookup import (
     EquityIndexQuerySet,
     EquityQuerySet,
@@ -76,7 +76,7 @@ class PullEquityIndexDataPull:
         return entity
 
     def pull_indices_market_cap(self, record: dict):
-        temp_folder = settings.TEMP_DIR  # temp folder to store files
+        temp_folder = CommonDataPull().create_temp_folder("IndexWeightage")
 
         if "url" not in record:
             self.logger.log_debug("No url exists for '%s'." % record["name"])

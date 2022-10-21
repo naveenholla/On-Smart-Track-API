@@ -1,4 +1,6 @@
 import pytest
+from _pytest.mark import Mark
+from django.core.management import call_command
 
 from ontrack.market.data.common import CommonDataPull
 from ontrack.market.data.equity import PullEquityData
@@ -10,6 +12,13 @@ from ontrack.market.data.tests.factories import (
 )
 from ontrack.market.models.lookup import Equity, Exchange, Index
 from ontrack.utils.config import Configurations
+
+
+@pytest.fixture(scope="session")
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command("loaddata", "ontrack/market/fixtures/Exchange.json")
+
 
 # # conftest.py
 # def pytest_collection_modifyitems(items):
@@ -24,6 +33,21 @@ from ontrack.utils.config import Configurations
 #             it for it in sorted_items if class_mapping[it] == class_
 #         ]
 #     items[:] = sorted_items
+
+empty_mark = Mark("", [], {})
+
+
+def by_slow_marker(item):
+    return item.get_closest_marker("slow", default=empty_mark)
+
+
+def pytest_addoption(parser):
+    parser.addoption("--slow-last", action="store_true", default=True)
+
+
+def pytest_collection_modifyitems(items, config):
+    if config.getoption("--slow-last"):
+        items.sort(key=by_slow_marker, reverse=False)
 
 
 @pytest.fixture(autouse=True)
@@ -48,7 +72,7 @@ def equity_data_fixture(
     def _method(exchange_symbol):
         exchange_queryset = Exchange.datapull_manager.all()
         equity_queryset = Equity.datapull_manager.all()
-        assert exchange_queryset.count() == 1
+        assert exchange_queryset.count() > 0
 
         urls = Configurations.get_urls_config()
         listed_equities = urls["listed_equities"]
@@ -71,7 +95,7 @@ def index_data_fixture(index_fixture: IndexFactory, exchange_fixture: ExchangeFa
     def _method(exchange_symbol):
         exchange_queryset = Exchange.datapull_manager.all()
         index_queryset = Index.datapull_manager.all()
-        assert exchange_queryset.count() == 1
+        assert exchange_queryset.count() > 0
 
         urls = Configurations.get_urls_config()
         indices_percentage = urls["indices_percentage"]

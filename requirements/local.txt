@@ -37,3 +37,4 @@ django-coverage-plugin==2.0.3  # https://github.com/nedbat/django_coverage_plugi
 pytest-django==4.5.2  # https://github.com/pytest-dev/pytest-django
 freezegun==1.2.2 # https://pypi.org/project/freezegun/
 pytest-mock==3.10.0 # https://pypi.org/project/pytest-mock/
+pytest-order==1.0.1 # https://pypi.org/project/pytest-order/

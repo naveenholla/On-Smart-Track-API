@@ -12,10 +12,12 @@ class TestPullEquityData:
         self.exchange_queryset = Exchange.datapull_manager.all()
         self.equity_queryset = Equity.datapull_manager.all()
 
+    @pytest.mark.integration
     def test_pull_and_parse_equity_data_invalid(self):
         result = self.equity_data_fixture("Exchange-not-Exists")
         assert result is None
 
+    @pytest.mark.integration
     def test_pull_and_parse_equity_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None

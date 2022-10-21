@@ -15,9 +15,16 @@ from ontrack.utils.config import Configurations
 
 
 @pytest.fixture(scope="session")
-def django_db_setup(django_db_setup, django_db_blocker):
+def django_db_setup(django_db_setup, django_db_blocker, tmp_path):
+    with open("ontrack/market/fixtures/Exchange.json", "rb") as f:
+        data = f.read()
+
+    path = tmp_path / "exchange.json"
+    with open(path, "wb") as f_new:
+        f_new.write(data)
+
     with django_db_blocker.unblock():
-        call_command("loaddata", "ontrack/market/fixtures/Exchange.json")
+        call_command("loaddata", path)
 
 
 # # conftest.py

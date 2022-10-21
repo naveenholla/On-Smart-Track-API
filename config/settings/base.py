@@ -7,7 +7,8 @@ import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # ontrack/
-APPS_DIR = ROOT_DIR / "ontrack"
+APPS_FOLDER_NAME = "ontrack"
+APPS_DIR = ROOT_DIR / APPS_FOLDER_NAME
 LOGS_DIR = APPS_DIR / "logfiles"
 TEMP_DIR = LOGS_DIR / "temp"
 CONFIG_DIR = ROOT_DIR / "config/app"

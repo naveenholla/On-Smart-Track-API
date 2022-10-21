@@ -11,23 +11,26 @@ class CommonDataPull:
     def __init__(self):
         self.logger = ApplicationLogger()
 
-    def create_temp_folder(self, folder_name):
+    def create_temp_folder(self, folder_name, temp_folder_path=None):
+        if temp_folder_path is None:
+            temp_folder_path = settings.TEMP_DIR
+
         # temp folder to store files
-        template_dir = settings.TEMP_DIR
-        fixtures_dir = template_dir / folder_name
+        fixtures_dir = temp_folder_path / folder_name
         if not os.path.exists(fixtures_dir):
             fixtures_dir.mkdir()
         return fixtures_dir
 
-    def load_lookup_data(self):
+    def load_lookup_data(self, temp_folder_path=None):
         fixtures = [
             "market.exchange",
             "market.marketdaytype",
             "market.marketdaycategory",
         ]
-        temp_folder = self.create_temp_folder("fixtures")
 
-        app_folder = settings.APPS_DIR
+        temp_folder = self.create_temp_folder("fixtures", temp_folder_path)
+
+        app_folder = settings.APPS_FOLDER_NAME
 
         for fixture in fixtures:
             fixture_details = fixture.split(".")

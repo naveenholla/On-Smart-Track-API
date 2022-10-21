@@ -1,6 +1,5 @@
 import pytest
 
-from ontrack.market.data.common import CommonDataPull
 from ontrack.market.models.lookup import Equity, Exchange
 
 
@@ -11,7 +10,7 @@ class TestPullEquityData:
         self.equity_fixture = equity_fixture
         self.equity_data_fixture = equity_data_fixture
         self.exchange_queryset = Exchange.datapull_manager.all()
-        self.equity_queryset = Equity.datapull_manager.get_queryset()
+        self.equity_queryset = Equity.datapull_manager.all()
 
     def test_pull_and_parse_equity_data_invalid(self):
         result = self.equity_data_fixture("Exchange-not-Exists")
@@ -33,7 +32,3 @@ class TestPullEquityData:
         symbol = self.equity_fixture.symbol.lower()
         stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
         assert stock2["id"] == self.equity_fixture.pk
-
-        CommonDataPull().create_or_update(result, Equity, Equity.datapull_manager)
-
-        assert self.equity_queryset.count() == len(result)

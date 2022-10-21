@@ -11,6 +11,20 @@ from ontrack.market.data.tests.factories import (
 from ontrack.market.models.lookup import Equity, Exchange, Index
 from ontrack.utils.config import Configurations
 
+# # conftest.py
+# def pytest_collection_modifyitems(items):
+#     """Modifies test items in place to ensure test classes run in a given order."""
+#     CLASS_ORDER = ["TestPullEquityData", "TestPullIndexData", "TestPullEquityIndexData"]
+#     class_mapping = {item: item.cls.__name__ for item in items}
+
+#     sorted_items = items.copy()
+#     # Iteratively move tests of each class to the end of the test queue
+#     for class_ in CLASS_ORDER:
+#         sorted_items = [it for it in sorted_items if class_mapping[it] != class_] + [
+#             it for it in sorted_items if class_mapping[it] == class_
+#         ]
+#     items[:] = sorted_items
+
 
 @pytest.fixture(autouse=True)
 def exchange_fixture(db) -> Exchange:
@@ -27,12 +41,13 @@ def index_fixture(db) -> Index:
     return IndexFactory()
 
 
-@pytest.fixture
-def equity_data_fixture():
+@pytest.fixture(autouse=True)
+def equity_data_fixture(
+    equity_fixture: EquityFactory, exchange_fixture: ExchangeFactory
+):
     def _method(exchange_symbol):
         exchange_queryset = Exchange.datapull_manager.all()
-        equity_queryset = Equity.datapull_manager.get_queryset()
-
+        equity_queryset = Equity.datapull_manager.all()
         assert exchange_queryset.count() == 1
 
         urls = Configurations.get_urls_config()
@@ -51,8 +66,8 @@ def equity_data_fixture():
     return _method
 
 
-@pytest.fixture
-def index_data_fixture():
+@pytest.fixture(autouse=True)
+def index_data_fixture(index_fixture: IndexFactory, exchange_fixture: ExchangeFactory):
     def _method(exchange_symbol):
         exchange_queryset = Exchange.datapull_manager.all()
         index_queryset = Index.datapull_manager.all()
@@ -76,7 +91,11 @@ def index_data_fixture():
 
 @pytest.fixture(autouse=True)
 def equity_index_data_fixture(
-    exchange_fixture, equity_data_fixture, index_data_fixture
+    exchange_fixture,
+    index_fixture,
+    equity_fixture,
+    equity_data_fixture,
+    index_data_fixture,
 ):
     indices = index_data_fixture(exchange_fixture.symbol)
     equities = equity_data_fixture(exchange_fixture.symbol)
@@ -84,3 +103,6 @@ def equity_index_data_fixture(
 
     datapull.create_or_update(indices, Index, Index.datapull_manager)
     datapull.create_or_update(equities, Equity, Equity.datapull_manager)
+
+    assert Index.datapull_manager.all().count() == len(indices)
+    assert Equity.datapull_manager.all().count() == len(equities)

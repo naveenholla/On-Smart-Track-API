@@ -1,6 +1,5 @@
 import pytest
 
-from ontrack.market.data.common import CommonDataPull
 from ontrack.market.models.lookup import Exchange, Index
 
 
@@ -36,7 +35,3 @@ class TestPullIndexData:
         symbol = self.index_fixture.symbol.lower()
         stock2 = [x for x in result if x["symbol"].lower() == symbol][0]
         assert stock2["id"] == self.index_fixture.pk
-
-        CommonDataPull().create_or_update(result, Index, Index.datapull_manager)
-
-        assert self.index_queryset.count() == len(result)

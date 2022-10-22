@@ -83,4 +83,4 @@ jobs:
           pip install -r requirements/local.txt
 
       - name: Test with pytest
-        run:  pytest
+        run:  pytest -m "not lookupdata"

@@ -71,6 +71,40 @@ class PullEquityIndexData:
 
         return entity
 
+    def __parse_webContent(self, webpage, url_temp):
+        content = (
+            webpage.read()
+            .decode()
+            .replace("'", "||||")
+            .replace("modelDataAvailable(", "[")
+            .replace(");", "]")
+            .replace("label:", '"label":')
+            .replace("label:", '"label":')
+            .replace("file:", '"file":')
+        )
+
+        with open(url_temp, "w") as file_intermediate:
+            # Writing the replaced data in our
+            # text file
+            json_content = json.dumps(content, ensure_ascii=True, indent=4)
+            json_content = json_content.replace('\\"', '"')[1:-1]
+            file_intermediate.write(json_content)
+
+        with open(url_temp) as file_intermediate2:
+            # Writing the replaced data in our
+            # text file
+            data = yaml.safe_load(file_intermediate2)
+
+        with open(url_temp, "w") as file_final:
+            # Writing the replaced data in our
+            # text file
+            file_final.write(str(data).replace("'", '"').replace("||||", "'"))
+
+        with open(url_temp) as file_final2:
+            # Writing the replaced data in our
+            # text file
+            return json.load(file_final2)
+
     def pull_indices_market_cap(self, record: dict):
         temp_folder = CommonData().create_temp_folder("IndexWeightage")
 
@@ -82,45 +116,19 @@ class PullEquityIndexData:
         index_url = record["url"]
         index_name = str(record["name"])
         sector_name_file_name = index_name.replace(" ", "_")
+        url_temp = f"{temp_folder}/{sector_name_file_name}_temp.json"
 
         self.logger.log_debug(f"Started with {index_name}, {index_url}.")
-        with urlopen(index_url) as webpage:
-            content = (
-                webpage.read()
-                .decode()
-                .replace("'", "||||")
-                .replace("modelDataAvailable(", "[")
-                .replace(");", "]")
-                .replace("label:", '"label":')
-                .replace("label:", '"label":')
-                .replace("file:", '"file":')
+
+        try:
+            with urlopen(index_url) as webpage:
+                self.__parse_webContent(webpage, url_temp)
+        except Exception as e:
+            message = (
+                f"Request exception from pull indices {index_url} - `{format(e)}`."
             )
-
-            url_temp = f"{temp_folder}/{sector_name_file_name}_temp.json"
-
-            with open(url_temp, "w") as file_intermediate:
-                # Writing the replaced data in our
-                # text file
-                file_intermediate.write(
-                    json.dumps(content, ensure_ascii=True, indent=4).replace(
-                        '\\"', '"'
-                    )[1:-1]
-                )
-
-            with open(url_temp) as file_intermediate2:
-                # Writing the replaced data in our
-                # text file
-                data = yaml.safe_load(file_intermediate2)
-
-            with open(url_temp, "w") as file_final:
-                # Writing the replaced data in our
-                # text file
-                file_final.write(str(data).replace("'", '"').replace("||||", "'"))
-
-            with open(url_temp) as file_final2:
-                # Writing the replaced data in our
-                # text file
-                return json.load(file_final2)
+            self.logger.log_critical(message=message)
+            raise
 
     def parse_indices_market_cap(self, index_name: str, record: dict) -> array:
         entities = []

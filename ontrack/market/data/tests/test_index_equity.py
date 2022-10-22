@@ -14,6 +14,7 @@ class TestPullEquityIndexData:
         self.equity_qs = Equity.backend.all()
         self.equityindex_qs = EquityIndex.backend.all()
 
+    @pytest.mark.lookupdata
     @pytest.mark.integration
     @pytest.mark.parametrize(
         "index_symbol",
@@ -33,11 +34,7 @@ class TestPullEquityIndexData:
             self.exchange_qs, self.index_qs, self.equity_qs, self.equityindex_qs
         )
         indices_percentage_urls = urls["indices_percentage"]
-        record = [
-            x
-            for x in indices_percentage_urls
-            if x["symbol"].lower() == index_symbol.lower()
-        ][0]
+        record = [x for x in indices_percentage_urls if x["symbol"] == index_symbol][0]
         weightage_obj = datapull_obj.pull_indices_market_cap(record)
 
         if "url" not in record:
@@ -53,6 +50,7 @@ class TestPullEquityIndexData:
             assert records is not None
             assert len(records) > 0
 
+    @pytest.mark.lookupdata
     @pytest.mark.integration
     @pytest.mark.slow
     def test_pull_indices_market_cap_all(self):

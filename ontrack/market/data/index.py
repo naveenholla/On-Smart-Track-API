@@ -1,6 +1,7 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
+from ontrack.utils.config import Configurations
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.numbers import NumberHelper
 
@@ -12,17 +13,19 @@ class PullIndexData:
         self,
         exchange_qs: ExchangeQuerySet,
         index_qs: IndexQuerySet,
-        indices_percentage_records,
-        market_cap_url: str,
         exchange_symbol: str,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.index_qs = index_qs
         self.exchange_symbol = exchange_symbol
-        self.indices_percentage_records = indices_percentage_records
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+
+        urls = Configurations.get_urls_config()
+        self.indices_percentage_records = urls["indices_percentage"]
+        market_cap_url = urls["fo_marketlot"]
+
         commonobj = CommonData()
         self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 

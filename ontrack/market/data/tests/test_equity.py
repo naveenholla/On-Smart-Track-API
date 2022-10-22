@@ -1,21 +1,28 @@
 import pytest
 
+from ontrack.market.data.initialize import InitializeData
+from ontrack.market.data.tests.factories import EquityFactory
 from ontrack.market.models.lookup import Equity, Exchange
 
 
 class TestPullEquityData:
     @pytest.fixture(autouse=True)
-    def injector(self, exchange_fixture, equity_fixture, equity_data_fixture):
+    def injector(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
-        self.equity_fixture = equity_fixture
-        self.equity_data_fixture = equity_data_fixture
         self.exchange_queryset = Exchange.backend.all()
         self.equity_queryset = Equity.backend.all()
+
+        self.initializeData = InitializeData()
+
+    @pytest.fixture(autouse=True)
+    def equity_fixture(self) -> Equity:
+        self.equity_fixture = EquityFactory()
+        return self.equity_fixture
 
     @pytest.mark.lookupdata
     @pytest.mark.integration
     def test_pull_and_parse_equity_data_invalid(self):
-        result = self.equity_data_fixture("Exchange-not-Exists")
+        result = self.initializeData.load_equity_data("Exchange-not-Exists", False)
         assert result is None
 
     @pytest.mark.lookupdata
@@ -24,7 +31,8 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.equity_data_fixture(self.exchange_fixture.symbol)
+        es = self.exchange_fixture.symbol
+        result = self.initializeData.load_equity_data(es, False)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]

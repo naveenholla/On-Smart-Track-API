@@ -68,7 +68,7 @@ class MarketDayCategory(BaseModel):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.day_type} - {self.display_name}"
+        return f"{self.display_name} ({self.code})"
 
 
 class MarketDay(BaseModel):

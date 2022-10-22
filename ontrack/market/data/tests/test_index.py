@@ -1,22 +1,23 @@
 import pytest
 
+from ontrack.market.data.initialize import InitializeData
+from ontrack.market.data.tests.factories import IndexFactory
 from ontrack.market.models.lookup import Exchange, Index
 
 
 class TestPullIndexData:
     @pytest.fixture(autouse=True)
-    def injector(self, exchange_fixture, index_fixture, index_data_fixture):
+    def injector(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
-        self.index_fixture = index_fixture
-        self.index_data_fixture = index_data_fixture
         self.exchange_queryset = Exchange.backend.all()
         self.index_queryset = Index.backend.all()
 
-    @pytest.mark.lookupdata
-    @pytest.mark.integration
-    def test_pull_and_parse_index_data_invalid(self):
-        result = self.index_data_fixture("Exchange-not-Exists")
-        assert result is None
+        self.initializeData = InitializeData()
+
+    @pytest.fixture(autouse=True)
+    def index_fixture(self) -> Index:
+        self.index_fixture = IndexFactory()
+        return self.index_fixture
 
     @pytest.mark.lookupdata
     @pytest.mark.integration
@@ -24,7 +25,8 @@ class TestPullIndexData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.index_data_fixture(self.exchange_fixture.symbol)
+        es = self.exchange_fixture.symbol
+        result = self.initializeData.load_index_data(es, False)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]

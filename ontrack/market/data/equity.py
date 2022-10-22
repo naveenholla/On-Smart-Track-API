@@ -1,6 +1,7 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
+from ontrack.utils.config import Configurations
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper
@@ -13,17 +14,19 @@ class PullEquityData:
         self,
         exchange_qs: ExchangeQuerySet,
         equity_qs: EquityQuerySet,
-        equity_listing_url: str,
-        market_cap_url: str,
         exchange_symbol: str,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.equity_qs = equity_qs
-        self.equity_listing_url = equity_listing_url
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+
+        urls = Configurations.get_urls_config()
+        self.equity_listing_url = urls["listed_equities"]
+        market_cap_url = urls["fo_marketlot"]
+
         commonobj = CommonData()
         self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 

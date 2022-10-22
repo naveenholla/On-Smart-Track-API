@@ -1,8 +1,13 @@
 from django.contrib import admin
 
 from ontrack.market.models.lookup import (
+    Equity,
+    EquityIndex,
     Exchange,
+    Index,
     MarketBroker,
+    MarketDay,
+    MarketDayCategory,
     MarketDayType,
     MarketSector,
     MarketTradingStrategy,
@@ -26,6 +31,20 @@ class MarketDayTypeAdmin(admin.ModelAdmin):
     search_fields = ("name__icontains",)
 
 
+@admin.register(MarketDay)
+class MarketDayAdmin(admin.ModelAdmin):
+    list_display = ("daytype", "category", "date", "day")
+    list_filter = (
+        "daytype",
+        "category",
+    )
+    search_fields = ("date",)
+
+
+admin.site.register(Equity)
+admin.site.register(Index)
+admin.site.register(EquityIndex)
+admin.site.register(MarketDayCategory)
 admin.site.register(MarketBroker)
 admin.site.register(MarketSector)
 admin.site.register(MarketTradingStrategy)

@@ -1,33 +1,26 @@
 import pytest
 
 from ontrack.market.data.index_equity import PullEquityIndexData
+from ontrack.market.data.initialize import InitializeData
 from ontrack.market.models.lookup import Equity, EquityIndex, Exchange, Index
 from ontrack.utils.config import Configurations
 
 
 class TestPullEquityIndexData:
     @pytest.fixture(autouse=True)
-    def injector(self, equity_index_data_fixture):
-        self.equity_index_data_fixture = equity_index_data_fixture
+    def injector(self):
         self.exchange_qs = Exchange.backend.all()
         self.index_qs = Index.backend.all()
         self.equity_qs = Equity.backend.all()
         self.equityindex_qs = EquityIndex.backend.all()
 
-    @pytest.mark.lookupdata
-    @pytest.mark.integration
-    @pytest.mark.parametrize(
-        "index_symbol",
-        [
-            "INDIAVIX",
-            "NIFTY",
-            "CNX750",
-            "BANKNIFTY",
-            "CNXPHARMA",
-            "CNXREALTY",
-        ],
-    )
-    def test_pull_indices_market_cap(self, index_symbol):
+    @pytest.fixture(autouse=True)
+    def equity_index_data_fixture(self, exchange_fixture):
+        self.initializeData = InitializeData()
+        self.initializeData.load_equity_data(exchange_fixture.symbol)
+        self.initializeData.load_index_data(exchange_fixture.symbol)
+
+    def __pull_indices_market_cap(self, index_symbol):
         urls = Configurations.get_urls_config()
 
         datapull_obj = PullEquityIndexData(
@@ -58,4 +51,4 @@ class TestPullEquityIndexData:
 
         indices_percentage_urls = urls["indices_percentage"]
         for record in indices_percentage_urls:
-            self.test_pull_indices_market_cap(record["symbol"])
+            self.__pull_indices_market_cap(record["symbol"])

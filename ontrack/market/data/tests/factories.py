@@ -27,8 +27,8 @@ class ExchangeFactory(DjangoModelFactory):
 class EquityFactory(DjangoModelFactory):
 
     name = "Reliance"
-    symbol = "Reliance"
-    chart_symbol = "Reliance"
+    symbol = "reliance"
+    chart_symbol = "reliance"
     lot_size = 50
     strike_difference = 100
     is_active = True

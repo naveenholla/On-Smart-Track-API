@@ -1,0 +1,5458 @@
+[
+{
+    "model": "market.marketday",
+    "pk": 1,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.209Z",
+        "created_at": "2022-10-22T12:56:12.209Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 2,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.209Z",
+        "created_at": "2022-10-22T12:56:12.209Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 3,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.209Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 4,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 5,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 6,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 7,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 8,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 9,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 10,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 11,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 12,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 13,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 14,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 15,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 16,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 17,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 1,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 18,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 19,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 20,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 21,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 22,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 23,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.210Z",
+        "created_at": "2022-10-22T12:56:12.210Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 24,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 25,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 26,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 27,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 28,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 29,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 30,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 31,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 32,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali * Laxmi Pujan",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 33,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 34,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 35,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 2,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 36,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 37,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 38,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 39,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 40,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 41,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 42,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 43,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 44,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 45,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.211Z",
+        "created_at": "2022-10-22T12:56:12.211Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 46,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 47,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 48,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 49,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 50,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali * Laxmi Pujan",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 51,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 52,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 53,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 3,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 54,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 55,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-02-19",
+        "day": null,
+        "is_working_day": false,
+        "description": "Chatrapati Shivaji Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 56,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 57,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 58,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 59,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-04-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gudi Padwa",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 60,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 61,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 62,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 63,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 64,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 65,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 66,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 67,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.212Z",
+        "created_at": "2022-10-22T12:56:12.212Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 68,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 69,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 70,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 71,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 72,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 73,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-10-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-E-Milad",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 74,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali * Laxmi Pujan",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 75,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 76,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 77,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 4,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 78,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 79,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-02-19",
+        "day": null,
+        "is_working_day": false,
+        "description": "Chatrapati Shivaji Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 80,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 81,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 82,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 83,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-04-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gudi Padwa",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 84,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 85,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 86,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 87,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 88,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 89,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.213Z",
+        "created_at": "2022-10-22T12:56:12.213Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 90,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 91,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 92,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 93,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 94,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 95,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 96,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 97,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-10-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-E-Milad",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 98,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali * Laxmi Pujan",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 99,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 100,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 101,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 5,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 102,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 103,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-02-19",
+        "day": null,
+        "is_working_day": false,
+        "description": "Chatrapati Shivaji Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 104,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 105,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 106,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 107,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-04-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gudi Padwa",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 108,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 109,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 110,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 111,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.214Z",
+        "created_at": "2022-10-22T12:56:12.214Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 112,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 113,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 114,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 115,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 116,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 117,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 118,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 119,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 120,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 121,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-10-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-E-Milad",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 122,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali * Laxmi Pujan",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 123,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 124,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 125,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 6,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 126,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 127,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-02-19",
+        "day": null,
+        "is_working_day": false,
+        "description": "Chatrapati Shivaji Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 128,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 129,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 130,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 131,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-04-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gudi Padwa",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 132,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 133,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.215Z",
+        "created_at": "2022-10-22T12:56:12.215Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 134,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 135,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 136,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 137,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 138,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 139,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 140,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 141,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 142,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 143,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 144,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 145,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-10-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-E-Milad",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 146,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 147,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 148,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 7,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 149,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-01-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "New Year Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 150,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 151,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 152,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 153,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 154,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.216Z",
+        "created_at": "2022-10-22T12:56:12.216Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 155,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 156,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 157,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 8,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 158,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 159,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 160,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 161,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 162,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 163,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 164,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 165,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 166,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 167,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 168,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 169,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 170,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 171,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 172,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 173,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 174,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 9,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 175,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 176,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.217Z",
+        "created_at": "2022-10-22T12:56:12.217Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-02-19",
+        "day": null,
+        "is_working_day": false,
+        "description": "Chatrapati Shivaji Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 177,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 178,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 179,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 180,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-04-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gudi Padwa",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 181,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-04-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ram Navami",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 182,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr.Baba Saheb Ambedkar Jayanti/Mahavir Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 183,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 184,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-05-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Maharashtra Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 185,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-Ul-Fitr (Ramzan ID)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 186,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 187,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-07-10",
+        "day": null,
+        "is_working_day": false,
+        "description": "Bakri Id",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 188,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 189,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 190,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 191,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 192,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-10-02",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahatma Gandhi Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 193,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dussehra",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 194,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-10-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Id-E-Milad",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 195,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali-Balipratipada",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 196,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 197,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.218Z",
+        "category": 10,
+        "daytype": 1,
+        "date": "2022-12-25",
+        "day": null,
+        "is_working_day": false,
+        "description": "Christmas",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 198,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.218Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 199,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 200,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 201,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 202,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 203,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 204,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 205,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 206,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 207,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 208,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 209,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 210,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 211,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 212,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 213,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 1,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 214,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 215,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 216,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 217,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 218,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.219Z",
+        "created_at": "2022-10-22T12:56:12.219Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 219,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 220,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 221,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 222,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 223,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 224,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 225,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 226,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 227,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 228,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 229,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 2,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 230,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 231,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 232,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 233,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 234,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 235,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 236,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 237,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 238,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 239,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.220Z",
+        "created_at": "2022-10-22T12:56:12.220Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 240,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 241,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 242,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 243,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 244,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 245,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 3,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 246,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 247,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 248,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 249,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 250,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 251,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 252,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 253,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 254,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 255,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 256,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 257,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 258,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 259,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 260,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.221Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 261,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.221Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 4,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 262,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 263,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 264,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 265,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 266,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 267,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 268,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 269,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 270,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 271,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 272,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 273,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 274,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 275,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 276,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 277,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 5,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 278,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 279,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 280,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 281,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 282,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.222Z",
+        "created_at": "2022-10-22T12:56:12.222Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 283,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 284,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 285,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 286,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 287,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 288,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 289,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 290,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 291,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 292,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 293,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 7,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 294,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 295,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 296,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 297,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 298,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 299,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 300,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 301,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 302,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 303,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 304,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.223Z",
+        "created_at": "2022-10-22T12:56:12.223Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 305,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 306,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 307,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 308,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 309,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 8,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 310,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 311,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 312,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 313,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 314,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 315,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 316,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 317,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 318,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 319,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 320,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 321,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 322,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 323,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 324,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 325,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.224Z",
+        "created_at": "2022-10-22T12:56:12.224Z",
+        "category": 9,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 326,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-01-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Republic Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 327,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-03-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Mahashivratri\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 328,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-03-18",
+        "day": null,
+        "is_working_day": false,
+        "description": "Holi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 329,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-04-01",
+        "day": null,
+        "is_working_day": false,
+        "description": "Annual Bank Closing\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 330,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-04-14",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dr. Babasaheb Ambedkar Jayanti/ Mahavir Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 331,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-04-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Good Friday \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 332,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-05-03",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ramzan-Id (Id-Ul-Fitr)\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 333,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-05-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Buddha Pournima\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 334,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-08-09",
+        "day": null,
+        "is_working_day": false,
+        "description": "Moharram \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 335,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-08-15",
+        "day": null,
+        "is_working_day": false,
+        "description": "Independence Day\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 336,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-08-16",
+        "day": null,
+        "is_working_day": false,
+        "description": "Parsi New Year \r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 337,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-08-31",
+        "day": null,
+        "is_working_day": false,
+        "description": "Ganesh Chaturthi\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 338,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-10-05",
+        "day": null,
+        "is_working_day": false,
+        "description": "Dusshera\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 339,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Laxmi Pujan\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 340,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-10-26",
+        "day": null,
+        "is_working_day": false,
+        "description": "Diwali - Bali Pratipada\r",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 341,
+    "fields": {
+        "updated_at": "2022-10-22T12:56:12.225Z",
+        "created_at": "2022-10-22T12:56:12.225Z",
+        "category": 10,
+        "daytype": 2,
+        "date": "2022-11-08",
+        "day": null,
+        "is_working_day": false,
+        "description": "Gurunanak Jayanti\r",
+        "start_time": null,
+        "end_time": null
+    }
+}
+]

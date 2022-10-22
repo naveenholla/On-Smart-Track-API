@@ -1,0 +1,686 @@
+[
+{
+    "model": "market.index",
+    "pk": 1,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "India Vix",
+        "symbol": "indiavix",
+        "chart_symbol": "indiavix",
+        "slug": "nse_indiavix",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 1,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 2,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty 50",
+        "symbol": "nifty",
+        "chart_symbol": "nifty",
+        "slug": "nse_nifty",
+        "lot_size": 50,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 1,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 3,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty Next 50",
+        "symbol": "niftyjr",
+        "chart_symbol": "niftyjr",
+        "slug": "nse_niftyjr",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 2,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 4,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty 100",
+        "symbol": "cnx100",
+        "chart_symbol": "cnx100",
+        "slug": "nse_cnx100",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 3,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 5,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty 200",
+        "symbol": "cnx200",
+        "chart_symbol": "cnx200",
+        "slug": "nse_cnx200",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 4,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 6,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty 500",
+        "symbol": "cnx500",
+        "chart_symbol": "cnx500",
+        "slug": "nse_cnx500",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 5,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 7,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty Total Market",
+        "symbol": "cnx750",
+        "chart_symbol": "cnx750",
+        "slug": "nse_cnx750",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 6,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 8,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty Midcap 50",
+        "symbol": "niftymidcap50",
+        "chart_symbol": "niftymidcap50",
+        "slug": "nse_niftymidcap50",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 7,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 9,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "NIFTY Midcap 100",
+        "symbol": "cnxmidcap",
+        "chart_symbol": "cnxmidcap",
+        "slug": "nse_cnxmidcap",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 8,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 10,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty Midcap 150",
+        "symbol": "niftymidcap150",
+        "chart_symbol": "niftymidcap150",
+        "slug": "nse_niftymidcap150",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 9,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 11,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "Nifty Midcap Select",
+        "symbol": "midcpnifty",
+        "chart_symbol": "NIFTY_MID_SELECT",
+        "slug": "nse_midcpnifty",
+        "lot_size": 75,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 10,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 12,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "NIFTY Smallcap 50",
+        "symbol": "niftysmlcap50",
+        "chart_symbol": "niftysmlcap50",
+        "slug": "nse_niftysmlcap50",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 11,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 13,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.120Z",
+        "created_at": "2022-10-22T12:55:36.120Z",
+        "name": "NIFTY Smallcap 100",
+        "symbol": "cnxsmallcap",
+        "chart_symbol": "cnxsmallcap",
+        "slug": "nse_cnxsmallcap",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 12,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 14,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "NIFTY Smallcap 250",
+        "symbol": "niftysmlcap250",
+        "chart_symbol": "niftysmlcap250",
+        "slug": "nse_niftysmlcap250",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 13,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 15,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Microcap 250",
+        "symbol": "nifty_microcap250",
+        "chart_symbol": "nifty_microcap250",
+        "slug": "nse_nifty_microcap250",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 14,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 16,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "NIFTY LargeMidcap 250",
+        "symbol": "nifty_largemid250",
+        "chart_symbol": "nifty_largemid250",
+        "slug": "nse_nifty_largemid250",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 15,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 17,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty MidSmallcap 400",
+        "symbol": "niftymidsml400",
+        "chart_symbol": "niftymidsml400",
+        "slug": "nse_niftymidsml400",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 16,
+        "is_sectoral": false
+    }
+},
+{
+    "model": "market.index",
+    "pk": 18,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Auto",
+        "symbol": "cnxauto",
+        "chart_symbol": "cnxauto",
+        "slug": "nse_cnxauto",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 17,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 19,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Bank",
+        "symbol": "banknifty",
+        "chart_symbol": "banknifty",
+        "slug": "nse_banknifty",
+        "lot_size": 25,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 18,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 20,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Financial Services",
+        "symbol": "finnifty",
+        "chart_symbol": "CNXFINANCE",
+        "slug": "nse_finnifty",
+        "lot_size": 40,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 19,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 21,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty FMCG",
+        "symbol": "cnxfmcg",
+        "chart_symbol": "cnxfmcg",
+        "slug": "nse_cnxfmcg",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 20,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 22,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Healthcare Index",
+        "symbol": "nifty_healthcare",
+        "chart_symbol": "nifty_healthcare",
+        "slug": "nse_nifty_healthcare",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 21,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 23,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty IT",
+        "symbol": "cnxit",
+        "chart_symbol": "cnxit",
+        "slug": "nse_cnxit",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 22,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 24,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Media",
+        "symbol": "cnxmedia",
+        "chart_symbol": "cnxmedia",
+        "slug": "nse_cnxmedia",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 23,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 25,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Metal",
+        "symbol": "cnxmetal",
+        "chart_symbol": "cnxmetal",
+        "slug": "nse_cnxmetal",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 24,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 26,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Pharma",
+        "symbol": "cnxpharma",
+        "chart_symbol": "cnxpharma",
+        "slug": "nse_cnxpharma",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 25,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 27,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Private Bank",
+        "symbol": "niftypvtbank",
+        "chart_symbol": "niftypvtbank",
+        "slug": "nse_niftypvtbank",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 26,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 28,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty PSU Bank",
+        "symbol": "cnxpsubank",
+        "chart_symbol": "cnxpsubank",
+        "slug": "nse_cnxpsubank",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 27,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 29,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Realty",
+        "symbol": "cnxrealty",
+        "chart_symbol": "cnxrealty",
+        "slug": "nse_cnxrealty",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 28,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 30,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Consumer Durables",
+        "symbol": "nifty_consr_durbl",
+        "chart_symbol": "nifty_consr_durbl",
+        "slug": "nse_nifty_consr_durbl",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 29,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 31,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Commodities",
+        "symbol": "cnxcommodities",
+        "chart_symbol": "cnxcommodities",
+        "slug": "nse_cnxcommodities",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 30,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 32,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Energy",
+        "symbol": "cnxenergy",
+        "chart_symbol": "cnxenergy",
+        "slug": "nse_cnxenergy",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 31,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 33,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty India Consumption",
+        "symbol": "cnxconsumption",
+        "chart_symbol": "cnxconsumption",
+        "slug": "nse_cnxconsumption",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 32,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 34,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty Infrastructure",
+        "symbol": "cnxinfra",
+        "chart_symbol": "cnxinfra",
+        "slug": "nse_cnxinfra",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 33,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 35,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty MNC",
+        "symbol": "cnxmnc",
+        "chart_symbol": "cnxmnc",
+        "slug": "nse_cnxmnc",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 34,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 36,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.121Z",
+        "name": "Nifty PSE",
+        "symbol": "cnxpse",
+        "chart_symbol": "cnxpse",
+        "slug": "nse_cnxpse",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 35,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 37,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.121Z",
+        "created_at": "2022-10-22T12:55:36.122Z",
+        "name": "Nifty Services Sector",
+        "symbol": "cnxservice",
+        "chart_symbol": "cnxservice",
+        "slug": "nse_cnxservice",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 36,
+        "is_sectoral": true
+    }
+},
+{
+    "model": "market.index",
+    "pk": 38,
+    "fields": {
+        "updated_at": "2022-10-22T12:55:36.122Z",
+        "created_at": "2022-10-22T12:55:36.122Z",
+        "name": "Nifty Oil & Gas",
+        "symbol": "nifty_oil_and_gas",
+        "chart_symbol": "nifty_oil_and_gas",
+        "slug": "nse_nifty_oil_and_gas",
+        "lot_size": 0,
+        "strike_difference": 0,
+        "is_active": true,
+        "exchange": 1,
+        "ordinal": 37,
+        "is_sectoral": true
+    }
+}
+]

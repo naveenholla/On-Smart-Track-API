@@ -74,7 +74,7 @@ class MarketDayQuerySet(models.QuerySet):
         self,
         category_code=None,
         category_id=None,
-        dayType_id=None,
+        daytype_id=None,
         daytype_name=None,
         date=None,
         day=None,
@@ -82,10 +82,10 @@ class MarketDayQuerySet(models.QuerySet):
         if category_code is None and category_id is None:
             return self.none()
 
-        if daytype_name is None and dayType_id is None:
+        if daytype_name is None and daytype_id is None:
             return self.none()
 
-        if date is None or day is None:
+        if date is None and day is None:
             return self.none()
 
         if category_code is not None:
@@ -96,7 +96,7 @@ class MarketDayQuerySet(models.QuerySet):
         if daytype_name is not None:
             lookups = lookups & Q(daytype__name__iexact=daytype_name)
         else:
-            lookups = lookups & Q(category_id=dayType_id)
+            lookups = lookups & Q(daytype_id=daytype_id)
 
         if date is not None:
             lookups = lookups & Q(date=date)

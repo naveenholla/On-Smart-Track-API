@@ -4,13 +4,14 @@ from urllib.request import urlopen
 
 import yaml
 
-from ontrack.market.data.common import CommonData
 from ontrack.market.querysets.lookup import (
     EquityIndexQuerySet,
     EquityQuerySet,
     ExchangeQuerySet,
     IndexQuerySet,
 )
+from ontrack.utils.config import Configurations
+from ontrack.utils.filesystem import FileSystemHelper
 from ontrack.utils.logger import ApplicationLogger
 
 
@@ -106,7 +107,7 @@ class PullEquityIndexData:
             return json.load(file_final2)
 
     def pull_indices_market_cap(self, record: dict):
-        temp_folder = CommonData().create_temp_folder("IndexWeightage")
+        temp_folder = FileSystemHelper.create_temp_folder("IndexWeightage")
 
         if "url" not in record:
             self.logger.log_debug("No url exists for '%s'." % record["name"])
@@ -121,14 +122,16 @@ class PullEquityIndexData:
         self.logger.log_debug(f"Started with {index_name}, {index_url}.")
 
         try:
+
             with urlopen(index_url) as webpage:
-                self.__parse_webContent(webpage, url_temp)
+                result = self.__parse_webContent(webpage, url_temp)
+
         except Exception as e:
-            message = (
-                f"Request exception from pull indices {index_url} - `{format(e)}`."
-            )
+            message = f"Exception from pull indices {index_url} - `{format(e)}`."
             self.logger.log_critical(message=message)
             raise
+
+        return result
 
     def parse_indices_market_cap(self, index_name: str, record: dict) -> array:
         entities = []
@@ -149,3 +152,22 @@ class PullEquityIndexData:
                     entities.append(entity)
 
         return entities
+
+    def pull_and_parse_market_cap(self):
+        urls = Configurations.get_urls_config()
+
+        indices_percentage_urls = urls["indices_percentage"]
+
+        results = []
+        for record in indices_percentage_urls:
+            weightage_obj = self.pull_indices_market_cap(record)
+
+            if "url" not in record:
+                continue
+
+            else:
+                results += self.parse_indices_market_cap(
+                    record["symbol"], weightage_obj[0]
+                )
+
+        return results

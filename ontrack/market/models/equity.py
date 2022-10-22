@@ -1,6 +1,6 @@
 from django.db import models
 
-from ontrack.market.managers.equity import EquityEndOfDayPullManager
+from ontrack.market.managers.equity import EquityEndOfDayBackendManager
 from ontrack.market.models.lookup import Equity
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
@@ -126,7 +126,7 @@ class EquityEndOfDay(BaseModel):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    backend = EquityEndOfDayPullManager()
+    backend = EquityEndOfDayBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

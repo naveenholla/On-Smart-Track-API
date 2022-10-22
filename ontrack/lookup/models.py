@@ -3,7 +3,7 @@ from django.db import models
 from ontrack.utils.base.enum import AdminSettingKey
 from ontrack.utils.base.model import BaseModel
 
-from .manager import SettingPullManager
+from .manager import SettingBackendManager
 
 
 # Create your models here.
@@ -22,7 +22,7 @@ class Setting(BaseModel):
     key = models.CharField(max_length=50, choices=AdminSettingKey.choices, unique=True)
     value = models.CharField(max_length=200)
 
-    backend = SettingPullManager()
+    backend = SettingBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

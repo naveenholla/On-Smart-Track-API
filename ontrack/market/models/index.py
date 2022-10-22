@@ -1,6 +1,6 @@
 from django.db import models
 
-from ontrack.market.managers.index import IndexEndOfDayPullManager
+from ontrack.market.managers.index import IndexEndOfDayBackendManager
 from ontrack.market.models.lookup import Index
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
@@ -95,7 +95,7 @@ class IndexEndOfDay(BaseModel):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    backend = IndexEndOfDayPullManager()
+    backend = IndexEndOfDayBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

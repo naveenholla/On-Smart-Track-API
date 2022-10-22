@@ -2,10 +2,13 @@ from django.db import models
 from timezone_field import TimeZoneField
 
 from ontrack.market.managers.lookup import (
-    EquityIndexPullManager,
-    EquityPullManager,
-    ExchangePullManager,
-    IndexPullManager,
+    EquityBackendManager,
+    EquityIndexBackendManager,
+    ExchangeBackendManager,
+    IndexBackendManager,
+    MarketDayBackendManager,
+    MarketDayCategoryBackendManager,
+    MarketDayTypeBackendManager,
 )
 from ontrack.utils.base.enum import (
     HolidayCategoryType,
@@ -26,7 +29,7 @@ class Exchange(BaseModel):
     data_refresh_time = models.TimeField(null=True, blank=True)
     time_zone = TimeZoneField(default="Asia/Kolkata", choices_display="WITH_GMT_OFFSET")
 
-    backend = ExchangePullManager()
+    backend = ExchangeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -40,6 +43,8 @@ class MarketDayType(BaseModel):
     exchange = models.ForeignKey(
         Exchange, related_name="day_types", on_delete=models.CASCADE
     )
+
+    backend = MarketDayTypeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -56,6 +61,8 @@ class MarketDayCategory(BaseModel):
     )
     display_name = models.CharField(max_length=50, choices=HolidayCategoryType.choices)
     code = models.CharField(max_length=50, unique=True)
+
+    backend = MarketDayCategoryBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -79,6 +86,8 @@ class MarketDay(BaseModel):
     description = models.CharField(max_length=100, null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
+
+    backend = MarketDayBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -182,7 +191,7 @@ class Equity(MarketEntity):
         Exchange, related_name="equities", on_delete=models.CASCADE
     )
 
-    backend = EquityPullManager()
+    backend = EquityBackendManager()
 
 
 # Create your models here.
@@ -194,7 +203,7 @@ class Index(MarketEntity):
     ordinal = models.IntegerField()
     is_sectoral = models.BooleanField(default=False)
 
-    backend = IndexPullManager()
+    backend = IndexBackendManager()
 
 
 class EquityIndex(BaseModel):
@@ -215,7 +224,7 @@ class EquityIndex(BaseModel):
     )
     last_update_date = models.DateField(null=True, blank=True, auto_now=True)
 
-    backend = EquityIndexPullManager()
+    backend = EquityIndexBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

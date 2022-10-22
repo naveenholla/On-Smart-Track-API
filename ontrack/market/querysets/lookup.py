@@ -69,7 +69,7 @@ class MarketDayCategoryQuerySet(models.QuerySet):
         return self.filter(lookups)
 
 
-class MarketDaySet(models.QuerySet):
+class MarketDayQuerySet(models.QuerySet):
     def unique_search(
         self,
         category_code=None,

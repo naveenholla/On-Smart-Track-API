@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class PullManagerAbstarct(models.Manager):
+class BackendManagerAbstarct(models.Manager):
     def unique_search(self, query):
         return self.get_queryset().unique_search(query=query)
 
@@ -15,7 +15,7 @@ class PullManagerAbstarct(models.Manager):
         self.get_queryset().search_old_records().delete()
 
 
-class EndOfDayPullManagerAbstract(PullManagerAbstarct):
+class EndOfDayBackendManagerAbstract(BackendManagerAbstarct):
     def get_records_after_date(self, query):
         return self.get_queryset().get_records_after_date(query=query)
 

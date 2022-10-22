@@ -1,9 +1,9 @@
-from ontrack.utils.base.manager import PullManagerAbstarct
+from ontrack.utils.base.manager import BackendManagerAbstarct
 
 from .queryset import SettingQuerySet
 
 
-class SettingPullManager(PullManagerAbstarct):
+class SettingBackendManager(BackendManagerAbstarct):
     def get_queryset(self):
         return SettingQuerySet(self.model, using=self._db)
 

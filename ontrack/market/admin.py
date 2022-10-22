@@ -2,6 +2,8 @@ import csv
 
 from django.contrib import admin
 from django.http import HttpResponse
+from django.urls import reverse
+from django.utils.html import format_html
 
 from ontrack.market.models.lookup import (
     Equity,
@@ -120,7 +122,14 @@ class IndexAdmin(admin.ModelAdmin, ExportCsvMixin):
 
 @admin.register(EquityIndex)
 class EquityIndexAdmin(admin.ModelAdmin, ExportCsvMixin):
-    list_display = ("index", "equity", "equity_weightage", "sector", "sector_weightage")
+    list_display = (
+        "id",
+        "link_to_index",
+        "equity",
+        "equity_weightage",
+        "sector",
+        "sector_weightage",
+    )
     search_fields = (
         "index__name__icontains",
         "equity__name__icontains",
@@ -133,6 +142,12 @@ class EquityIndexAdmin(admin.ModelAdmin, ExportCsvMixin):
         "sector",
     )
     actions = ["export_as_csv"]
+
+    def link_to_index(self, obj):
+        link = reverse("admin:market_index_change", args=[obj.index_id])
+        return format_html('<a href="{}">{}</a>', link, obj.index.name)
+
+    link_to_index.short_description = "Index"
 
 
 admin.site.register(MarketBroker)

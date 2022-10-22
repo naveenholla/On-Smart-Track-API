@@ -63,3 +63,7 @@ if settings.DEBUG:
         import debug_toolbar
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
+
+admin.site.site_header = "OnSmartTrack API Admin"
+admin.site.site_title = "OnSmartTrack API Admin Portal"
+admin.site.index_title = "Welcome to On Smart Track API Portal"

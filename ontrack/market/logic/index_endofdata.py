@@ -29,7 +29,7 @@ class IndicesDataPullLogic:
 
     def get_pull_indices_eod_data_task(self):
         date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
-        last_pull_date = AdminSetting.datapull_manager.get_setting(date_key)
+        last_pull_date = AdminSetting.backend.get_setting(date_key)
 
         if last_pull_date is None:
             return DateTimeHelper.string_to_datetime(
@@ -42,7 +42,7 @@ class IndicesDataPullLogic:
 
     def save_pull_indices_eod_data_task_time(self, date):
         date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
-        AdminSetting.datapull_manager.save_setting(
+        AdminSetting.backend.save_setting(
             date_key, DateTimeHelper.convert_datetime_to_string(date)
         )
 
@@ -141,7 +141,7 @@ class IndicesDataPullLogic:
 
             records_to_create.append(d)
 
-        IndexEndOfDay.datapull_manager.bulk_create_or_update(
+        IndexEndOfDay.backend.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -171,7 +171,7 @@ class IndicesDataPullLogic:
                 self.get_pull_indices_eod_data_task(), days=1
             )
             urls = Configurations.get_urls_config()  # get the urls from configurations
-            indices = Index.datapull_manager.all()  # get all equities
+            indices = Index.backend.all()  # get all equities
 
             output = ""
             currentdate = DateTimeHelper.current_date()
@@ -179,7 +179,7 @@ class IndicesDataPullLogic:
             self.logger.log_debug(f"Current Date:{currentdate}")
             self.logger.log_debug(f"Date:{date}")
 
-            IndexEndOfDay.datapull_manager.delete_records_after_date(
+            IndexEndOfDay.backend.delete_records_after_date(
                 date=date
             )  # delete all the future records
             while date <= currentdate:

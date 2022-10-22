@@ -126,7 +126,7 @@ class EquityEndOfDay(BaseModel):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    datapull_manager = EquityEndOfDayPullManager()
+    backend = EquityEndOfDayPullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

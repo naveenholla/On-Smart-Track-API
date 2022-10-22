@@ -34,10 +34,10 @@ class CommonData:
 
         for fixture in fixtures:
             fixture_details = fixture.split(".")
-            source = (
-                f"{app_folder}/{fixture_details[0]}/fixtures/{fixture_details[1]}.json"
-            )
-            destination = temp_folder / f"{fixture_details[1]}.json"
+            app_name = fixture_details[0]
+            model = fixture_details[1]
+            source = f"{app_folder}/{app_name}/fixtures/{model}.json"
+            destination = temp_folder / f"{model}.json"
             print(source)
             print(destination)
 
@@ -61,7 +61,7 @@ class CommonData:
             # remove extra spaces in the dictionaty keys
             record = {k.strip(): v for (k, v) in record.items()}
             market_cap = {}
-            market_cap["symbol"] = record["SYMBOL"].strip()
+            market_cap["symbol"] = record["SYMBOL"].strip().lower()
             market_cap["lot_size"] = record["lot_size"].strip()
 
             market_caps.append(market_cap)

@@ -27,7 +27,11 @@ class PullIndexData:
         self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 
     def __parse_index_data(self, record):
-        symbol = record["symbol"].strip()
+        symbol = record["symbol"].strip().lower()
+        strike_diff = (
+            record["strike_difference"] if "strike_difference" in record else 0
+        )
+        chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
         existing_entity = self.index_qs.unique_search(symbol).first()
@@ -35,11 +39,9 @@ class PullIndexData:
             pk = existing_entity.id
 
         lot_size = 0
-        market_cap_record = [
-            x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
-        ]
-        if len(market_cap_record) > 0:
-            lot_size_str = market_cap_record[0]["lot_size"].strip()
+        mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
+        if len(mcr) > 0:
+            lot_size_str = mcr[0]["lot_size"].strip()
             lot_size = NumberHelper.str_to_float(lot_size_str)
 
         entity = {}
@@ -47,17 +49,13 @@ class PullIndexData:
         entity["exchange"] = self.exchange
         entity["name"] = record["name"]
         entity["symbol"] = symbol
-        entity["chart_symbol"] = (
-            record["chart_symbol"] if "chart_symbol" in record else symbol
-        )
+        entity["chart_symbol"] = chart_symbol
         entity["lot_size"] = lot_size
         entity["ordinal"] = record["ordinal"]
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
         entity["is_sectoral"] = record["is_sector"]
         entity["is_active"] = record["is_active"]
-        entity["strike_difference"] = (
-            record["strike_difference"] if "strike_difference" in record else 0
-        )
+        entity["strike_difference"] = strike_diff
 
         return entity
 

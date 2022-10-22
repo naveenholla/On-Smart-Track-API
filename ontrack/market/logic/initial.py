@@ -32,7 +32,7 @@ class InitialDataPullLogic:
 
             self.logger.log_debug(f"Starting with {exchange_name}.")
 
-            exchange_obj = Exchange.datapull_manager.filter(name=exchange_name).first()
+            exchange_obj = Exchange.backend.filter(name=exchange_name).first()
 
             if not exchange_obj:
                 self.logger.log_info("Exchange not exists. Creating.")

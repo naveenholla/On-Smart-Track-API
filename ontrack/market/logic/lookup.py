@@ -28,15 +28,15 @@ class LookupDataPullLogic:
         self.logger = ApplicationLogger()
 
     def create_lookup_files(self):
-        exchanges = Exchange.datapull_manager.all()
+        exchanges = Exchange.backend.all()
         Configurations.save_exchanges(ExchangeSerializer(exchanges, many=True).data)
 
     def can_run_pull_equity_lookup_data_task(self):
         date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
         days_pause_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DAY_PAUSE
 
-        last_pull_date = AdminSetting.datapull_manager.get_setting(date_key)
-        days_pause = AdminSetting.datapull_manager.get_setting(days_pause_key)
+        last_pull_date = AdminSetting.backend.get_setting(date_key)
+        days_pause = AdminSetting.backend.get_setting(days_pause_key)
 
         if days_pause is None:
             days_pause = Configurations.get_default_values_config()[
@@ -53,7 +53,7 @@ class LookupDataPullLogic:
 
     def save_pull_equity_lookup_data_task_time(self):
         date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
-        AdminSetting.datapull_manager.save_setting(
+        AdminSetting.backend.save_setting(
             date_key,
             DateTimeHelper.convert_datetime_to_string(
                 DateTimeHelper.current_date_time()
@@ -153,13 +153,13 @@ class LookupDataPullLogic:
 
     @transaction.atomic
     def save_equity_sectors_from_indices(self, data):
-        equities = Equity.datapull_manager.all()
-        indices = Index.datapull_manager.all()
+        equities = Equity.backend.all()
+        indices = Index.backend.all()
 
         records_to_create = []
         records_to_update = []
         for _, record in data.iterrows():
-            obj = EquityIndex.datapull_manager.unique_search(record).first()
+            obj = EquityIndex.backend.unique_search(record).first()
             index = indices.unique_search(record).first()
             equity = equities.unique_search(record).first()
 
@@ -201,7 +201,7 @@ class LookupDataPullLogic:
                 )
                 records_to_update.append(d)
 
-        EquityIndex.datapull_manager.bulk_create_or_update(
+        EquityIndex.backend.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -229,12 +229,12 @@ class LookupDataPullLogic:
         )  # set 0 to null values
         # records = mergedRecords.to_dict('records') # convert to dictionary
 
-        exchanges = Exchange.datapull_manager.all()
+        exchanges = Exchange.backend.all()
 
         records_to_create = []
         records_to_update = []
         for _, record in mergedRecords.iterrows():
-            obj = Equity.datapull_manager.unique_search(record).first()
+            obj = Equity.backend.unique_search(record).first()
             exchange = exchanges.unique_search(record).first()
 
             if exchange is None:
@@ -276,7 +276,7 @@ class LookupDataPullLogic:
                 )
                 records_to_update.append(d)
 
-        Equity.datapull_manager.bulk_create_or_update(
+        Equity.backend.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -297,7 +297,7 @@ class LookupDataPullLogic:
         indices_percentage_urls = urls["indices_percentage"]
         data_marketlot = self.pull_equity_marketlot_data(urls)  # pull market lot size
 
-        exchanges = Exchange.datapull_manager.all()
+        exchanges = Exchange.backend.all()
 
         data_day_list = []
         records_to_create = []
@@ -313,7 +313,7 @@ class LookupDataPullLogic:
                     record["lot_size"] = record_lot["lot_size"]
                     break
 
-            obj = Index.datapull_manager.unique_search(record).first()
+            obj = Index.backend.unique_search(record).first()
             exchange = exchanges.unique_search(record).first()
 
             index_name = str(record["name"])
@@ -375,7 +375,7 @@ class LookupDataPullLogic:
                     f"{len(data_day_list)} records found for {record['name']}."
                 )
 
-        Index.datapull_manager.bulk_create_or_update(
+        Index.backend.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -407,7 +407,7 @@ class LookupDataPullLogic:
         return output
 
     def delete_old_records(self):
-        EquityIndex.datapull_manager.delete_old_records()
+        EquityIndex.backend.delete_old_records()
 
     def execute_equity_lookup_data_task(self):
         try:

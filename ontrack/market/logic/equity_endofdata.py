@@ -30,7 +30,7 @@ class EquityDataPullLogic:
 
     def get_pull_equity_eod_data_task(self):
         date_key = AdminSettingKey.DATAPULL_EQUITY_EOD_DATA_DATE
-        last_pull_date = AdminSetting.datapull_manager.get_setting(date_key)
+        last_pull_date = AdminSetting.backend.get_setting(date_key)
 
         if last_pull_date is None:
             return DateTimeHelper.string_to_datetime(
@@ -43,7 +43,7 @@ class EquityDataPullLogic:
 
     def save_pull_equity_eod_data_task_time(self, date):
         date_key = AdminSettingKey.DATAPULL_EQUITY_EOD_DATA_DATE
-        AdminSetting.datapull_manager.save_setting(
+        AdminSetting.backend.save_setting(
             date_key, DateTimeHelper.convert_datetime_to_string(date)
         )
 
@@ -122,8 +122,8 @@ class EquityDataPullLogic:
             record["date"] = DateTimeHelper.string_to_datetime(
                 record["date"], "%d-%b-%Y"
             )
-            records_for_average = (
-                EquityEndOfDay.datapull_manager.get_records_after_date(query=record)
+            records_for_average = EquityEndOfDay.backend.get_records_after_date(
+                query=record
             )
             average_values = records_for_average.aggregate(
                 average_quantity_per_trade=Avg("quantity_per_trade"),
@@ -172,7 +172,7 @@ class EquityDataPullLogic:
 
             records_to_create.append(d)
 
-        EquityEndOfDay.datapull_manager.bulk_create_or_update(
+        EquityEndOfDay.backend.bulk_create_or_update(
             records_to_create,
             records_to_update,
             [
@@ -203,7 +203,7 @@ class EquityDataPullLogic:
                 self.get_pull_equity_eod_data_task(), days=1
             )
             urls = Configurations.get_urls_config()  # get the urls from configurations
-            equities = Equity.datapull_manager.all()  # get all equities
+            equities = Equity.backend.all()  # get all equities
 
             output = ""
             currentdate = DateTimeHelper.current_date()
@@ -211,7 +211,7 @@ class EquityDataPullLogic:
             self.logger.log_debug(f"Current Date:{currentdate}")
             self.logger.log_debug(f"Date:{date}")
 
-            EquityEndOfDay.datapull_manager.delete_records_after_date(
+            EquityEndOfDay.backend.delete_records_after_date(
                 date=date
             )  # delete all the future records
             while date <= currentdate:

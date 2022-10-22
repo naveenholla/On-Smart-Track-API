@@ -9,8 +9,8 @@ class TestPullIndexData:
         self.exchange_fixture = exchange_fixture
         self.index_fixture = index_fixture
         self.index_data_fixture = index_data_fixture
-        self.exchange_queryset = Exchange.datapull_manager.all()
-        self.index_queryset = Index.datapull_manager.all()
+        self.exchange_queryset = Exchange.backend.all()
+        self.index_queryset = Index.backend.all()
 
     @pytest.mark.integration
     def test_pull_and_parse_index_data_invalid(self):

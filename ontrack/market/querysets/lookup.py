@@ -49,3 +49,58 @@ class EquityIndexQuerySet(models.QuerySet):
             ]
         )
         return self.filter(last_update_date__lt=threshold)
+
+
+class MarketDayTypeQuerySet(models.QuerySet):
+    def unique_search(self, name=None):
+        if name is None:
+            return self.none()
+
+        lookups = Q(name__iexact=name)
+        return self.filter(lookups)
+
+
+class MarketDayCategoryQuerySet(models.QuerySet):
+    def unique_search(self, code=None):
+        if code is None:
+            return self.none()
+
+        lookups = Q(code__iexact=code)
+        return self.filter(lookups)
+
+
+class MarketDaySet(models.QuerySet):
+    def unique_search(
+        self,
+        category_code=None,
+        category_id=None,
+        dayType_id=None,
+        daytype_name=None,
+        date=None,
+        day=None,
+    ):
+        if category_code is None and category_id is None:
+            return self.none()
+
+        if daytype_name is None and dayType_id is None:
+            return self.none()
+
+        if date is None or day is None:
+            return self.none()
+
+        if category_code is not None:
+            lookups = Q(category__code__iexact=category_code)
+        else:
+            lookups = Q(category_id=category_id)
+
+        if daytype_name is not None:
+            lookups = lookups & Q(daytype__name__iexact=daytype_name)
+        else:
+            lookups = lookups & Q(category_id=dayType_id)
+
+        if date is not None:
+            lookups = lookups & Q(date=date)
+        else:
+            lookups = lookups & Q(day=day)
+
+        return self.filter(lookups)

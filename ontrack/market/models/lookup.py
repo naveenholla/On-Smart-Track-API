@@ -26,7 +26,7 @@ class Exchange(BaseModel):
     data_refresh_time = models.TimeField(null=True, blank=True)
     time_zone = TimeZoneField(default="Asia/Kolkata", choices_display="WITH_GMT_OFFSET")
 
-    datapull_manager = ExchangePullManager()
+    backend = ExchangePullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -67,6 +67,9 @@ class MarketDayCategory(BaseModel):
 class MarketDay(BaseModel):
     category = models.ForeignKey(
         MarketDayCategory, related_name="days", on_delete=models.CASCADE
+    )
+    daytype = models.ForeignKey(
+        MarketDayType, related_name="days", on_delete=models.CASCADE
     )
     date = models.DateField(null=True, blank=True)
     day = models.CharField(
@@ -179,7 +182,7 @@ class Equity(MarketEntity):
         Exchange, related_name="equities", on_delete=models.CASCADE
     )
 
-    datapull_manager = EquityPullManager()
+    backend = EquityPullManager()
 
 
 # Create your models here.
@@ -191,7 +194,7 @@ class Index(MarketEntity):
     ordinal = models.IntegerField()
     is_sectoral = models.BooleanField(default=False)
 
-    datapull_manager = IndexPullManager()
+    backend = IndexPullManager()
 
 
 class EquityIndex(BaseModel):
@@ -212,7 +215,7 @@ class EquityIndex(BaseModel):
     )
     last_update_date = models.DateField(null=True, blank=True, auto_now=True)
 
-    datapull_manager = EquityIndexPullManager()
+    backend = EquityIndexPullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

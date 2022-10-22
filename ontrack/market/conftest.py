@@ -69,8 +69,8 @@ def equity_data_fixture(
     equity_fixture: EquityFactory, exchange_fixture: ExchangeFactory
 ):
     def _method(exchange_symbol):
-        exchange_queryset = Exchange.datapull_manager.all()
-        equity_queryset = Equity.datapull_manager.all()
+        exchange_queryset = Exchange.backend.all()
+        equity_queryset = Equity.backend.all()
         assert exchange_queryset.count() > 0
 
         urls = Configurations.get_urls_config()
@@ -92,8 +92,8 @@ def equity_data_fixture(
 @pytest.fixture(autouse=True)
 def index_data_fixture(index_fixture: IndexFactory, exchange_fixture: ExchangeFactory):
     def _method(exchange_symbol):
-        exchange_queryset = Exchange.datapull_manager.all()
-        index_queryset = Index.datapull_manager.all()
+        exchange_queryset = Exchange.backend.all()
+        index_queryset = Index.backend.all()
         assert exchange_queryset.count() > 0
 
         urls = Configurations.get_urls_config()
@@ -124,8 +124,8 @@ def equity_index_data_fixture(
     equities = equity_data_fixture(exchange_fixture.symbol)
     datapull = CommonData()
 
-    datapull.create_or_update(indices, Index, Index.datapull_manager)
-    datapull.create_or_update(equities, Equity, Equity.datapull_manager)
+    datapull.create_or_update(indices, Index, Index.backend)
+    datapull.create_or_update(equities, Equity, Equity.backend)
 
-    assert Index.datapull_manager.all().count() == len(indices)
-    assert Equity.datapull_manager.all().count() == len(equities)
+    assert Index.backend.all().count() == len(indices)
+    assert Equity.backend.all().count() == len(equities)

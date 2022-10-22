@@ -9,10 +9,10 @@ class TestPullEquityIndexData:
     @pytest.fixture(autouse=True)
     def injector(self, equity_index_data_fixture):
         self.equity_index_data_fixture = equity_index_data_fixture
-        self.exchange_qs = Exchange.datapull_manager.all()
-        self.index_qs = Index.datapull_manager.all()
-        self.equity_qs = Equity.datapull_manager.all()
-        self.equityindex_qs = EquityIndex.datapull_manager.all()
+        self.exchange_qs = Exchange.backend.all()
+        self.index_qs = Index.backend.all()
+        self.equity_qs = Equity.backend.all()
+        self.equityindex_qs = EquityIndex.backend.all()
 
     @pytest.mark.integration
     @pytest.mark.parametrize(

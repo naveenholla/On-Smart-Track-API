@@ -30,7 +30,10 @@ class PullEquityData:
     def __parse_equity_data(self, record):
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
-        symbol = record["SYMBOL"].strip()
+        symbol = record["SYMBOL"].strip().lower()
+        strike_diff = (
+            record["strike_difference"] if "strike_difference" in record else 0
+        )
 
         pk = None
         existing_entity = self.equity_qs.unique_search(symbol).first()
@@ -38,11 +41,9 @@ class PullEquityData:
             pk = existing_entity.id
 
         lot_size = 0
-        market_cap_record = [
-            x for x in self.market_cap_records if x["symbol"].lower() == symbol.lower()
-        ]
-        if len(market_cap_record) > 0:
-            lot_size_str = market_cap_record[0]["lot_size"].strip()
+        mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
+        if len(mcr) > 0:
+            lot_size_str = mcr[0]["lot_size"].strip()
             lot_size = NumberHelper.str_to_float(lot_size_str)
 
         entity = {}
@@ -53,9 +54,7 @@ class PullEquityData:
         entity["lot_size"] = lot_size
         entity["chart_symbol"] = symbol
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
-        entity["strike_difference"] = (
-            record["strike_difference"] if "strike_difference" in record else 0
-        )
+        entity["strike_difference"] = strike_diff
 
         return entity
 
@@ -63,9 +62,7 @@ class PullEquityData:
         self.logger.log_debug(f"Started with {self.equity_listing_url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(
-                f"Exchange with symbol '{self.exchange_symbol}' doesn't exists"
-            )
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return None
 
         # pull csv containing all the listed equities from web

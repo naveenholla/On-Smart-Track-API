@@ -95,7 +95,7 @@ class IndexEndOfDay(BaseModel):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    datapull_manager = IndexEndOfDayPullManager()
+    backend = IndexEndOfDayPullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

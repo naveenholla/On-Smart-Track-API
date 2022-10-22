@@ -42,16 +42,12 @@ class PullEquityIndexData:
 
         index = self.index_qs.unique_search(index_symbol).first()
         if index is None:
-            self.logger.log_warning(
-                f"Index with symbol '{index_symbol}' doesn't exists"
-            )
+            self.logger.log_warning(f"Index '{index_symbol}' doesn't exists")
             return None
 
         equity = self.equity_qs.unique_search(equity_symbol).first()
         if equity is None:
-            self.logger.log_warning(
-                f"Equity with symbol '{equity_symbol}' doesn't exists"
-            )
+            self.logger.log_warning(f"Equity '{equity_symbol}' doesn't exists")
             return None
 
         pk = None

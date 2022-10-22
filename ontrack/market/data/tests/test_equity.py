@@ -9,8 +9,8 @@ class TestPullEquityData:
         self.exchange_fixture = exchange_fixture
         self.equity_fixture = equity_fixture
         self.equity_data_fixture = equity_data_fixture
-        self.exchange_queryset = Exchange.datapull_manager.all()
-        self.equity_queryset = Equity.datapull_manager.all()
+        self.exchange_queryset = Exchange.backend.all()
+        self.equity_queryset = Equity.backend.all()
 
     @pytest.mark.integration
     def test_pull_and_parse_equity_data_invalid(self):

@@ -22,7 +22,7 @@ class Setting(BaseModel):
     key = models.CharField(max_length=50, choices=AdminSettingKey.choices, unique=True)
     value = models.CharField(max_length=200)
 
-    datapull_manager = SettingPullManager()
+    backend = SettingPullManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

@@ -1,12 +1,13 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminSettingKey(models.TextChoices):
-    NO_OF_DAYS_AVG = "NO_OF_DAYS_AVG"
-    DATAPULL_EQUITY_LOOKUP_DATE = "DATAPULL_EQUITY_LOOKUP_DATE"
-    DATAPULL_EQUITY_LOOKUP_DAY_PAUSE = "DATAPULL_EQUITY_LOOKUP_DAY_PAUSE"
-    DATAPULL_EQUITY_EOD_DATA_DATE = "DATAPULL_EQUITY_EOD_DATA_DATE"
-    DATAPULL_INDICES_EOD_DATA_DATE = "DATAPULL_INDICES_EOD_DATA_DATE"
+    NO_OF_DAYS_AVG = _("NO_OF_DAYS_AVG")
+    DATAPULL_EQUITY_LOOKUP_DATE = _("DATAPULL_EQUITY_LOOKUP_DATE")
+    DATAPULL_EQUITY_LOOKUP_DAY_PAUSE = _("DATAPULL_EQUITY_LOOKUP_DAY_PAUSE")
+    DATAPULL_EQUITY_EOD_DATA_DATE = _("DATAPULL_EQUITY_EOD_DATA_DATE")
+    DATAPULL_INDICES_EOD_DATA_DATE = _("DATAPULL_INDICES_EOD_DATA_DATE")
 
 
 class UserSettingKey(models.TextChoices):
@@ -18,8 +19,8 @@ class UserSettingKey(models.TextChoices):
 
 
 class ExpiryType(models.TextChoices):
-    WEEKLY = "WEEKLY"
-    MONTHLY = "MONTHLY"
+    WEEKLY = _("WEEKLY")
+    MONTHLY = _("MONTHLY")
 
 
 class OrderValidityType(models.TextChoices):
@@ -39,6 +40,8 @@ class HolidayParentCategoryType(models.TextChoices):
     CAPITAL_MARKET = "Capital Market"
     DEBT_MARKET = "Debt Market"
     DERIVATIVES_MARKET = "Derivatives Market"
+    WEEKEND = "Weekend"
+    SPECIAL_TRADING = "Special Trading"
 
 
 class HolidayCategoryType(models.TextChoices):

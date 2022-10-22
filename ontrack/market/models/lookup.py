@@ -33,6 +33,8 @@ class Exchange(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Exchange"
+        verbose_name_plural = "Exchanges"
 
     def __str__(self):
         return self.name
@@ -49,6 +51,8 @@ class MarketDayType(BaseModel):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = ("exchange", "name")
+        verbose_name = "Market Day Type"
+        verbose_name_plural = "Market Day Types"
 
     def __str__(self):
         return f"{self.exchange} - {self.name}"
@@ -66,6 +70,8 @@ class MarketDayCategory(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Market Day Category"
+        verbose_name_plural = "Market Day Categories"
 
     def __str__(self):
         return f"{self.display_name} ({self.code})"
@@ -92,9 +98,16 @@ class MarketDay(BaseModel):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = ("category", "date", "day")
+        verbose_name = "Market Day"
+        verbose_name_plural = "Market Days"
 
     def __str__(self):
-        return f"{self.category} - {self.date.strftime('%d/%m/%Y %H:%M:%S')}"
+        name = f"{self.category} - "
+        if self.date is not None:
+            name += f"{name}{self.date.strftime('%d/%m/%Y %H:%M:%S')}"
+        else:
+            name += f"{name}{self.day}"
+        return name
 
 
 class MarketBroker(BaseModel):
@@ -102,6 +115,8 @@ class MarketBroker(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Market Broker"
+        verbose_name_plural = "Market Brokers"
 
     def __str__(self):
         return self.name
@@ -121,6 +136,8 @@ class MarketSector(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Market Sector"
+        verbose_name_plural = "Market Sectors"
 
     def __str__(self):
         return self.sector_name[0:50]
@@ -151,6 +168,8 @@ class MarketTradingStrategy(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Trading Strategy"
+        verbose_name_plural = "Trading Startegies"
 
     def __str__(self):
         return self.name
@@ -165,6 +184,8 @@ class MarketTradingStrategySymbol(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Trading Startegy Symbol"
+        verbose_name_plural = "Trading Strategy Symbols"
 
     def __str__(self):
         return self.symbol
@@ -181,9 +202,11 @@ class MarketEntity(BaseModel):
 
     class Meta(BaseModel.Meta):
         abstract = True
+        verbose_name = "Market Entity"
+        verbose_name_plural = "Market Entities"
 
     def __str__(self):
-        return self.symbol
+        return f"{self.name}"
 
 
 class Equity(MarketEntity):
@@ -192,6 +215,10 @@ class Equity(MarketEntity):
     )
 
     backend = EquityBackendManager()
+
+    class Meta(BaseModel.Meta):
+        verbose_name = "Equity"
+        verbose_name_plural = "Equities"
 
 
 # Create your models here.
@@ -204,6 +231,10 @@ class Index(MarketEntity):
     is_sectoral = models.BooleanField(default=False)
 
     backend = IndexBackendManager()
+
+    class Meta(BaseModel.Meta):
+        verbose_name = "Index"
+        verbose_name_plural = "Indices"
 
 
 class EquityIndex(BaseModel):
@@ -228,6 +259,8 @@ class EquityIndex(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        verbose_name = "Equity Index Weightage"
+        verbose_name_plural = "Equity Index Weightages"
 
     def __str__(self):
-        return self.symbol
+        return f"{self.index}:{self.equity} ({self.equity_weightage})"

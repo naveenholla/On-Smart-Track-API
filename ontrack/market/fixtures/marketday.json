@@ -5454,5 +5454,53 @@
         "start_time": null,
         "end_time": null
     }
+},
+{
+    "model": "market.marketday",
+    "pk": 342,
+    "fields": {
+        "updated_at": "2022-10-22T14:55:30.037Z",
+        "created_at": "2022-10-22T14:55:07.006Z",
+        "category": 12,
+        "daytype": 4,
+        "date": "2022-10-24",
+        "day": null,
+        "is_working_day": true,
+        "description": "Muhurat Trading",
+        "start_time": "18:15:00",
+        "end_time": "19:15:00"
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 346,
+    "fields": {
+        "updated_at": "2022-10-22T15:01:34.370Z",
+        "created_at": "2022-10-22T15:01:34.370Z",
+        "category": 11,
+        "daytype": 3,
+        "date": null,
+        "day": "Saturday",
+        "is_working_day": false,
+        "description": "Weekly Off (Saturday)",
+        "start_time": null,
+        "end_time": null
+    }
+},
+{
+    "model": "market.marketday",
+    "pk": 347,
+    "fields": {
+        "updated_at": "2022-10-22T15:02:44.665Z",
+        "created_at": "2022-10-22T15:02:44.665Z",
+        "category": 11,
+        "daytype": 3,
+        "date": null,
+        "day": "Sunday",
+        "is_working_day": false,
+        "description": "Weekly Off (Sunday)",
+        "start_time": null,
+        "end_time": null
+    }
 }
 ]

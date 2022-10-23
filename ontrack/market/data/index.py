@@ -2,6 +2,7 @@ from django.utils.text import slugify
 
 from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
 from ontrack.utils.config import Configurations
+from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.numbers import NumberHelper
 
@@ -11,9 +12,9 @@ from .common import CommonData
 class PullIndexData:
     def __init__(
         self,
-        exchange_qs: ExchangeQuerySet,
-        index_qs: IndexQuerySet,
         exchange_symbol: str,
+        exchange_qs: ExchangeQuerySet = None,
+        index_qs: IndexQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
@@ -59,6 +60,7 @@ class PullIndexData:
         entity["is_sectoral"] = record["is_sector"]
         entity["is_active"] = record["is_active"]
         entity["strike_difference"] = strike_diff
+        entity["updated_at"] = dt.current_date_time()
 
         return entity
 

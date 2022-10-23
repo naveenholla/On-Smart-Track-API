@@ -6,11 +6,20 @@ from ontrack.utils.datetime import DateTimeHelper
 
 
 class EquityEndOfDayQuerySet(models.QuerySet):
-    def unique_search(self, query=None):
-        if query is None:
+    def unique_search(self, date, equity_id=None, equity_symbol=None):
+        if equity_id is None and equity_symbol is None:
             return self.none()
 
-        lookups = Q(date=query["date"]) & Q(equity__symbol=query["symbol"])
+        if date is None:
+            return self.none()
+
+        lookups = Q(date=date)
+
+        if equity_id is not None:
+            lookups = lookups & Q(equity_id=equity_id)
+        else:
+            lookups = lookups & Q(equity__symbol=equity_symbol)
+
         return self.filter(lookups)
 
     def get_records_after_date(self, query):

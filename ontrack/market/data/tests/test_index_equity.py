@@ -16,9 +16,9 @@ class TestPullEquityIndexData:
 
     @pytest.fixture(autouse=True)
     def equity_index_data_fixture(self, exchange_fixture):
-        self.initializeData = InitializeData()
-        self.initializeData.load_equity_data(exchange_fixture.symbol)
-        self.initializeData.load_index_data(exchange_fixture.symbol)
+        self.initializeData = InitializeData(exchange_fixture.symbol)
+        self.initializeData.load_equity_data()
+        self.initializeData.load_index_data()
 
     def __pull_indices_market_cap(self, index_symbol):
         urls = Configurations.get_urls_config()

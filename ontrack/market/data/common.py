@@ -25,7 +25,7 @@ class CommonData:
 
         return market_caps
 
-    def create_or_update(self, data, entityType, manager):
+    def create_or_update(self, data, entityType):
         if data is None or len(data) == 0:
             return
 
@@ -36,4 +36,6 @@ class CommonData:
 
         record_keys = list(data[0].keys())
         record_keys.remove("id")
-        manager.bulk_create_or_update(new_records, existing_records, record_keys)
+        entityType.backend.bulk_create_or_update(
+            new_records, existing_records, record_keys
+        )

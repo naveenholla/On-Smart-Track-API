@@ -12,7 +12,7 @@ class TestPullIndexData:
         self.exchange_queryset = Exchange.backend.all()
         self.index_queryset = Index.backend.all()
 
-        self.initializeData = InitializeData()
+        self.initializeData = InitializeData(exchange_fixture.symbol)
 
     @pytest.fixture(autouse=True)
     def index_fixture(self) -> Index:
@@ -25,8 +25,7 @@ class TestPullIndexData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        es = self.exchange_fixture.symbol
-        result = self.initializeData.load_index_data(es, False)
+        result = self.initializeData.load_index_data(False)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]

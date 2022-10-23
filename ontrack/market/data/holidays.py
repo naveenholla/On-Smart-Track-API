@@ -8,6 +8,7 @@ from ontrack.market.querysets.lookup import (
 )
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper
+from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.logger import ApplicationLogger
 
 
@@ -55,6 +56,7 @@ class HolidayData:
         entity["description"] = description
         entity["start_time"] = start_time
         entity["end_time"] = end_time
+        entity["updated_at"] = dt.current_date_time()
 
         return entity
 

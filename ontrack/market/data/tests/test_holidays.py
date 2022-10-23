@@ -12,16 +12,18 @@ from ontrack.market.models.lookup import (
 
 class TestPullHolidayData:
     @pytest.fixture(autouse=True)
-    def injector(self):
+    def injector(self, exchange_fixture):
         self.exchange_qs = Exchange.backend.all()
         self.daytype_qs = MarketDayType.backend.all()
         self.category_qs = MarketDayCategory.backend.all()
         self.day_qs = MarketDay.backend.all()
 
+        self.initializeData = InitializeData(exchange_fixture.symbol)
+
     @pytest.mark.lookupdata
     @pytest.mark.integration
     def test_pull_parse_exchange_holidays(self):
-        InitializeData().load_holidays_data()
+        self.initializeData.load_holidays_data()
         holiday_obj = HolidayData(
             self.exchange_qs, self.daytype_qs, self.category_qs, self.day_qs
         )

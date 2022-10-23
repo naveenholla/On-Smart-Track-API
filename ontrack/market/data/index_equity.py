@@ -11,6 +11,7 @@ from ontrack.market.querysets.lookup import (
     IndexQuerySet,
 )
 from ontrack.utils.config import Configurations
+from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.filesystem import FileSystemHelper
 from ontrack.utils.logger import ApplicationLogger
 
@@ -63,6 +64,7 @@ class PullEquityIndexData:
         entity["index"] = index
         entity["equity"] = equity
         entity["equity_weightage"] = weight
+        entity["updated_at"] = dt.current_date_time()
 
         if parent is not None:
             label = self.__get_name_from_label(parent["label"])

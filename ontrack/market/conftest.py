@@ -9,7 +9,8 @@ from ontrack.market.models.lookup import Exchange
 @pytest.fixture(scope="session")
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        InitializeData().load_fixtures_data()
+        obj = InitializeData("nse")
+        obj.load_fixtures_data()
 
 
 # # conftest.py

@@ -5,7 +5,7 @@ from ontrack.market.models.lookup import Equity, Exchange, Index
 
 class ExchangeFactory(DjangoModelFactory):
 
-    name = "NSE"
+    name = "National Stock Exchange of India Ltd"
     symbol = "nse"
     start_time = "09:15:00"
     end_time = "15:30:00"

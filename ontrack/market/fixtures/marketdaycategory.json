@@ -148,5 +148,33 @@
             2
         ]
     }
+},
+{
+    "model": "market.marketdaycategory",
+    "pk": 11,
+    "fields": {
+        "updated_at": "2022-10-22T14:52:09.811Z",
+        "created_at": "2022-10-22T14:52:09.812Z",
+        "parent_name": "Weekend",
+        "display_name": "Weekend",
+        "code": "Weekend",
+        "daytype": [
+            3
+        ]
+    }
+},
+{
+    "model": "market.marketdaycategory",
+    "pk": 12,
+    "fields": {
+        "updated_at": "2022-10-22T14:53:13.865Z",
+        "created_at": "2022-10-22T14:53:13.865Z",
+        "parent_name": "Special Trading",
+        "display_name": "Special Trading Hours",
+        "code": "Special_Hours",
+        "daytype": [
+            4
+        ]
+    }
 }
 ]

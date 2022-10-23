@@ -29,6 +29,10 @@ class InitializeData:
             "market.exchange",
             "market.marketdaytype",
             "market.marketdaycategory",
+            "market.marketday",
+            "market.equity",
+            "market.index",
+            "market.equityindex",
         ]
 
         temp_folder = FileSystemHelper.create_temp_folder("fixtures", temp_folder_path)

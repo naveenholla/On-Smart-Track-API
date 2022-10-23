@@ -29198,5 +29198,21 @@
         "is_active": true,
         "exchange": 1
     }
+},
+{
+    "model": "market.equity",
+    "pk": 1826,
+    "fields": {
+        "updated_at": "2022-10-23T05:28:15.175Z",
+        "created_at": "2022-10-23T05:28:15.175Z",
+        "name": "Future Retail Ltd",
+        "symbol": "fretail",
+        "chart_symbol": "fretail",
+        "slug": "nse_fretail",
+        "lot_size": 0,
+        "strike_difference": null,
+        "is_active": true,
+        "exchange": 1
+    }
 }
 ]

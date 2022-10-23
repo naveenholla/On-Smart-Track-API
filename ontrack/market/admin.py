@@ -48,9 +48,19 @@ class MarketDayTypeInline(admin.StackedInline):
 
 @admin.register(Exchange)
 class ExchangeAdmin(admin.ModelAdmin):
-    list_display = ("name", "start_time", "end_time", "data_refresh_time", "time_zone")
+    list_display = (
+        "name",
+        "symbol",
+        "start_time",
+        "end_time",
+        "data_refresh_time",
+        "time_zone",
+    )
     list_filter = ("time_zone",)
-    search_fields = ("name__icontains",)
+    search_fields = (
+        "name__icontains",
+        "symbol__icontains",
+    )
 
     inlines = [MarketDayTypeInline]
     list_per_page = 100
@@ -129,6 +139,7 @@ class EquityIndexAdmin(admin.ModelAdmin, ExportCsvMixin):
         "equity_weightage",
         "sector",
         "sector_weightage",
+        "ordinal",
     )
     search_fields = (
         "index__name__icontains",
@@ -141,13 +152,25 @@ class EquityIndexAdmin(admin.ModelAdmin, ExportCsvMixin):
         "index",
         "sector",
     )
-    actions = ["export_as_csv"]
+    actions = [
+        "export_as_csv",
+    ]
+
+    ordering = [
+        "index__ordinal",
+        "-equity_weightage",
+    ]
 
     def link_to_index(self, obj):
         link = reverse("admin:market_index_change", args=[obj.index_id])
         return format_html('<a href="{}">{}</a>', link, obj.index.name)
 
     link_to_index.short_description = "Index"
+
+    def ordinal(self, obj):
+        return obj.index.ordinal
+
+    ordinal.admin_order_field = "index__ordinal"
 
 
 admin.site.register(MarketBroker)

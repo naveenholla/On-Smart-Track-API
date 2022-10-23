@@ -45858,8 +45858,8 @@
         "index": 18,
         "equity": 141,
         "equity_weightage": "3.6500",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Capital Goods",
+        "sector_weightage": "6.6100",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45872,8 +45872,8 @@
         "index": 18,
         "equity": 232,
         "equity_weightage": "2.9600",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Capital Goods",
+        "sector_weightage": "6.6100",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45886,8 +45886,8 @@
         "index": 18,
         "equity": 177,
         "equity_weightage": "7.5200",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45900,8 +45900,8 @@
         "index": 18,
         "equity": 189,
         "equity_weightage": "2.5400",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45914,8 +45914,8 @@
         "index": 18,
         "equity": 257,
         "equity_weightage": "2.2500",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45928,8 +45928,8 @@
         "index": 18,
         "equity": 442,
         "equity_weightage": "8.5100",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45942,8 +45942,8 @@
         "index": 18,
         "equity": 649,
         "equity_weightage": "5.5000",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45956,8 +45956,8 @@
         "index": 18,
         "equity": 962,
         "equity_weightage": "20.1700",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45970,8 +45970,8 @@
         "index": 18,
         "equity": 1006,
         "equity_weightage": "19.5000",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45984,8 +45984,8 @@
         "index": 18,
         "equity": 1067,
         "equity_weightage": "2.2900",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -45998,8 +45998,8 @@
         "index": 18,
         "equity": 1072,
         "equity_weightage": "2.8200",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -46012,8 +46012,8 @@
         "index": 18,
         "equity": 1507,
         "equity_weightage": "1.4900",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -46026,8 +46026,8 @@
         "index": 18,
         "equity": 1608,
         "equity_weightage": "12.0600",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -46040,8 +46040,8 @@
         "index": 18,
         "equity": 1646,
         "equity_weightage": "4.7500",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -46054,8 +46054,8 @@
         "index": 18,
         "equity": 1685,
         "equity_weightage": "3.9900",
-        "sector": null,
-        "sector_weightage": null,
+        "sector": "Automobile and Auto Components",
+        "sector_weightage": "93.3900",
         "last_update_date": "2022-10-22"
     }
 },
@@ -47286,8 +47286,8 @@
         "index": 25,
         "equity": 31,
         "equity_weightage": "24.0800",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47300,8 +47300,8 @@
         "index": 25,
         "equity": 659,
         "equity_weightage": "14.5300",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47314,8 +47314,8 @@
         "index": 25,
         "equity": 662,
         "equity_weightage": "0.9000",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47328,8 +47328,8 @@
         "index": 25,
         "equity": 668,
         "equity_weightage": "1.7300",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47342,8 +47342,8 @@
         "index": 25,
         "equity": 809,
         "equity_weightage": "4.3400",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47356,8 +47356,8 @@
         "index": 25,
         "equity": 827,
         "equity_weightage": "0.4900",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47370,8 +47370,8 @@
         "index": 25,
         "equity": 832,
         "equity_weightage": "15.1700",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47384,8 +47384,8 @@
         "index": 25,
         "equity": 1058,
         "equity_weightage": "0.2700",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47398,8 +47398,8 @@
         "index": 25,
         "equity": 1099,
         "equity_weightage": "1.6300",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47412,8 +47412,8 @@
         "index": 25,
         "equity": 1386,
         "equity_weightage": "2.8300",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47426,8 +47426,8 @@
         "index": 25,
         "equity": 1611,
         "equity_weightage": "20.4000",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47440,8 +47440,8 @@
         "index": 25,
         "equity": 1735,
         "equity_weightage": "7.6700",
-        "sector": "Metals & Mining",
-        "sector_weightage": "94.0300",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47454,8 +47454,8 @@
         "index": 25,
         "equity": 107,
         "equity_weightage": "3.8400",
-        "sector": "Capital Goods",
-        "sector_weightage": "5.9700",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47468,8 +47468,8 @@
         "index": 25,
         "equity": 1318,
         "equity_weightage": "1.2500",
-        "sector": "Capital Goods",
-        "sector_weightage": "5.9700",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47482,8 +47482,8 @@
         "index": 25,
         "equity": 1784,
         "equity_weightage": "0.8800",
-        "sector": "Capital Goods",
-        "sector_weightage": "5.9700",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47496,8 +47496,8 @@
         "index": 26,
         "equity": 21,
         "equity_weightage": "2.3200",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47510,8 +47510,8 @@
         "index": 26,
         "equity": 72,
         "equity_weightage": "3.6700",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47524,8 +47524,8 @@
         "index": 26,
         "equity": 160,
         "equity_weightage": "3.2800",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47538,8 +47538,8 @@
         "index": 26,
         "equity": 241,
         "equity_weightage": "3.0400",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47552,8 +47552,8 @@
         "index": 26,
         "equity": 320,
         "equity_weightage": "13.7800",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47566,8 +47566,8 @@
         "index": 26,
         "equity": 412,
         "equity_weightage": "10.8000",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47580,8 +47580,8 @@
         "index": 26,
         "equity": 428,
         "equity_weightage": "12.0500",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47594,8 +47594,8 @@
         "index": 26,
         "equity": 550,
         "equity_weightage": "2.8400",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47608,8 +47608,8 @@
         "index": 26,
         "equity": 551,
         "equity_weightage": "1.3800",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47622,8 +47622,8 @@
         "index": 26,
         "equity": 552,
         "equity_weightage": "1.3300",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47636,8 +47636,8 @@
         "index": 26,
         "equity": 587,
         "equity_weightage": "1.1200",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47650,8 +47650,8 @@
         "index": 26,
         "equity": 767,
         "equity_weightage": "2.8700",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47664,8 +47664,8 @@
         "index": 26,
         "equity": 929,
         "equity_weightage": "4.6000",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47678,8 +47678,8 @@
         "index": 26,
         "equity": 957,
         "equity_weightage": "3.7500",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47692,8 +47692,8 @@
         "index": 26,
         "equity": 1097,
         "equity_weightage": "1.2900",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47706,8 +47706,8 @@
         "index": 26,
         "equity": 1222,
         "equity_weightage": "1.5200",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47720,8 +47720,8 @@
         "index": 26,
         "equity": 1403,
         "equity_weightage": "1.2200",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47734,8 +47734,8 @@
         "index": 26,
         "equity": 1561,
         "equity_weightage": "23.4200",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47748,8 +47748,8 @@
         "index": 26,
         "equity": 1663,
         "equity_weightage": "3.5000",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -47762,8 +47762,8 @@
         "index": 26,
         "equity": 1824,
         "equity_weightage": "2.2400",
-        "sector": "Healthcare",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48084,8 +48084,8 @@
         "index": 29,
         "equity": 260,
         "equity_weightage": "7.3900",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48098,8 +48098,8 @@
         "index": 29,
         "equity": 414,
         "equity_weightage": "24.8300",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48112,8 +48112,8 @@
         "index": 29,
         "equity": 574,
         "equity_weightage": "15.6800",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48126,8 +48126,8 @@
         "index": 29,
         "equity": 691,
         "equity_weightage": "4.1700",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48140,8 +48140,8 @@
         "index": 29,
         "equity": 945,
         "equity_weightage": "9.0100",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48154,8 +48154,8 @@
         "index": 29,
         "equity": 1160,
         "equity_weightage": "12.0100",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48168,8 +48168,8 @@
         "index": 29,
         "equity": 1229,
         "equity_weightage": "14.9000",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48182,8 +48182,8 @@
         "index": 29,
         "equity": 1272,
         "equity_weightage": "7.1000",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48196,8 +48196,8 @@
         "index": 29,
         "equity": 1500,
         "equity_weightage": "2.6200",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -48210,8 +48210,8 @@
         "index": 29,
         "equity": 1562,
         "equity_weightage": "2.2800",
-        "sector": "Realty",
-        "sector_weightage": "100.0000",
+        "sector": null,
+        "sector_weightage": null,
         "last_update_date": "2022-10-22"
     }
 },
@@ -51153,6 +51153,34 @@
         "sector": "Oil Gas & Consumable Fuels",
         "sector_weightage": "100.0000",
         "last_update_date": "2022-10-22"
+    }
+},
+{
+    "model": "market.equityindex",
+    "pk": 3655,
+    "fields": {
+        "updated_at": "2022-10-23T05:31:58.080Z",
+        "created_at": "2022-10-23T05:31:58.080Z",
+        "index": 7,
+        "equity": 1826,
+        "equity_weightage": "0.0000",
+        "sector": "Consumer Services",
+        "sector_weightage": "2.5900",
+        "last_update_date": "2022-10-23"
+    }
+},
+{
+    "model": "market.equityindex",
+    "pk": 3656,
+    "fields": {
+        "updated_at": "2022-10-23T05:31:58.080Z",
+        "created_at": "2022-10-23T05:31:58.080Z",
+        "index": 15,
+        "equity": 1826,
+        "equity_weightage": "0.0400",
+        "sector": "Consumer Services",
+        "sector_weightage": "4.3500",
+        "last_update_date": "2022-10-23"
     }
 }
 ]

@@ -94,7 +94,7 @@ class InitializeData:
             exchange_qs,
             index_qs,
         )
-        result = pull_index_obj.pull_and_parse_indice_data()
+        result = pull_index_obj.pull_and_parse_index_data()
         if save_data:
             self.commonobj.create_or_update(result, Index)
 

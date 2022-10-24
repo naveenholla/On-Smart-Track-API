@@ -14,7 +14,7 @@ class TestPullEquityData:
         self.equity_queryset = Equity.backend.all()
 
     @pytest.fixture(autouse=True)
-    def equity_index_data_fixture(self, exchange_fixture):
+    def equity_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
         self.initializeData = InitializeData(exchange_fixture.symbol)
 
@@ -48,5 +48,5 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         date = datetime(2022, 10, 20)
-        result = self.endofdaydata.load_equity_eod_data(date, False)
+        result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None

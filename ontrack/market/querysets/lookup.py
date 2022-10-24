@@ -24,11 +24,16 @@ class EquityQuerySet(models.QuerySet):
 
 
 class IndexQuerySet(models.QuerySet):
-    def unique_search(self, symbol=None):
-        if symbol is None:
+    def unique_search(self, symbol=None, name=None):
+        if symbol is None and name is None:
             return self.none()
 
-        lookups = Q(symbol__iexact=symbol)
+        if symbol is not None:
+            lookups = Q(symbol__iexact=symbol)
+
+        if name is not None:
+            lookups = Q(name__iexact=name)
+
         return self.filter(lookups)
 
 

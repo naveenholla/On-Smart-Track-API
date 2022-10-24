@@ -341,7 +341,7 @@
     "equity_bhavcopy": {
       "url": "https://archives.nseindia.com/products/content/sec_bhavdata_full_%d%m%Y.csv"
     },
-    "indices_bhavcopy": {
+    "index_bhavcopy": {
       "url": "https://archives.nseindia.com/content/indices/ind_close_all_%d%m%Y.csv"
     },
     "fo_participant_oi": {

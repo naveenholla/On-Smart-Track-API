@@ -1,7 +1,9 @@
 from ontrack.market.data.common import CommonData
 from ontrack.market.data.equity import PullEquityData
+from ontrack.market.data.index import PullIndexData
 from ontrack.market.models.equity import EquityEndOfDay
-from ontrack.market.models.lookup import Equity, Exchange
+from ontrack.market.models.index import IndexEndOfDay
+from ontrack.market.models.lookup import Equity, Exchange, Index
 from ontrack.utils.logger import ApplicationLogger
 
 
@@ -26,5 +28,21 @@ class EndOfDayData:
 
         return result
 
-    def load_initial_data(self, date):
+    def load_index_eod_data(self, date, save_data=True):
+        exchange_qs = Exchange.backend.all()
+        index_qs = Index.backend.all()
+        index_eod_qs = IndexEndOfDay.backend.all()
+
+        pull_index_obj = PullIndexData(
+            self.exchange_symbol, exchange_qs, index_qs, index_eod_qs
+        )
+
+        result = pull_index_obj.pull_parse_index_eod_data(date)
+        if save_data:
+            self.commonobj.create_or_update(result, IndexEndOfDay)
+
+        return result
+
+    def load_eod_data(self, date):
         self.load_equity_eod_data(date)
+        self.load_index_eod_data(date)

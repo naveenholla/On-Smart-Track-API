@@ -23,7 +23,7 @@ class TestPullIndexData:
 
     @pytest.mark.lookupdata
     @pytest.mark.integration
-    def test_pull_and_parse_index_data(self):
+    def test_pull_and_parse_lookup_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
@@ -46,10 +46,19 @@ class TestPullIndexData:
         assert stock2["id"] == index_fixture.id
 
     @pytest.mark.integration
-    def test_pull_parse_index_eod_data(self):
+    def test_pull_parse_eod_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
         date = datetime(2022, 10, 20)
         result = self.endofdaydata.load_index_eod_data(date, True)
+        assert result is not None
+
+    @pytest.mark.integration
+    def test_pull_parse_derivative_eod_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        date = datetime(2022, 10, 20)
+        result = self.endofdaydata.load_index_derivative_eod_data(date, True)
         assert result is not None

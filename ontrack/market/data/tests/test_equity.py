@@ -23,7 +23,7 @@ class TestPullEquityData:
 
     @pytest.mark.lookupdata
     @pytest.mark.integration
-    def test_pull_and_parse_equity_data(self):
+    def test_pull_and_parse_lookup_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
@@ -43,10 +43,19 @@ class TestPullEquityData:
         assert stock2["id"] == equity_fixture.id
 
     @pytest.mark.integration
-    def test_pull_parse_equity_eod_data(self):
+    def test_pull_parse_eod_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
         date = datetime(2022, 10, 20)
         result = self.endofdaydata.load_equity_eod_data(date, True)
+        assert result is not None
+
+    @pytest.mark.integration
+    def test_pull_parse_derivative_eod_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        date = datetime(2022, 10, 20)
+        result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
         assert result is not None

@@ -79,7 +79,7 @@ class InitializeData:
             equity_qs,
         )
 
-        result = pull_equity_obj.pull_and_parse_equity_data()
+        result = pull_equity_obj.pull_and_parse_lookup_data()
         if save_data:
             self.commonobj.create_or_update(result, Equity)
 
@@ -94,7 +94,7 @@ class InitializeData:
             exchange_qs,
             index_qs,
         )
-        result = pull_index_obj.pull_and_parse_index_data()
+        result = pull_index_obj.pull_and_parse_lookup_data()
         if save_data:
             self.commonobj.create_or_update(result, Index)
 

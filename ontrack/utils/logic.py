@@ -115,3 +115,24 @@ class LogicHelper:
         except Exception as e:
             message = f"Request exception from {url} - `{format(e)}`."
             raise Error_While_Data_Pull(message=message)
+
+    @staticmethod
+    def reading_csv_pandas(path: str, header=0, skiprows=None, delimiter: str = ","):
+        """This task is used to pull the data from the website"""
+
+        LogicHelper.logger.log_debug(f"Started with {path}.")
+        try:
+            # fetch page source using pandas
+            data = pd.read_csv(
+                path,
+                sep=delimiter,
+                skiprows=skiprows,
+                skipfooter=0,
+                header=header,
+                engine="python",
+            )
+            LogicHelper.logger.log_debug(f"{len(data)} records found from {path}.")
+            return data
+        except Exception as e:
+            message = f"Request exception from {path} - `{format(e)}`."
+            raise Error_While_Data_Pull(message=message)

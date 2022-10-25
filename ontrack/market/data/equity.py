@@ -1,9 +1,14 @@
 from django.utils.text import slugify
 
-from ontrack.market.querysets.equity import EquityEndOfDayQuerySet
+from ontrack.market.querysets.equity import (
+    EquityDerivativeEndOfDayQuerySet,
+    EquityEndOfDayQuerySet,
+)
 from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
+from ontrack.utils.base.enum import InstrumentType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
+from ontrack.utils.filesystem import FileSystemHelper
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper as nh
@@ -19,30 +24,26 @@ class PullEquityData:
         exchange_qs: ExchangeQuerySet = None,
         equity_qs: EquityQuerySet = None,
         equity_eod_qs: EquityEndOfDayQuerySet = None,
+        equity_derivative_eod_qs: EquityDerivativeEndOfDayQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.equity_qs = equity_qs
         self.equity_eod_qs = equity_eod_qs
+        self.equity_derivative_eod_qs = equity_derivative_eod_qs
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        self.urls = Configurations.get_urls_config()
 
-        urls = Configurations.get_urls_config()
-        self.equity_listing_url = urls["listed_equities"]
-        market_cap_url = urls["fo_marketlot"]
-        self.eod_format_url = urls["equity_bhavcopy"]
-
-        commonobj = CommonData()
-        self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
-
-    def __parse_equity_data(self, record):
+    def __parse_lookup_data(self, record):
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
         strike_diff = (
             record["strike_difference"] if "strike_difference" in record else 0
         )
+        chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
         existing_entity = self.equity_qs.unique_search(symbol).first()
@@ -61,14 +62,14 @@ class PullEquityData:
         entity["name"] = record["NAME OF COMPANY"].strip()
         entity["symbol"] = symbol
         entity["lot_size"] = lot_size
-        entity["chart_symbol"] = symbol
+        entity["chart_symbol"] = chart_symbol
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
         entity["strike_difference"] = strike_diff
         entity["updated_at"] = dt.current_date_time()
 
         return entity
 
-    def __parse_equity_eod_data(self, record):
+    def __parse_eod_data(self, record):
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
@@ -118,36 +119,109 @@ class PullEquityData:
         entity["avg_price"] = avg_price
         entity["point_changed"] = price_change
         entity["percentage_changed"] = percentage_change
+
         entity["traded_quantity"] = traded_quantity
         entity["traded_value"] = traded_value
         entity["number_of_trades"] = number_of_trades
         entity["quantity_per_trade"] = quantity_per_trade
         entity["delivery_quantity"] = delivery_quantity
         entity["delivery_percentage"] = delivery_percentage
+
         entity["date"] = date
         entity["pull_date"] = dt.current_date_time()
         entity["updated_at"] = dt.current_date_time()
 
         return entity
 
-    def pull_and_parse_equity_data(self):
-        self.logger.log_debug(f"Started with {self.equity_listing_url}.")
+    def __parse_derivative_eod_data(self, record):
+        # remove extra spaces in the dictionaty keys
+        record = {k.strip(): v for (k, v) in record.items()}
+        symbol = record["SYMBOL"].strip().lower()
+        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y")
+        expiry_date = dt.string_to_datetime(record["EXPIRY_DT"], "%d-%b-%Y")
+        instrument = record["INSTRUMENT"].strip().lower()
+
+        if instrument != InstrumentType.FUTSTK.lower():
+            return None
+
+        equity = self.equity_qs.unique_search(symbol).first()
+        if equity is None:
+            return None
+
+        pk = None
+        existing_entity = self.equity_derivative_eod_qs.unique_search(
+            date, equity_id=equity.id, expiry_date=expiry_date
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        open_price = nh.str_to_float(record["OPEN"])
+        high_price = nh.str_to_float(record["HIGH"])
+        low_price = nh.str_to_float(record["LOW"])
+        last_price = nh.str_to_float(record["SETTLE_PR"])
+        prev_close = 0
+        close_price = nh.str_to_float(record["CLOSE"])
+        avg_price = (high_price + low_price) / 2
+        price_change = 0
+        percentage_change = 0
+        strike_price = None
+        option_type = None
+        no_of_contracts = nh.str_to_float(record["CONTRACTS"])
+        value_of_contracts = nh.str_to_float(record["VAL_INLAKH"])
+        open_interest = nh.str_to_float(record["OPEN_INT"])
+        change_in_open_interest = nh.str_to_float(record["CHG_IN_OI"])
+
+        entity = {}
+        entity["id"] = pk
+        entity["equity"] = equity
+        entity["prev_close"] = prev_close
+        entity["open_price"] = open_price
+        entity["high_price"] = high_price
+        entity["low_price"] = low_price
+        entity["last_price"] = last_price
+        entity["close_price"] = close_price
+        entity["avg_price"] = avg_price
+        entity["point_changed"] = price_change
+        entity["percentage_changed"] = percentage_change
+
+        entity["instrument"] = instrument
+        entity["expiry_date"] = expiry_date
+        entity["strike_price"] = strike_price
+        entity["option_type"] = option_type
+        entity["no_of_contracts"] = no_of_contracts
+        entity["value_of_contracts"] = value_of_contracts
+        entity["open_interest"] = open_interest
+        entity["change_in_open_interest"] = change_in_open_interest
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
+    def pull_and_parse_lookup_data(self):
+        listing_url = self.urls["listed_equities"]
+        self.logger.log_debug(f"Started with {listing_url}.")
+
+        market_cap_url = self.urls["fo_marketlot"]
+        commonobj = CommonData()
+        self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return None
 
         # pull csv containing all the listed equities from web
-        data = LogicHelper.reading_csv_pandas_web(url=self.equity_listing_url)
+        data = LogicHelper.reading_csv_pandas_web(url=listing_url)
         entities = []
         for _, record in data.iterrows():
-            entity = self.__parse_equity_data(record)
+            entity = self.__parse_lookup_data(record)
             entities.append(entity)
 
         return entities
 
-    def pull_parse_equity_eod_data(self, date):
-        url_record = self.eod_format_url
+    def pull_parse_eod_data(self, date):
+        url_record = self.urls["equity_bhavcopy"]
         url = StringHelper.format_url(url_record, date)
         self.logger.log_debug(f"Started with {url}.")
 
@@ -163,7 +237,35 @@ class PullEquityData:
 
         entities = []
         for _, record in data.iterrows():
-            entity = self.__parse_equity_eod_data(record)
+            entity = self.__parse_eod_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_derivative_eod_data(self, date):
+        url_record = self.urls["fo_bhavcopy"]
+        url = StringHelper.format_url(url_record, date)
+        self.logger.log_debug(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        temp_folder = FileSystemHelper.create_temp_folder("fo")
+        file_name = FileSystemHelper.download_extract_zip(url, temp_folder)
+        path = temp_folder / file_name
+
+        # pull csv containing all the listed equities from web
+        data = LogicHelper.reading_csv_pandas(path=path)
+
+        # remove extra spaces from the column names and data
+        StringHelper.whitespace_remover(data)
+
+        entities = []
+        for _, record in data.iterrows():
+            entity = self.__parse_derivative_eod_data(record)
 
             if entity is not None:
                 entities.append(entity)

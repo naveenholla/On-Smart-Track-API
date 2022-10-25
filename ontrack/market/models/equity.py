@@ -1,13 +1,16 @@
 from django.db import models
 
-from ontrack.market.managers.equity import EquityEndOfDayBackendManager
+from ontrack.market.managers.equity import (
+    EquityDerivativeEndOfDayBackendManager,
+    EquityEndOfDayBackendManager,
+)
 from ontrack.market.models.base import (
     TradableEntity,
+    TradableEntityDerivativeEndOfDay,
     TradableEntityEndOfDayData,
     numeric_field_values,
 )
 from ontrack.market.models.lookup import Equity
-from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
 
 
@@ -26,7 +29,7 @@ class EquityEndOfDay(TradableEntityEndOfDayData):
         unique_together = ("equity", "date")
 
     def __str__(self):
-        return self.equity.name
+        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityEndOfDayCalcutated(BaseModel):
@@ -48,7 +51,7 @@ class EquityEndOfDayCalcutated(BaseModel):
         unique_together = ("equity", "date")
 
     def __str__(self):
-        return self.equity.name
+        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityInsiderTrade(BaseModel):
@@ -101,32 +104,37 @@ class EquitySast(BaseModel):
         return self.equity.name
 
 
-class EquityDerivativeEndOfDay(TradableEntity):
+class EquityDerivativeEndOfDay(TradableEntityDerivativeEndOfDay):
     equity = models.ForeignKey(
         Equity, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
-    instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
-    expiry_date = models.DateField()
-    strike_price = models.DecimalField(**numeric_field_values)
-    option_type = models.CharField(max_length=50, choices=OptionType.choices)
-    no_of_contracts = models.DecimalField(**numeric_field_values)
-    value_of_contracts = models.DecimalField(**numeric_field_values)
-    open_interest = models.DecimalField(**numeric_field_values)
-    change_in_open_interest = models.DecimalField(**numeric_field_values)
-    pull_date = models.DateField(auto_now=True)
+
+    backend = EquityDerivativeEndOfDayBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = (
+            "equity",
+            "date",
+            "instrument",
+            "expiry_date",
+            "strike_price",
+            "option_type",
+        )
 
     def __str__(self):
-        return self.equity.name
+        return (
+            f"{self.equity.name}-"
+            f"{self.date.strftime('%d/%m/%Y')}-"
+            f"{self.instrument}-"
+            f"{self.expiry_date.strftime('%d/%m/%Y')}"
+        )
 
 
 class LiveEquityData(TradableEntity):
     equity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
-    symbol = models.CharField(max_length=100)
     date = models.DateTimeField()
     traded_quantity = models.DecimalField(**numeric_field_values)
     traded_value = models.DecimalField(**numeric_field_values)
@@ -151,7 +159,7 @@ class LiveEquityData(TradableEntity):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.symbol
+        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class LiveEquityOptionChain(BaseModel):

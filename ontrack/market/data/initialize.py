@@ -34,8 +34,6 @@ class InitializeData:
         model = fixture_details[1]
         source = f"{app_folder}/{app_name}/fixtures/{model}.json"
         destination = temp_folder / f"{model}.json"
-        print(source)
-        print(destination)
 
         with open(source, "rb") as f:
             data = f.read()

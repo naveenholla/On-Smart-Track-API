@@ -4,7 +4,6 @@ import csv
 import pandas as pd
 import requests
 
-from .exception import Error_While_Data_Pull
 from .logger import ApplicationLogger
 
 
@@ -57,7 +56,7 @@ class LogicHelper:
         return records_to_create, records_to_update
 
     @staticmethod
-    def reading_csv_raw(url: str, timeout=100):
+    def reading_csv_raw(url: str, timeout=100, skiprows=0):
         """This task is used to pull the data from the website"""
 
         LogicHelper.logger.log_debug(f"Started with {url}.")
@@ -77,23 +76,31 @@ class LogicHelper:
 
                 # reding the data from stream
                 data = list(reader)
+                if len(data) > skiprows:
+                    header = [i.strip() for i in data[skiprows]]
+
+                    data = [dict(zip(header, v)) for v in data[skiprows + 1 :]] #noqa E203
 
                 LogicHelper.logger.log_debug(f"{len(data)} records found from {url}.")
                 return data
 
             elif res.status_code == 429:
                 message = f"Too many reconnects from {url}."
-                raise Error_While_Data_Pull(message=message)
+                LogicHelper.logger.log_critical(message=message)
+                raise
             else:
                 message = f"Unhandled status `{format(res.status_code)}` retreived from {url}."
-                raise Error_While_Data_Pull(message=message)
+                LogicHelper.logger.log_critical(message=message)
+                raise
 
         except requests.exceptions.Timeout:
             message = f"Timed-out exception from {url}."
-            raise Error_While_Data_Pull(message=message)
+            LogicHelper.logger.log_critical(message=message)
+            raise
         except requests.exceptions.RequestException as e:
             message = f"Request exception from {url} - `{format(e)}`."
-            raise Error_While_Data_Pull(message=message)
+            LogicHelper.logger.log_critical(message=message)
+            raise
 
     @staticmethod
     def reading_csv_pandas_web(url: str, header=0, skiprows=None, delimiter: str = ","):
@@ -114,7 +121,8 @@ class LogicHelper:
             return data
         except Exception as e:
             message = f"Request exception from {url} - `{format(e)}`."
-            raise Error_While_Data_Pull(message=message)
+            LogicHelper.logger.log_critical(message=message)
+            raise
 
     @staticmethod
     def reading_csv_pandas(path: str, header=0, skiprows=None, delimiter: str = ","):
@@ -135,4 +143,5 @@ class LogicHelper:
             return data
         except Exception as e:
             message = f"Request exception from {path} - `{format(e)}`."
-            raise Error_While_Data_Pull(message=message)
+            LogicHelper.logger.log_critical(message=message)
+            raise

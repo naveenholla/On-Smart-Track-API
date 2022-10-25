@@ -10,6 +10,7 @@ from ontrack.market.managers.lookup import (
     MarketDayCategoryBackendManager,
     MarketDayTypeBackendManager,
 )
+from ontrack.market.models.base import MarketEntity
 from ontrack.utils.base.enum import (
     HolidayCategoryType,
     HolidayParentCategoryType,
@@ -191,25 +192,7 @@ class MarketTradingStrategySymbol(BaseModel):
         return self.symbol
 
 
-class MarketEntity(BaseModel):
-    name = models.CharField(max_length=200)
-    symbol = models.CharField(max_length=200, unique=True)
-    chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
-    slug = models.SlugField(blank=True, null=True)
-    lot_size = models.IntegerField(default=0, null=True, blank=True)
-    strike_difference = models.IntegerField(null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-
-    class Meta(BaseModel.Meta):
-        abstract = True
-        verbose_name = "Market Entity"
-        verbose_name_plural = "Market Entities"
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class Equity(MarketEntity):
+class Equity(MarketEntity, BaseModel):
     exchange = models.ForeignKey(
         Exchange, related_name="equities", on_delete=models.CASCADE
     )
@@ -221,8 +204,7 @@ class Equity(MarketEntity):
         verbose_name_plural = "Equities"
 
 
-# Create your models here.
-class Index(MarketEntity):
+class Index(MarketEntity, BaseModel):
     exchange = models.ForeignKey(
         Exchange, related_name="indices", on_delete=models.CASCADE
     )

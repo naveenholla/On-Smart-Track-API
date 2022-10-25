@@ -1,7 +1,6 @@
 from django.db import models
 
 from ontrack.utils.base.enum import InstrumentType, OptionType
-from ontrack.utils.base.model import BaseModel
 
 numeric_field_values = {
     "max_digits": 18,
@@ -11,7 +10,20 @@ numeric_field_values = {
 }
 
 
-class TradableEntity(BaseModel):
+class MarketEntity(models.Model):
+    name = models.CharField(max_length=200)
+    symbol = models.CharField(max_length=200, unique=True)
+    chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    slug = models.SlugField(blank=True, null=True)
+    lot_size = models.IntegerField(default=0, null=True, blank=True)
+    strike_difference = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        abstract = True
+
+
+class TradableEntity(models.Model):
     prev_close = models.DecimalField(**numeric_field_values)
     open_price = models.DecimalField(**numeric_field_values)
     high_price = models.DecimalField(**numeric_field_values)
@@ -22,11 +34,11 @@ class TradableEntity(BaseModel):
     point_changed = models.DecimalField(**numeric_field_values)
     percentage_changed = models.DecimalField(**numeric_field_values)
 
-    class Meta(BaseModel.Meta):
+    class Meta:
         abstract = True
 
 
-class TradableEntityEndOfDayData(TradableEntity):
+class EndOfDayData(models.Model):
     traded_quantity = models.DecimalField(**numeric_field_values)
     traded_value = models.DecimalField(**numeric_field_values)
     number_of_trades = models.DecimalField(**numeric_field_values)
@@ -34,11 +46,11 @@ class TradableEntityEndOfDayData(TradableEntity):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    class Meta(BaseModel.Meta):
+    class Meta:
         abstract = True
 
 
-class TradableEntityDerivativeEndOfDay(TradableEntity):
+class DerivativeEndOfDay(models.Model):
     instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
     expiry_date = models.DateField()
     strike_price = models.DecimalField(**numeric_field_values)
@@ -52,5 +64,5 @@ class TradableEntityDerivativeEndOfDay(TradableEntity):
     date = models.DateField()
     pull_date = models.DateTimeField(auto_now=True)
 
-    class Meta(BaseModel.Meta):
+    class Meta:
         abstract = True

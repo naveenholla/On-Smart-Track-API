@@ -5,16 +5,16 @@ from ontrack.market.managers.equity import (
     EquityEndOfDayBackendManager,
 )
 from ontrack.market.models.base import (
+    DerivativeEndOfDay,
+    EndOfDayData,
     TradableEntity,
-    TradableEntityDerivativeEndOfDay,
-    TradableEntityEndOfDayData,
     numeric_field_values,
 )
 from ontrack.market.models.lookup import Equity
 from ontrack.utils.base.model import BaseModel
 
 
-class EquityEndOfDay(TradableEntityEndOfDayData):
+class EquityEndOfDay(EndOfDayData, TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="eod_data", on_delete=models.CASCADE
     )
@@ -104,7 +104,7 @@ class EquitySast(BaseModel):
         return self.equity.name
 
 
-class EquityDerivativeEndOfDay(TradableEntityDerivativeEndOfDay):
+class EquityDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
@@ -131,7 +131,7 @@ class EquityDerivativeEndOfDay(TradableEntityDerivativeEndOfDay):
         )
 
 
-class LiveEquityData(TradableEntity):
+class LiveEquityData(TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
@@ -203,7 +203,7 @@ class LiveEquityOptionChain(BaseModel):
         return self.symbol
 
 
-class LiveEquityDerivative(TradableEntity):
+class LiveEquityDerivative(TradableEntity, BaseModel):
     symbol = models.CharField(max_length=100)
     date = models.DateTimeField()
     month = models.CharField(max_length=100)

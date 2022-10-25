@@ -85,7 +85,7 @@ class ClientType(models.TextChoices):
     FII = "FII"
     DII = "DII"
     PRO = "PRO"
-    RETAIL = "RETAIL"
+    CLIENT = "CLIENT"
 
 
 class EntityType(models.TextChoices):

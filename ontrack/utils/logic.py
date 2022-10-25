@@ -78,8 +78,9 @@ class LogicHelper:
                 data = list(reader)
                 if len(data) > skiprows:
                     header = [i.strip() for i in data[skiprows]]
+                    rows = data[(skiprows + 1) :]  # noqa E203
 
-                    data = [dict(zip(header, v)) for v in data[skiprows + 1 :]] #noqa E203
+                    data = [dict(zip(header, v)) for v in rows]
 
                 LogicHelper.logger.log_debug(f"{len(data)} records found from {url}.")
                 return data

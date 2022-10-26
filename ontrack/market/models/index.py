@@ -6,8 +6,8 @@ from ontrack.market.managers.index import (
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
-    EndOfDayData,
     TradableEntity,
+    TradingInformation,
     numeric_field_values,
 )
 from ontrack.market.models.lookup import Index
@@ -15,7 +15,7 @@ from ontrack.utils.base.enum import OptionType
 from ontrack.utils.base.model import BaseModel
 
 
-class IndexEndOfDay(EndOfDayData, TradableEntity, BaseModel):
+class IndexEndOfDay(TradingInformation, TradableEntity, BaseModel):
     index = models.ForeignKey(Index, related_name="eod_data", on_delete=models.CASCADE)
 
     index_pe = models.DecimalField(**numeric_field_values)

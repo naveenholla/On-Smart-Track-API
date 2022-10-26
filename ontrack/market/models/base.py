@@ -38,12 +38,12 @@ class TradableEntity(models.Model):
         abstract = True
 
 
-class EndOfDayData(models.Model):
+class TradingInformation(models.Model):
     traded_quantity = models.DecimalField(**numeric_field_values)
     traded_value = models.DecimalField(**numeric_field_values)
     number_of_trades = models.DecimalField(**numeric_field_values)
     quantity_per_trade = models.DecimalField(**numeric_field_values)
-    date = models.DateField()
+    date = models.DateTimeField()
     pull_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -61,7 +61,7 @@ class DerivativeEndOfDay(models.Model):
     value_of_contracts = models.DecimalField(**numeric_field_values)
     open_interest = models.DecimalField(**numeric_field_values)
     change_in_open_interest = models.DecimalField(**numeric_field_values)
-    date = models.DateField()
+    date = models.DateTimeField()
     pull_date = models.DateTimeField(auto_now=True)
 
     class Meta:

@@ -4,14 +4,17 @@ import pytest
 
 from ontrack.market.data.endofdata import EndOfDayData
 from ontrack.market.data.initialize import InitializeData
+from ontrack.market.models.equity import EquityDerivativeEndOfDay, EquityEndOfDay
 from ontrack.market.models.lookup import Equity, Exchange
 
 
 class TestPullEquityData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_queryset = Exchange.backend.all()
-        self.equity_queryset = Equity.backend.all()
+        self.exchange_qs = Exchange.backend.all()
+        self.equity_qs = Equity.backend.all()
+        self.equity_eod_qs = EquityEndOfDay.backend.all()
+        self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.all()
 
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):
@@ -27,7 +30,7 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.initializeData.load_equity_data(False)
+        result = self.initializeData.load_equity_data(True)
         assert result is not None
 
         stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]
@@ -36,11 +39,18 @@ class TestPullEquityData:
         stock = [x for x in result if x["symbol"] == "hdfcbank"][0]
         assert stock["lot_size"] > 0
 
-        equity_fixture = self.equity_queryset.unique_search(symbol="reliance").first()
+        equity_fixture = self.equity_qs.unique_search(symbol="reliance").first()
         assert equity_fixture is not None and equity_fixture.id is not None
         symbol = equity_fixture.symbol
         stock2 = [x for x in result if x["symbol"] == symbol][0]
         assert stock2["id"] == equity_fixture.id
+
+        records_count = self.equity_qs.all().count()
+
+        # check update logic
+        result = self.initializeData.load_equity_data(True)
+        assert result is not None
+        assert records_count == self.equity_qs.all().count()
 
     @pytest.mark.integration
     def test_pull_parse_eod_data(self):
@@ -51,6 +61,14 @@ class TestPullEquityData:
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
 
+        records_count = self.equity_eod_qs.all().count()
+
+        # check update logic
+        date = datetime(2022, 10, 20)
+        result = self.endofdaydata.load_equity_eod_data(date, True)
+        assert result is not None
+        assert records_count == self.equity_eod_qs.all().count()
+
     @pytest.mark.integration
     def test_pull_parse_derivative_eod_data(self):
         assert self.exchange_fixture is not None
@@ -59,3 +77,11 @@ class TestPullEquityData:
         date = datetime(2022, 10, 20)
         result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
         assert result is not None
+
+        records_count = self.equity_derivative_eod_qs.all().count()
+
+        # check update logic
+        date = datetime(2022, 10, 20)
+        result = self.endofdaydata.load_equity_eod_data(date, True)
+        assert result is not None
+        assert records_count == self.equity_derivative_eod_qs.all().count()

@@ -7,6 +7,10 @@ from ontrack.market.managers.equity import (
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
+    EntityLiveData,
+    EntityLiveFuture,
+    EntityLiveOpenInterest,
+    EntityLiveOptionChain,
     TradableEntity,
     TradingInformation,
     numeric_field_values,
@@ -132,20 +136,10 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
         )
 
 
-class EquityLiveData(TradingInformation, TradableEntity, BaseModel):
+class EquityLiveData(EntityLiveData, TradingInformation, TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
-
-    year_high = models.DecimalField(**numeric_field_values)
-    year_low = models.DecimalField(**numeric_field_values)
-    near_week_high = models.DecimalField(**numeric_field_values)
-    near_week_low = models.DecimalField(**numeric_field_values)
-
-    price_change_month_ago = models.DecimalField(**numeric_field_values)
-    date_month_ago = models.DateField(null=True, blank="True")
-    price_change_year_ago = models.DecimalField(**numeric_field_values)
-    date_year_ago = models.DateField(null=True, blank="True")
 
     backend = EquityLiveDataBackendManager()
 
@@ -156,44 +150,10 @@ class EquityLiveData(TradingInformation, TradableEntity, BaseModel):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityLiveOptionChain(BaseModel):
+class EquityLiveOptionChain(EntityLiveOptionChain, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_optionchain", on_delete=models.CASCADE
     )
-
-    pe_strike_price = models.DecimalField(**numeric_field_values)
-    pe_expiry_date = models.DateField()
-    pe_open_interest = models.DecimalField(**numeric_field_values)
-    pe_change_in_open_interest = models.DecimalField(**numeric_field_values)
-    pe_total_traded_volume = models.DecimalField(**numeric_field_values)
-    pe_implied_volatility = models.DecimalField(**numeric_field_values)
-    pe_last_traded_price = models.DecimalField(**numeric_field_values)
-    pe_change = models.DecimalField(**numeric_field_values)
-    pe_total_buy_quantity = models.DecimalField(**numeric_field_values)
-    pe_total_sell_quantity = models.DecimalField(**numeric_field_values)
-    pe_bid_quantity = models.DecimalField(**numeric_field_values)
-    pe_bid_price = models.DecimalField(**numeric_field_values)
-    pe_ask_quantity = models.DecimalField(**numeric_field_values)
-    pe_ask_price = models.DecimalField(**numeric_field_values)
-    pe_underlying_value = models.DecimalField(**numeric_field_values)
-    ce_strike_price = models.DecimalField(**numeric_field_values)
-    ce_expiry_date = models.DateField()
-    ce_open_interest = models.DecimalField(**numeric_field_values)
-    ce_change_in_open_interest = models.DecimalField(**numeric_field_values)
-    ce_total_traded_volume = models.DecimalField(**numeric_field_values)
-    ce_implied_volatility = models.DecimalField(**numeric_field_values)
-    ce_last_traded_price = models.DecimalField(**numeric_field_values)
-    ce_change = models.DecimalField(**numeric_field_values)
-    ce_total_buy_quantity = models.DecimalField(**numeric_field_values)
-    ce_total_sell_quantity = models.DecimalField(**numeric_field_values)
-    ce_bid_quantity = models.DecimalField(**numeric_field_values)
-    ce_bid_price = models.DecimalField(**numeric_field_values)
-    ce_ask_quantity = models.DecimalField(**numeric_field_values)
-    ce_ask_price = models.DecimalField(**numeric_field_values)
-    ce_underlying_value = models.DecimalField(**numeric_field_values)
-
-    date = models.DateTimeField()
-    pull_date = models.DateTimeField(auto_now=True)
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -202,15 +162,10 @@ class EquityLiveOptionChain(BaseModel):
         return self.symbol
 
 
-class EquityLiveFuture(TradableEntity, BaseModel):
+class EquityLiveFuture(EntityLiveFuture, TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_future", on_delete=models.CASCADE
     )
-
-    expiry_date = models.DateField()
-
-    date = models.DateTimeField()
-    pull_date = models.DateTimeField(auto_now=True)
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
@@ -219,22 +174,10 @@ class EquityLiveFuture(TradableEntity, BaseModel):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityLiveOpenInterest(BaseModel):
+class EquityLiveOpenInterest(EntityLiveOpenInterest, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_openInterest", on_delete=models.CASCADE
     )
-
-    lastest_open_interest = models.DecimalField(**numeric_field_values)
-    previous_open_interest = models.DecimalField(**numeric_field_values)
-    change_in_open_interest = models.DecimalField(**numeric_field_values)
-    average_open_interest = models.DecimalField(**numeric_field_values)
-    volume_open_interest = models.DecimalField(**numeric_field_values)
-    future_value = models.DecimalField(**numeric_field_values)
-    option_value = models.DecimalField(**numeric_field_values)
-    underlying_value = models.DecimalField(**numeric_field_values)
-
-    date = models.DateTimeField()
-    pull_date = models.DateTimeField(auto_now=True)
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

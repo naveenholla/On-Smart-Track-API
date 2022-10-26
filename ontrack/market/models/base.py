@@ -66,3 +66,72 @@ class DerivativeEndOfDay(models.Model):
 
     class Meta:
         abstract = True
+
+
+class EntityLiveData(models.Model):
+    year_high = models.DecimalField(**numeric_field_values)
+    year_low = models.DecimalField(**numeric_field_values)
+    near_week_high = models.DecimalField(**numeric_field_values)
+    near_week_low = models.DecimalField(**numeric_field_values)
+
+    price_change_month_ago = models.DecimalField(**numeric_field_values)
+    date_month_ago = models.DateField(null=True, blank="True")
+    price_change_year_ago = models.DecimalField(**numeric_field_values)
+    date_year_ago = models.DateField(null=True, blank="True")
+
+
+class EntityLiveFuture(models.Model):
+    expiry_date = models.DateField()
+
+    date = models.DateTimeField()
+    pull_date = models.DateTimeField(auto_now=True)
+
+
+class EntityLiveOpenInterest(models.Model):
+    lastest_open_interest = models.DecimalField(**numeric_field_values)
+    previous_open_interest = models.DecimalField(**numeric_field_values)
+    change_in_open_interest = models.DecimalField(**numeric_field_values)
+    average_open_interest = models.DecimalField(**numeric_field_values)
+    volume_open_interest = models.DecimalField(**numeric_field_values)
+    future_value = models.DecimalField(**numeric_field_values)
+    option_value = models.DecimalField(**numeric_field_values)
+    underlying_value = models.DecimalField(**numeric_field_values)
+
+    date = models.DateTimeField()
+    pull_date = models.DateTimeField(auto_now=True)
+
+
+class EntityLiveOptionChain(models.Model):
+    pe_strike_price = models.DecimalField(**numeric_field_values)
+    pe_expiry_date = models.DateField()
+    pe_open_interest = models.DecimalField(**numeric_field_values)
+    pe_change_in_open_interest = models.DecimalField(**numeric_field_values)
+    pe_total_traded_volume = models.DecimalField(**numeric_field_values)
+    pe_implied_volatility = models.DecimalField(**numeric_field_values)
+    pe_last_traded_price = models.DecimalField(**numeric_field_values)
+    pe_change = models.DecimalField(**numeric_field_values)
+    pe_total_buy_quantity = models.DecimalField(**numeric_field_values)
+    pe_total_sell_quantity = models.DecimalField(**numeric_field_values)
+    pe_bid_quantity = models.DecimalField(**numeric_field_values)
+    pe_bid_price = models.DecimalField(**numeric_field_values)
+    pe_ask_quantity = models.DecimalField(**numeric_field_values)
+    pe_ask_price = models.DecimalField(**numeric_field_values)
+    pe_underlying_value = models.DecimalField(**numeric_field_values)
+    ce_strike_price = models.DecimalField(**numeric_field_values)
+    ce_expiry_date = models.DateField()
+    ce_open_interest = models.DecimalField(**numeric_field_values)
+    ce_change_in_open_interest = models.DecimalField(**numeric_field_values)
+    ce_total_traded_volume = models.DecimalField(**numeric_field_values)
+    ce_implied_volatility = models.DecimalField(**numeric_field_values)
+    ce_last_traded_price = models.DecimalField(**numeric_field_values)
+    ce_change = models.DecimalField(**numeric_field_values)
+    ce_total_buy_quantity = models.DecimalField(**numeric_field_values)
+    ce_total_sell_quantity = models.DecimalField(**numeric_field_values)
+    ce_bid_quantity = models.DecimalField(**numeric_field_values)
+    ce_bid_price = models.DecimalField(**numeric_field_values)
+    ce_ask_quantity = models.DecimalField(**numeric_field_values)
+    ce_ask_price = models.DecimalField(**numeric_field_values)
+    ce_underlying_value = models.DecimalField(**numeric_field_values)
+
+    date = models.DateTimeField()
+    pull_date = models.DateTimeField(auto_now=True)

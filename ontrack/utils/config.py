@@ -49,6 +49,11 @@ class Configurations:
 
     @staticmethod
     @lru_cache(1)
+    def get_header_values_config():
+        return Configurations.__get_config("header_values")
+
+    @staticmethod
+    @lru_cache(1)
     def get_all_exchanges():
         return Configurations.__get_config("exchanges")
 

@@ -20,7 +20,7 @@ class TestPullHolidayData:
 
         self.initializeData = InitializeData(exchange_fixture.symbol)
 
-    @pytest.mark.lookupdata
+    @pytest.mark.lookup_data
     @pytest.mark.integration
     def test_pull_parse_exchange_holidays(self):
         self.initializeData.load_holidays_data()

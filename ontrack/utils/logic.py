@@ -56,6 +56,22 @@ class LogicHelper:
         return records_to_create, records_to_update
 
     @staticmethod
+    def pull_data_from_external_api(url, headers=None):
+        try:
+            data = None
+            LogicHelper.logger.log_debug(f"Started with [{url}].")
+            session = requests.Session()
+            res = session.get(url, headers=headers)
+
+            if res.status_code == 200:
+                data = res.json()
+                LogicHelper.logger.log_debug("Got the Data.")
+        finally:
+            session.close()
+
+        return data
+
+    @staticmethod
     def reading_csv_raw(url: str, timeout=100, skiprows=0):
         """This task is used to pull the data from the website"""
 

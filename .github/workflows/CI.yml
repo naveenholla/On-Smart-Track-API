@@ -83,4 +83,4 @@ jobs:
           pip install -r requirements/local.txt
 
       - name: Test with pytest
-        run:  pytest -m "not lookupdata"
+        run:  pytest -m "not (eod_data_pull or live_data_pull or lookup_data)"

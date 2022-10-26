@@ -3,6 +3,7 @@ from django.db import models
 from ontrack.market.managers.equity import (
     EquityDerivativeEndOfDayBackendManager,
     EquityEndOfDayBackendManager,
+    EquityLiveDataBackendManager,
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
@@ -131,7 +132,7 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
         )
 
 
-class LiveEquityData(TradingInformation, TradableEntity, BaseModel):
+class EquityLiveData(TradingInformation, TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
@@ -146,6 +147,8 @@ class LiveEquityData(TradingInformation, TradableEntity, BaseModel):
     price_change_year_ago = models.DecimalField(**numeric_field_values)
     date_year_ago = models.DateField(null=True, blank="True")
 
+    backend = EquityLiveDataBackendManager()
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
 
@@ -153,7 +156,7 @@ class LiveEquityData(TradingInformation, TradableEntity, BaseModel):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class LiveEquityOptionChain(BaseModel):
+class EquityLiveOptionChain(BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_optionchain", on_delete=models.CASCADE
     )
@@ -199,7 +202,7 @@ class LiveEquityOptionChain(BaseModel):
         return self.symbol
 
 
-class LiveEquityFuture(TradableEntity, BaseModel):
+class EquityLiveFuture(TradableEntity, BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_future", on_delete=models.CASCADE
     )
@@ -216,7 +219,7 @@ class LiveEquityFuture(TradableEntity, BaseModel):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class LiveEquityOpenInterest(BaseModel):
+class EquityLiveOpenInterest(BaseModel):
     equity = models.ForeignKey(
         Equity, related_name="live_openInterest", on_delete=models.CASCADE
     )

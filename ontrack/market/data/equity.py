@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from ontrack.market.querysets.equity import (
     EquityDerivativeEndOfDayQuerySet,
     EquityEndOfDayQuerySet,
+    EquityLiveDataQuerySet,
 )
 from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
 from ontrack.utils.base.enum import InstrumentType
@@ -25,12 +26,16 @@ class PullEquityData:
         equity_qs: EquityQuerySet = None,
         equity_eod_qs: EquityEndOfDayQuerySet = None,
         equity_derivative_eod_qs: EquityDerivativeEndOfDayQuerySet = None,
+        equity_live_qs: EquityLiveDataQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.equity_qs = equity_qs
         self.equity_eod_qs = equity_eod_qs
         self.equity_derivative_eod_qs = equity_derivative_eod_qs
+        self.equity_live_qs = equity_live_qs
+
+        self.equity_eod_qs = equity_eod_qs
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
@@ -202,6 +207,94 @@ class PullEquityData:
 
         return entity
 
+    def __parse_live_data(self, record):
+        symbol = record["symbol"].strip().lower()
+        series = record["series"].strip().lower() if "series" in record else "-"
+
+        if series != "eq":
+            return None
+
+        equity = self.equity_qs.unique_search(symbol).first()
+        if equity is None:
+            return None
+
+        meta = record["meta"]
+        industry = meta["industry"].strip().lower() if "industry" in meta else None
+        isin_number = meta["isin"].strip().lower() if "isin" in meta else None
+        date = dt.string_to_datetime(record["lastUpdateTime"], "%d-%b-%Y %H:%M:%S")
+
+        if industry is not None and isin_number is not None:
+            if equity.isin_number is None or equity.industry is None:
+                equity.isin_number = isin_number
+                equity.industry = industry
+                equity.save()
+
+        pk = None
+        existing_entity = self.equity_live_qs.unique_search(
+            date, equity_id=equity.id
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        open_price = nh.str_to_float(record["open"])
+        high_price = nh.str_to_float(record["dayHigh"])
+        low_price = nh.str_to_float(record["dayLow"])
+        last_price = nh.str_to_float(record["lastPrice"])
+        prev_close = nh.str_to_float(record["previousClose"])
+        close_price = nh.str_to_float(record["lastPrice"])
+        avg_price = (high_price + low_price) / 2
+        price_change = nh.str_to_float(record["change"])
+        percentage_change = nh.str_to_float(record["pChange"])
+
+        traded_quantity = nh.str_to_float(record["totalTradedVolume"])
+        traded_value = nh.str_to_float(record["totalTradedValue"])
+        number_of_trades = None
+        quantity_per_trade = None
+
+        year_high = nh.str_to_float(record["yearHigh"])
+        year_low = nh.str_to_float(record["yearLow"])
+        near_week_high = nh.str_to_float(record["nearWKH"])
+        near_week_low = nh.str_to_float(record["nearWKL"])
+
+        price_change_month_ago = nh.str_to_float(record["perChange30d"])
+        date_month_ago = dt.string_to_datetime(record["date30dAgo"], "%d-%b-%Y")
+        price_change_year_ago = nh.str_to_float(record["perChange365d"])
+        date_year_ago = dt.string_to_datetime(record["date365dAgo"], "%d-%b-%Y")
+
+        entity = {}
+        entity["id"] = pk
+        entity["equity"] = equity
+        entity["prev_close"] = prev_close
+        entity["open_price"] = open_price
+        entity["high_price"] = high_price
+        entity["low_price"] = low_price
+        entity["last_price"] = last_price
+        entity["close_price"] = close_price
+        entity["avg_price"] = avg_price
+        entity["point_changed"] = price_change
+        entity["percentage_changed"] = percentage_change
+
+        entity["traded_quantity"] = traded_quantity
+        entity["traded_value"] = traded_value
+        entity["number_of_trades"] = number_of_trades
+        entity["quantity_per_trade"] = quantity_per_trade
+
+        entity["year_high"] = year_high
+        entity["year_low"] = year_low
+        entity["near_week_high"] = near_week_high
+        entity["near_week_low"] = near_week_low
+
+        entity["price_change_month_ago"] = price_change_month_ago
+        entity["date_month_ago"] = date_month_ago
+        entity["price_change_year_ago"] = price_change_year_ago
+        entity["date_year_ago"] = date_year_ago
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
     def pull_and_parse_lookup_data(self):
         listing_url = self.urls["listed_equities"]
         self.logger.log_debug(f"Started with {listing_url}.")
@@ -269,6 +362,31 @@ class PullEquityData:
         entities = []
         for _, record in data.iterrows():
             entity = self.__parse_derivative_eod_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_data(self):
+        url_record = self.urls["live_equity_data"]
+        url = url_record["url"]
+        self.logger.log_debug(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        # pull csv containing all the listed equities from web
+        headers = Configurations.get_header_values_config()
+        data = LogicHelper.pull_data_from_external_api(url=url, headers=headers)
+
+        if data is None:
+            return None
+
+        entities = []
+        for record in data["data"]:
+            entity = self.__parse_live_data(record)
 
             if entity is not None:
                 entities.append(entity)

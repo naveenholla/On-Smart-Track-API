@@ -23,6 +23,7 @@ class TestPullParticipantData:
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
 
     @pytest.mark.integration
+    @pytest.mark.eod_data_pull
     def test_pull_parse_eod_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
@@ -32,6 +33,7 @@ class TestPullParticipantData:
         assert result is not None
 
         records_count = self.participant_qs.all().count()
+        assert records_count > 0
 
         # check update logic
         date = datetime(2022, 10, 20)
@@ -40,6 +42,7 @@ class TestPullParticipantData:
         assert records_count == self.participant_qs.all().count()
 
     @pytest.mark.integration
+    @pytest.mark.eod_data_pull
     def test_pull_parse_eod_stats_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
@@ -49,6 +52,7 @@ class TestPullParticipantData:
         assert result is not None
 
         records_count = self.participant_stats_qs.all().count()
+        assert records_count > 0
 
         # check update logic
         date = datetime(2022, 10, 20)

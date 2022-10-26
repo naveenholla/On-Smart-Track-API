@@ -43,7 +43,7 @@ class TestPullEquityIndexData:
             assert records is not None
             assert len(records) > 0
 
-    @pytest.mark.lookupdata
+    @pytest.mark.lookup_data
     @pytest.mark.integration
     @pytest.mark.slow
     def test_pull_indices_market_cap_all(self):

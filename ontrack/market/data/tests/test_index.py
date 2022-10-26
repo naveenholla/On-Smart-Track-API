@@ -24,7 +24,7 @@ class TestPullIndexData:
         self.initializeData.load_index_data()
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
 
-    @pytest.mark.lookupdata
+    @pytest.mark.lookup_data
     @pytest.mark.integration
     def test_pull_and_parse_lookup_data(self):
         assert self.exchange_fixture is not None
@@ -49,6 +49,7 @@ class TestPullIndexData:
         assert stock2["id"] == index_fixture.id
 
         records_count = self.index_qs.all().count()
+        assert records_count > 0
 
         # check update logic
         result = self.initializeData.load_index_data(True)
@@ -56,6 +57,7 @@ class TestPullIndexData:
         assert records_count == self.index_qs.all().count()
 
     @pytest.mark.integration
+    @pytest.mark.eod_data_pull
     def test_pull_parse_eod_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
@@ -65,6 +67,7 @@ class TestPullIndexData:
         assert result is not None
 
         records_count = self.index_eod_qs.all().count()
+        assert records_count > 0
 
         # check update logic
         date = datetime(2022, 10, 20)
@@ -73,6 +76,7 @@ class TestPullIndexData:
         assert records_count == self.index_eod_qs.all().count()
 
     @pytest.mark.integration
+    @pytest.mark.eod_data_pull
     def test_pull_parse_derivative_eod_data(self):
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
@@ -82,6 +86,7 @@ class TestPullIndexData:
         assert result is not None
 
         records_count = self.index_derivative_eod_qs.all().count()
+        assert records_count > 0
 
         # check update logic
         date = datetime(2022, 10, 20)

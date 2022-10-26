@@ -1,5 +1,3 @@
-import requests
-
 from ontrack.market.querysets.lookup import (
     ExchangeQuerySet,
     MarketDayCategoryQuerySet,
@@ -7,9 +5,9 @@ from ontrack.market.querysets.lookup import (
     MarketDayTypeQuerySet,
 )
 from ontrack.utils.config import Configurations
-from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.logger import ApplicationLogger
+from ontrack.utils.logic import LogicHelper
 
 
 class HolidayData:
@@ -27,7 +25,7 @@ class HolidayData:
         self.day_qs = day_qs
 
     def __process_record(self, daytype, category, record):
-        date = DateTimeHelper.string_to_datetime(record["tradingDate"], "%d-%b-%Y")
+        date = dt.string_to_datetime(record["tradingDate"], "%d-%b-%Y")
         day = record["day"] if "day" in record else None
         is_working = record["is_working_day"] if "is_working_day" in record else False
         start_time = record["start_time"] if "start_time" in record else None
@@ -78,9 +76,10 @@ class HolidayData:
             f"Started with Config Holiday [{exchange.symbol}] [{daytype.name}]."
         )
 
+        headers = Configurations.get_header_values_config()
         holiday_type = holiday_types[0]
         url = holiday_type["url"]
-        holidays = self.__pull_holiday_data(url)
+        holidays = LogicHelper.pull_data_from_external_api(url, headers)
 
         entities = []
         for category in list(daytype.categories.all()):
@@ -93,24 +92,6 @@ class HolidayData:
                 entity = self.__process_record(daytype, category, record)
                 entities.append(entity)
         return entities
-
-    def __pull_holiday_data(self, url):
-        headers = {
-            "accept-encoding": "gzip, deflate, br",
-            "accept-language": "en-US,en;q=0.9",
-            "user-agent": (
-                "Mozilla/5.0 (Windows NT 10.0; WOW64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/106.0.0.0 Safari/537.36"
-            ),
-        }
-
-        self.logger.log_debug(f"Started with [{url}].")
-        session = requests.Session()
-        data = session.get(url, headers=headers).json()
-        self.logger.log_debug("Got the Data.")
-
-        return data
 
     def pull_parse_exchange_holidays(self):
         exchanges = self.exchange_qs.all()

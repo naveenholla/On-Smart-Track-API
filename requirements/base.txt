@@ -30,3 +30,7 @@ django-celery-results==2.4.0
 matplotlib==3.6.1
 django-timezone-field==5.0
 tzdata==2022.5
+lxml==4.9.1
+html5lib==1.1
+bs4==0.0.1
+xlrd==2.0.1

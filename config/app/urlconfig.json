@@ -355,6 +355,23 @@
       }
     ]
   },
+  "participant_activity": {
+    "cash": {
+      "url": "https://www.moneycontrol.com/techmvc/responsive/fiidii/monthly?month=%m&year=%Y&section=cash&sub_section="
+    },
+    "fno_index": {
+      "url": "https://www.moneycontrol.com/techmvc/responsive/fiidii/monthly?month=%m&year=%Y&section=fno&sub_section=index"
+    },
+    "fno_stock": {
+      "url": "https://www.moneycontrol.com/techmvc/responsive/fiidii/monthly?month=%m&year=%Y&section=fno&sub_section=stock"
+    },
+    "mfsebi": {
+      "url": "https://www.moneycontrol.com/techmvc/responsive/fiidii/monthly?month=%m&year=%Y&section=mfsebi&sub_section=index"
+    },
+    "fiisebi": {
+      "url": "https://www.moneycontrol.com/techmvc/responsive/fiidii/monthly?month=%m&year=%Y&section=fiisebi&sub_section=index"
+    }
+  },
   "fo_participant_oi": {
     "url": "https://archives.nseindia.com/content/nsccl/fao_participant_oi_%d%m%Y.csv"
   },

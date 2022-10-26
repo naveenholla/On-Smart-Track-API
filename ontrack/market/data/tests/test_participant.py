@@ -26,3 +26,12 @@ class TestPullParticipantData:
         date = datetime(2022, 10, 20)
         result = self.endofdaydata.load_participant_eod_data(date, True)
         assert result is not None
+
+    @pytest.mark.integration
+    def test_pull_parse_eod_stats_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        date = datetime(2022, 10, 20)
+        result = self.endofdaydata.load_participant_stats_eod_data(date, True)
+        assert result is not None

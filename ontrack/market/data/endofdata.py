@@ -5,7 +5,10 @@ from ontrack.market.data.participant import PullParticipantData
 from ontrack.market.models.equity import EquityDerivativeEndOfDay, EquityEndOfDay
 from ontrack.market.models.index import IndexDerivativeEndOfDay, IndexEndOfDay
 from ontrack.market.models.lookup import Equity, Exchange, Index
-from ontrack.market.models.participant import ParticipantActivity
+from ontrack.market.models.participant import (
+    ParticipantActivity,
+    ParticipantStatsActivity,
+)
 from ontrack.utils.logger import ApplicationLogger
 
 
@@ -98,6 +101,24 @@ class EndOfDayData:
         result = pull_particpant_obj.pull_parse_eod_data(date)
         if save_data:
             self.commonobj.create_or_update(result, ParticipantActivity)
+
+        return result
+
+    def load_participant_stats_eod_data(self, date, save_data=True):
+        exchange_qs = Exchange.backend.all()
+        participant_qs = ParticipantActivity.backend.all()
+        participant_stats_qs = ParticipantStatsActivity.backend.all()
+
+        pull_particpant_obj = PullParticipantData(
+            self.exchange_symbol,
+            exchange_qs,
+            participant_qs,
+            participant_stats_qs,
+        )
+
+        result = pull_particpant_obj.pull_parse_eod_stats(date)
+        if save_data:
+            self.commonobj.create_or_update(result, ParticipantStatsActivity)
 
         return result
 

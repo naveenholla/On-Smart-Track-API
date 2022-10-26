@@ -54,7 +54,10 @@ class PullIndexData:
         mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
         if len(mcr) > 0:
             lot_size_str = mcr[0]["lot_size"].strip()
+            lot_size1_str = mcr[0]["lot_size1"].strip()
             lot_size = nh.str_to_float(lot_size_str)
+            if lot_size == 0:
+                lot_size = nh.str_to_float(lot_size1_str)
 
         entity = {}
         entity["id"] = pk

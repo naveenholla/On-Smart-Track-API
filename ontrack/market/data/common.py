@@ -12,6 +12,8 @@ class CommonData:
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
         data.columns.values[2] = "lot_size"
+        data.columns.values[3] = "lot_size1"
+        data.columns.values[4] = "lot_size2"
         market_caps = []
         for _, record in data.iterrows():
 
@@ -20,6 +22,8 @@ class CommonData:
             market_cap = {}
             market_cap["symbol"] = record["SYMBOL"].strip().lower()
             market_cap["lot_size"] = record["lot_size"].strip()
+            market_cap["lot_size1"] = record["lot_size1"].strip()
+            market_cap["lot_size2"] = record["lot_size2"].strip()
 
             market_caps.append(market_cap)
 

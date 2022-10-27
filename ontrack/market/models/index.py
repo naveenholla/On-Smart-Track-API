@@ -4,6 +4,7 @@ from ontrack.market.managers.index import (
     IndexDerivativeEndOfDayBackendManager,
     IndexEndOfDayBackendManager,
     IndexLiveDataBackendManager,
+    IndexLiveOpenInterestManager,
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
@@ -76,6 +77,10 @@ class IndexLiveData(EntityLiveData):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = (
+            "index",
+            "date",
+        )
 
     def __str__(self):
         return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
@@ -110,11 +115,17 @@ class IndexLiveOpenInterest(EntityLiveOpenInterest):
         Index, related_name="live_openInterest", on_delete=models.CASCADE
     )
 
+    backend = IndexLiveOpenInterestManager()
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = (
+            "index",
+            "date",
+        )
 
     def __str__(self):
-        return self.symbol
+        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class MajorIndexData(BaseModel):

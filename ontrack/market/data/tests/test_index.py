@@ -2,8 +2,14 @@ import pytest
 
 from ontrack.market.data.endofdata import EndOfDayData
 from ontrack.market.data.initialize import InitializeData
+from ontrack.market.data.livedata import LiveData
 from ontrack.market.data.tests.test_base import test_date
-from ontrack.market.models.index import IndexDerivativeEndOfDay, IndexEndOfDay
+from ontrack.market.models.index import (
+    IndexDerivativeEndOfDay,
+    IndexEndOfDay,
+    IndexLiveData,
+    IndexLiveOpenInterest,
+)
 from ontrack.market.models.lookup import Exchange, Index
 
 
@@ -14,6 +20,8 @@ class TestPullIndexData:
         self.index_qs = Index.backend.all()
         self.index_eod_qs = IndexEndOfDay.backend.all()
         self.index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.all()
+        self.index_live_data_qs = IndexLiveData.backend.all()
+        self.index_live_open_interest_qs = IndexLiveOpenInterest.backend.all()
 
     @pytest.fixture(autouse=True)
     def index_data_fixture(self, exchange_fixture):
@@ -22,6 +30,7 @@ class TestPullIndexData:
 
         self.initializeData.load_index_data()
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
+        self.livedata = LiveData(exchange_fixture.symbol)
 
     @pytest.mark.lookup_data
     @pytest.mark.integration
@@ -92,3 +101,37 @@ class TestPullIndexData:
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
         assert records_count == self.index_derivative_eod_qs.all().count()
+
+    @pytest.mark.integration
+    @pytest.mark.live_data_pull
+    def test_pull_parse_live_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        result = self.livedata.load_index_live_data(True)
+        assert result is not None
+
+        records_count = self.index_live_data_qs.all().count()
+        assert records_count > 0
+
+        # check update logic
+        result = self.livedata.load_index_live_data(True)
+        assert result is not None
+        assert records_count == self.index_live_data_qs.all().count()
+
+    @pytest.mark.integration
+    @pytest.mark.live_data_pull
+    def test_pull_parse_live_open_interest_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        result = self.livedata.load_index_live_open_interest_data(True)
+        assert result is not None
+
+        records_count = self.index_live_open_interest_qs.all().count()
+        assert records_count > 0
+
+        # check update logic
+        result = self.livedata.load_index_live_open_interest_data(True)
+        assert result is not None
+        assert records_count == self.index_live_open_interest_qs.all().count()

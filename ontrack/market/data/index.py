@@ -3,6 +3,8 @@ from django.utils.text import slugify
 from ontrack.market.querysets.index import (
     IndexDerivativeEndOfDayQuerySet,
     IndexEndOfDayQuerySet,
+    IndexLiveDataQuerySet,
+    IndexLiveOpenInterestQuerySet,
 )
 from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
 from ontrack.utils.base.enum import InstrumentType
@@ -25,12 +27,17 @@ class PullIndexData:
         index_qs: IndexQuerySet = None,
         index_eod_qs: IndexEndOfDayQuerySet = None,
         index_derivative_eod_qs: IndexDerivativeEndOfDayQuerySet = None,
+        index_live_qs: IndexLiveDataQuerySet = None,
+        index_live_open_interest_qs: IndexLiveOpenInterestQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
         self.index_qs = index_qs
         self.index_eod_qs = index_eod_qs
         self.index_derivative_eod_qs = index_derivative_eod_qs
+        self.index_live_qs = index_live_qs
+        self.index_live_open_interest_qs = index_live_open_interest_qs
+
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
@@ -208,6 +215,118 @@ class PullIndexData:
 
         return entity
 
+    def __parse_live_data(self, record, date):
+        index_name = record["index"].strip().lower()
+
+        index = self.index_qs.unique_search(name=index_name).first()
+        if index is None:
+            return None
+
+        pk = None
+        existing_entity = self.index_live_qs.unique_search(
+            date, index_id=index.id
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        open_price = nh.str_to_float(record["open"])
+        high_price = nh.str_to_float(record["high"])
+        low_price = nh.str_to_float(record["low"])
+        last_price = nh.str_to_float(record["last"])
+        prev_close = nh.str_to_float(record["previousClose"])
+        close_price = nh.str_to_float(record["last"])
+        avg_price = (high_price + low_price) / 2
+        price_change = nh.str_to_float(record["variation"])
+        percentage_change = nh.str_to_float(record["percentChange"])
+
+        year_high = nh.str_to_float(record["yearHigh"])
+        year_low = nh.str_to_float(record["yearLow"])
+        one_week_ago = nh.str_to_float(record["oneWeekAgo"])
+        one_month_ago = nh.str_to_float(record["oneMonthAgo"])
+
+        declines = nh.str_to_float(record["declines"] if "declines" in record else 0)
+        advances = nh.str_to_float(record["advances"] if "advances" in record else 0)
+        unchanged = nh.str_to_float(record["unchanged"] if "unchanged" in record else 0)
+
+        price_change_month_ago = nh.str_to_float(record["perChange30d"])
+        date_month_ago = dt.string_to_datetime(
+            record["date30dAgo"], "%d-%b-%Y", self.timezone
+        )
+        price_change_year_ago = nh.str_to_float(record["perChange365d"])
+        date_year_ago = dt.string_to_datetime(
+            record["date365dAgo"], "%d-%b-%Y", self.timezone
+        )
+
+        entity = {}
+        entity["id"] = pk
+        entity["index"] = index
+        entity["prev_close"] = prev_close
+        entity["open_price"] = open_price
+        entity["high_price"] = high_price
+        entity["low_price"] = low_price
+        entity["last_price"] = last_price
+        entity["close_price"] = close_price
+        entity["avg_price"] = avg_price
+        entity["point_changed"] = price_change
+        entity["percentage_changed"] = percentage_change
+
+        entity["declines"] = declines
+        entity["advances"] = advances
+        entity["unchanged"] = unchanged
+
+        entity["year_high"] = year_high
+        entity["year_low"] = year_low
+        entity["one_week_ago"] = one_week_ago
+        entity["one_month_ago"] = one_month_ago
+
+        entity["price_change_month_ago"] = price_change_month_ago
+        entity["date_month_ago"] = date_month_ago
+        entity["price_change_year_ago"] = price_change_year_ago
+        entity["date_year_ago"] = date_year_ago
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
+    def __parse_live_open_interest(self, record, date):
+        symbol = record["symbol"].strip().lower()
+
+        index = self.index_qs.unique_search(symbol).first()
+        if index is None:
+            return None
+
+        pk = None
+        existing_entity = self.index_live_open_interest_qs.unique_search(
+            date, index_id=index.id
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        lastest_open_interest = nh.str_to_float(record["latestOI"])
+        previous_open_interest = nh.str_to_float(record["prevOI"])
+        change_in_open_interest = nh.str_to_float(record["changeInOI"])
+        average_open_interest = nh.str_to_float(record["avgInOI"])
+        volume_open_interest = nh.str_to_float(record["volume"])
+        underlying_value = nh.str_to_float(record["underlyingValue"])
+
+        entity = {}
+        entity["id"] = pk
+        entity["index"] = index
+        entity["lastest_open_interest"] = lastest_open_interest
+        entity["previous_open_interest"] = previous_open_interest
+        entity["change_in_open_interest"] = change_in_open_interest
+        entity["average_open_interest"] = average_open_interest
+        entity["volume_open_interest"] = volume_open_interest
+        entity["underlying_value"] = underlying_value
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
     def pull_and_parse_lookup_data(self):
         self.logger.log_debug("Started with indices.")
 
@@ -278,6 +397,63 @@ class PullIndexData:
         entities = []
         for _, record in data.iterrows():
             entity = self.__parse_derivative_eod_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_data(self):
+        url_record = self.urls["live_index_data"]
+        url = url_record["url"]
+        self.logger.log_debug(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        # pull csv containing all the listed equities from web
+        headers = Configurations.get_header_values_config()
+        data = LogicHelper.pull_data_from_external_api(
+            record=url_record, headers=headers
+        )
+
+        if data is None:
+            return None
+
+        entities = []
+        for record in data["data"]:
+            entity = self.__parse_live_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_open_interest_data(self):
+        url_record = self.urls["live_spurts_oi"]
+        url = url_record["url"]
+        self.logger.log_debug(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        # pull csv containing all the listed equities from web
+        headers = Configurations.get_header_values_config()
+        data = LogicHelper.pull_data_from_external_api(
+            record=url_record, headers=headers
+        )
+
+        if data is None:
+            return None
+
+        entities = []
+        date = dt.string_to_datetime(
+            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
+        )
+        for record in data["data"]:
+            entity = self.__parse_live_open_interest(record, date)
 
             if entity is not None:
                 entities.append(entity)

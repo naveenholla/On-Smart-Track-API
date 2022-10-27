@@ -4,6 +4,7 @@ from ontrack.market.managers.equity import (
     EquityDerivativeEndOfDayBackendManager,
     EquityEndOfDayBackendManager,
     EquityLiveDataBackendManager,
+    EquityLiveOpenInterestManager,
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
@@ -144,6 +145,10 @@ class EquityLiveData(EntityLiveData):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = (
+            "equity",
+            "date",
+        )
 
     def __str__(self):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
@@ -178,8 +183,14 @@ class EquityLiveOpenInterest(EntityLiveOpenInterest):
         Equity, related_name="live_openInterest", on_delete=models.CASCADE
     )
 
+    backend = EquityLiveOpenInterestManager()
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = (
+            "equity",
+            "date",
+        )
 
     def __str__(self):
-        return self.symbol
+        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"

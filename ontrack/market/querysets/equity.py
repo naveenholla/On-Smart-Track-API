@@ -127,3 +127,21 @@ class EquityLiveDataQuerySet(models.QuerySet):
             lookups = lookups & Q(equity__symbol=equity_symbol)
 
         return self.filter(lookups)
+
+
+class EquityLiveOpenInterestQuerySet(models.QuerySet):
+    def unique_search(self, date, equity_id=None, equity_symbol=None):
+        if equity_id is None and equity_symbol is None:
+            return self.none()
+
+        if date is None:
+            return self.none()
+
+        lookups = Q(date=date)
+
+        if equity_id is not None:
+            lookups = lookups & Q(equity_id=equity_id)
+        else:
+            lookups = lookups & Q(equity__symbol=equity_symbol)
+
+        return self.filter(lookups)

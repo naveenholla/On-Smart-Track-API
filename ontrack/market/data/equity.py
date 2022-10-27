@@ -4,6 +4,7 @@ from ontrack.market.querysets.equity import (
     EquityDerivativeEndOfDayQuerySet,
     EquityEndOfDayQuerySet,
     EquityLiveDataQuerySet,
+    EquityLiveOpenInterestQuerySet,
 )
 from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
 from ontrack.utils.base.enum import InstrumentType
@@ -27,6 +28,7 @@ class PullEquityData:
         equity_eod_qs: EquityEndOfDayQuerySet = None,
         equity_derivative_eod_qs: EquityDerivativeEndOfDayQuerySet = None,
         equity_live_qs: EquityLiveDataQuerySet = None,
+        equity_live_open_interest_qs: EquityLiveOpenInterestQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
@@ -34,8 +36,8 @@ class PullEquityData:
         self.equity_eod_qs = equity_eod_qs
         self.equity_derivative_eod_qs = equity_derivative_eod_qs
         self.equity_live_qs = equity_live_qs
+        self.equity_live_open_interest_qs = equity_live_open_interest_qs
 
-        self.equity_eod_qs = equity_eod_qs
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
@@ -304,6 +306,49 @@ class PullEquityData:
 
         return entity
 
+    def __parse_live_open_interest(self, record, date):
+        symbol = record["symbol"].strip().lower()
+
+        equity = self.equity_qs.unique_search(symbol).first()
+        if equity is None:
+            return None
+
+        pk = None
+        existing_entity = self.equity_live_open_interest_qs.unique_search(
+            date, equity_id=equity.id
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        lastest_open_interest = nh.str_to_float(record["latestOI"])
+        previous_open_interest = nh.str_to_float(record["prevOI"])
+        change_in_open_interest = nh.str_to_float(record["changeInOI"])
+        average_open_interest = nh.str_to_float(record["avgInOI"])
+        volume_open_interest = nh.str_to_float(record["volume"])
+        future_value = nh.str_to_float(record["futValue"])
+        option_value = nh.str_to_float(record["optValue"])
+        total_value = nh.str_to_float(record["total"])
+        underlying_value = nh.str_to_float(record["underlyingValue"])
+
+        entity = {}
+        entity["id"] = pk
+        entity["equity"] = equity
+        entity["lastest_open_interest"] = lastest_open_interest
+        entity["previous_open_interest"] = previous_open_interest
+        entity["change_in_open_interest"] = change_in_open_interest
+        entity["average_open_interest"] = average_open_interest
+        entity["volume_open_interest"] = volume_open_interest
+        entity["future_value"] = future_value
+        entity["option_value"] = option_value
+        entity["total_value"] = total_value
+        entity["underlying_value"] = underlying_value
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
     def pull_and_parse_lookup_data(self):
         listing_url = self.urls["listed_equities"]
         self.logger.log_debug(f"Started with {listing_url}.")
@@ -398,6 +443,36 @@ class PullEquityData:
         entities = []
         for record in data["data"]:
             entity = self.__parse_live_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_open_interest_data(self):
+        url_record = self.urls["live_spurts_oi"]
+        url = url_record["url"]
+        self.logger.log_debug(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        # pull csv containing all the listed equities from web
+        headers = Configurations.get_header_values_config()
+        data = LogicHelper.pull_data_from_external_api(
+            record=url_record, headers=headers
+        )
+
+        if data is None:
+            return None
+
+        entities = []
+        date = dt.string_to_datetime(
+            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
+        )
+        for record in data["data"]:
+            entity = self.__parse_live_open_interest(record, date)
 
             if entity is not None:
                 entities.append(entity)

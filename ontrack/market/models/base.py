@@ -102,6 +102,7 @@ class EntityLiveOpenInterest(BaseModel):
     volume_open_interest = models.DecimalField(**numeric_field_values)
     future_value = models.DecimalField(**numeric_field_values)
     option_value = models.DecimalField(**numeric_field_values)
+    total_value = models.DecimalField(**numeric_field_values)
     underlying_value = models.DecimalField(**numeric_field_values)
 
     date = models.DateTimeField()

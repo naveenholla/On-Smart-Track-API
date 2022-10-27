@@ -380,14 +380,18 @@
   "fii_stats": {
     "url": "https://archives.nseindia.com/content/fo/fii_stats_%d-%b-%Y.xls"
   },
-  "live_spurts_oi": {
-    "url": "https://www.nseindia.com/api/live-analysis-oi-spurts-underlyings",
-    "website": "https://www.nseindia.com/market-data/oi-spurts",
-    "parent_website": "https://www.nseindia.com/"
-  },
   "live_equity_data": {
     "url": "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20TOTAL%20MARKET",
     "website": "https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%20TOTAL%20MARKET",
+    "parent_website": "https://www.nseindia.com/"
+  },
+  "live_index_data": {
+    "url": "https://www.nseindia.com/api/allIndices",
+    "parent_website": "https://www.nseindia.com/"
+  },
+  "live_spurts_oi": {
+    "url": "https://www.nseindia.com/api/live-analysis-oi-spurts-underlyings",
+    "website": "https://www.nseindia.com/market-data/oi-spurts",
     "parent_website": "https://www.nseindia.com/"
   },
   "live_nifty_future_data": {
@@ -422,10 +426,6 @@
       "&",
       "%26"
     ]
-  },
-  "live_all_indices": {
-    "url": "https://www.nseindia.com/api/allIndices",
-    "parent_website": "https://www.nseindia.com/"
   },
   "corporates_pit": {
     "url": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y",

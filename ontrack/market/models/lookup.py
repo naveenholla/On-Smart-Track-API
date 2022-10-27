@@ -192,7 +192,7 @@ class MarketTradingStrategySymbol(BaseModel):
         return self.symbol
 
 
-class Equity(MarketEntity, BaseModel):
+class Equity(MarketEntity):
     exchange = models.ForeignKey(
         Exchange, related_name="equities", on_delete=models.CASCADE
     )
@@ -207,7 +207,7 @@ class Equity(MarketEntity, BaseModel):
         verbose_name_plural = "Equities"
 
 
-class Index(MarketEntity, BaseModel):
+class Index(MarketEntity):
     exchange = models.ForeignKey(
         Exchange, related_name="indices", on_delete=models.CASCADE
     )

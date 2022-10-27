@@ -20,13 +20,15 @@
       "exchange_symbol": "nse",
       "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
       "url": "https://www.nseindia.com/api/holiday-master?type=trading",
-      "type": "Trading Holidays"
+      "type": "Trading Holidays",
+      "parent_website": "https://www.nseindia.com/"
     },
     {
       "exchange_symbol": "nse",
       "website": "https://www.nseindia.com/resources/exchange-communication-holidays",
       "url": "https://www.nseindia.com/api/holiday-master?type=clearing",
-      "type": "Clearing Holidays"
+      "type": "Clearing Holidays",
+      "parent_website": "https://www.nseindia.com/"
     }
   ],
   "indices_percentage": [
@@ -380,31 +382,38 @@
   },
   "live_spurts_oi": {
     "url": "https://www.nseindia.com/api/live-analysis-oi-spurts-underlyings",
-    "website": "https://www.nseindia.com/market-data/oi-spurts"
+    "website": "https://www.nseindia.com/market-data/oi-spurts",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_equity_data": {
     "url": "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20TOTAL%20MARKET",
-    "website": "https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%20TOTAL%20MARKET"
+    "website": "https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%20TOTAL%20MARKET",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_nifty_future_data": {
     "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nse50_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_banknifty_future_data": {
     "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nifty_bank_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_top20_stock_future_data": {
     "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=stock_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_top20_contracts_data": {
     "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=top20_contracts",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch"
+    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+    "parent_website": "https://www.nseindia.com/"
   },
   "live_option_chain": {
     "url": "https://www.nseindia.com/api/option-chain-{0}?symbol={1}",
     "website": "https://www.nseindia.com/option-chain",
+    "parent_website": "https://www.nseindia.com/",
     "arg1_options": [
       "indices",
       "equities"
@@ -415,10 +424,12 @@
     ]
   },
   "live_all_indices": {
-    "url": "https://www.nseindia.com/api/allIndices"
+    "url": "https://www.nseindia.com/api/allIndices",
+    "parent_website": "https://www.nseindia.com/"
   },
   "corporates_pit": {
-    "url": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y"
+    "url": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y",
+    "parent_website": "https://www.nseindia.com/"
   },
   "fortnightly_sector_wise_fii": {
     "url": "https://www.fpi.nsdl.co.in/web/StaticReports/Fortnightly_Sector_wise_FII_Investment_Data/FIIInvestSector_%b%d%Y.html"

@@ -8,7 +8,6 @@ from ontrack.market.managers.index import (
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
     EntityLiveData,
-    EntityLiveFuture,
     EntityLiveOpenInterest,
     EntityLiveOptionChain,
     TradableEntity,
@@ -20,7 +19,7 @@ from ontrack.utils.base.enum import OptionType
 from ontrack.utils.base.model import BaseModel
 
 
-class IndexEndOfDay(TradingInformation, TradableEntity, BaseModel):
+class IndexEndOfDay(TradingInformation):
     index = models.ForeignKey(Index, related_name="eod_data", on_delete=models.CASCADE)
 
     index_pe = models.DecimalField(**numeric_field_values)
@@ -37,7 +36,7 @@ class IndexEndOfDay(TradingInformation, TradableEntity, BaseModel):
         return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class IndexDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
+class IndexDerivativeEndOfDay(DerivativeEndOfDay):
     index = models.ForeignKey(
         Index, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
@@ -64,7 +63,7 @@ class IndexDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
         )
 
 
-class IndexLiveData(EntityLiveData, TradingInformation, TradableEntity, BaseModel):
+class IndexLiveData(EntityLiveData):
     index = models.ForeignKey(Index, related_name="live_data", on_delete=models.CASCADE)
 
     one_week_ago = models.DecimalField(**numeric_field_values)
@@ -82,7 +81,7 @@ class IndexLiveData(EntityLiveData, TradingInformation, TradableEntity, BaseMode
         return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class IndexLiveOptionChain(EntityLiveOptionChain, BaseModel):
+class IndexLiveOptionChain(EntityLiveOptionChain):
     index = models.ForeignKey(
         Index, related_name="live_optionchain", on_delete=models.CASCADE
     )
@@ -94,7 +93,7 @@ class IndexLiveOptionChain(EntityLiveOptionChain, BaseModel):
         return self.symbol
 
 
-class IndexLiveFuture(EntityLiveFuture, TradableEntity, BaseModel):
+class IndexLiveFuture(TradableEntity):
     index = models.ForeignKey(
         Index, related_name="live_future", on_delete=models.CASCADE
     )
@@ -106,7 +105,7 @@ class IndexLiveFuture(EntityLiveFuture, TradableEntity, BaseModel):
         return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class IndexLiveOpenInterest(EntityLiveOpenInterest, BaseModel):
+class IndexLiveOpenInterest(EntityLiveOpenInterest):
     index = models.ForeignKey(
         Index, related_name="live_openInterest", on_delete=models.CASCADE
     )

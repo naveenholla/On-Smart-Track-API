@@ -78,8 +78,7 @@ class HolidayData:
 
         headers = Configurations.get_header_values_config()
         holiday_type = holiday_types[0]
-        url = holiday_type["url"]
-        holidays = LogicHelper.pull_data_from_external_api(url, headers)
+        holidays = LogicHelper.pull_data_from_external_api(holiday_type, headers)
 
         entities = []
         for category in list(daytype.categories.all()):

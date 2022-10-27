@@ -8,7 +8,6 @@ from ontrack.market.managers.equity import (
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
     EntityLiveData,
-    EntityLiveFuture,
     EntityLiveOpenInterest,
     EntityLiveOptionChain,
     TradableEntity,
@@ -19,7 +18,7 @@ from ontrack.market.models.lookup import Equity
 from ontrack.utils.base.model import BaseModel
 
 
-class EquityEndOfDay(TradingInformation, TradableEntity, BaseModel):
+class EquityEndOfDay(TradingInformation):
     equity = models.ForeignKey(
         Equity, related_name="eod_data", on_delete=models.CASCADE
     )
@@ -109,7 +108,7 @@ class EquitySast(BaseModel):
         return self.equity.name
 
 
-class EquityDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
+class EquityDerivativeEndOfDay(DerivativeEndOfDay):
     equity = models.ForeignKey(
         Equity, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
@@ -136,7 +135,7 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay, TradableEntity, BaseModel):
         )
 
 
-class EquityLiveData(EntityLiveData, TradingInformation, TradableEntity, BaseModel):
+class EquityLiveData(EntityLiveData):
     equity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
@@ -150,7 +149,7 @@ class EquityLiveData(EntityLiveData, TradingInformation, TradableEntity, BaseMod
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityLiveOptionChain(EntityLiveOptionChain, BaseModel):
+class EquityLiveOptionChain(EntityLiveOptionChain):
     equity = models.ForeignKey(
         Equity, related_name="live_optionchain", on_delete=models.CASCADE
     )
@@ -162,7 +161,7 @@ class EquityLiveOptionChain(EntityLiveOptionChain, BaseModel):
         return self.symbol
 
 
-class EquityLiveFuture(EntityLiveFuture, TradableEntity, BaseModel):
+class EquityLiveFuture(TradableEntity):
     equity = models.ForeignKey(
         Equity, related_name="live_future", on_delete=models.CASCADE
     )
@@ -174,7 +173,7 @@ class EquityLiveFuture(EntityLiveFuture, TradableEntity, BaseModel):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityLiveOpenInterest(EntityLiveOpenInterest, BaseModel):
+class EquityLiveOpenInterest(EntityLiveOpenInterest):
     equity = models.ForeignKey(
         Equity, related_name="live_openInterest", on_delete=models.CASCADE
     )

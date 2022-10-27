@@ -1,6 +1,7 @@
 from django.db import models
 
 from ontrack.utils.base.enum import InstrumentType, OptionType
+from ontrack.utils.base.model import BaseModel
 
 numeric_field_values = {
     "max_digits": 18,
@@ -10,7 +11,7 @@ numeric_field_values = {
 }
 
 
-class MarketEntity(models.Model):
+class MarketEntity(BaseModel):
     name = models.CharField(max_length=200)
     symbol = models.CharField(max_length=200, unique=True)
     chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
@@ -23,7 +24,7 @@ class MarketEntity(models.Model):
         abstract = True
 
 
-class TradableEntity(models.Model):
+class TradableEntity(BaseModel):
     prev_close = models.DecimalField(**numeric_field_values)
     open_price = models.DecimalField(**numeric_field_values)
     high_price = models.DecimalField(**numeric_field_values)
@@ -38,7 +39,7 @@ class TradableEntity(models.Model):
         abstract = True
 
 
-class TradingInformation(models.Model):
+class TradingInformation(TradableEntity):
     traded_quantity = models.DecimalField(**numeric_field_values)
     traded_value = models.DecimalField(**numeric_field_values)
     number_of_trades = models.DecimalField(**numeric_field_values)
@@ -50,7 +51,7 @@ class TradingInformation(models.Model):
         abstract = True
 
 
-class DerivativeEndOfDay(models.Model):
+class DerivativeEndOfDay(TradableEntity):
     instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
     expiry_date = models.DateField()
     strike_price = models.DecimalField(**numeric_field_values)
@@ -68,7 +69,7 @@ class DerivativeEndOfDay(models.Model):
         abstract = True
 
 
-class EntityLiveData(models.Model):
+class EntityLiveData(TradingInformation):
     year_high = models.DecimalField(**numeric_field_values)
     year_low = models.DecimalField(**numeric_field_values)
     near_week_high = models.DecimalField(**numeric_field_values)
@@ -79,15 +80,21 @@ class EntityLiveData(models.Model):
     price_change_year_ago = models.DecimalField(**numeric_field_values)
     date_year_ago = models.DateField(null=True, blank="True")
 
+    class Meta:
+        abstract = True
 
-class EntityLiveFuture(models.Model):
+
+class EntityLiveFuture(TradableEntity):
     expiry_date = models.DateField()
 
     date = models.DateTimeField()
     pull_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        abstract = True
 
-class EntityLiveOpenInterest(models.Model):
+
+class EntityLiveOpenInterest(BaseModel):
     lastest_open_interest = models.DecimalField(**numeric_field_values)
     previous_open_interest = models.DecimalField(**numeric_field_values)
     change_in_open_interest = models.DecimalField(**numeric_field_values)
@@ -100,8 +107,11 @@ class EntityLiveOpenInterest(models.Model):
     date = models.DateTimeField()
     pull_date = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        abstract = True
 
-class EntityLiveOptionChain(models.Model):
+
+class EntityLiveOptionChain(BaseModel):
     pe_strike_price = models.DecimalField(**numeric_field_values)
     pe_expiry_date = models.DateField()
     pe_open_interest = models.DecimalField(**numeric_field_values)
@@ -135,3 +145,6 @@ class EntityLiveOptionChain(models.Model):
 
     date = models.DateTimeField()
     pull_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True

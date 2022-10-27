@@ -4,7 +4,7 @@ from ontrack.market.managers.participant import (
     ParticipantActivityBackendManager,
     ParticipantStatsActivityBackendManager,
 )
-from ontrack.market.models.base import DerivativeEndOfDay, numeric_field_values
+from ontrack.market.models.base import numeric_field_values
 from ontrack.utils.base.enum import ClientType, InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
 
@@ -24,7 +24,7 @@ class ParticipantActivity(BaseModel):
 
     backend = ParticipantActivityBackendManager()
 
-    class Meta(BaseModel.Meta, DerivativeEndOfDay.Meta):
+    class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = ("client_type", "date", "instrument", "option_type")
 

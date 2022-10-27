@@ -379,7 +379,9 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         headers = Configurations.get_header_values_config()
-        data = LogicHelper.pull_data_from_external_api(url=url, headers=headers)
+        data = LogicHelper.pull_data_from_external_api(
+            record=url_record, headers=headers
+        )
 
         if data is None:
             return None

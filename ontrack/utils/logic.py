@@ -56,12 +56,21 @@ class LogicHelper:
         return records_to_create, records_to_update
 
     @staticmethod
-    def pull_data_from_external_api(url, headers=None):
+    def pull_data_from_external_api(record, headers=None):
         try:
             data = None
+            url = record["url"]
+            parent_website = (
+                record["parent_website"] if "parent_website" in record else None
+            )
             LogicHelper.logger.log_debug(f"Started with [{url}].")
             session = requests.Session()
-            res = session.get(url, headers=headers)
+            session.headers.update(headers)
+
+            if parent_website is not None:
+                session.get(parent_website)
+
+            res = session.get(url)
 
             if res.status_code == 200:
                 data = res.json()

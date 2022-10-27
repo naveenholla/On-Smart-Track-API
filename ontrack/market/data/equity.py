@@ -39,6 +39,7 @@ class PullEquityData:
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        self.timezone = self.exchange.time_zone.zone
         self.urls = Configurations.get_urls_config()
 
     def __parse_lookup_data(self, record):
@@ -81,7 +82,7 @@ class PullEquityData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["DATE1"], "%d-%b-%Y")
+        date = dt.string_to_datetime(record["DATE1"], "%d-%b-%Y", self.timezone)
         series = record["SERIES"].strip().lower()
 
         if series != "eq":
@@ -145,8 +146,10 @@ class PullEquityData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y")
-        expiry_date = dt.string_to_datetime(record["EXPIRY_DT"], "%d-%b-%Y")
+        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
+        expiry_date = dt.string_to_datetime(
+            record["EXPIRY_DT"], "%d-%b-%Y", self.timezone
+        )
         instrument = record["INSTRUMENT"].strip().lower()
 
         if instrument != InstrumentType.FUTSTK.lower():
@@ -219,9 +222,11 @@ class PullEquityData:
             return None
 
         meta = record["meta"]
-        industry = meta["industry"].strip().lower() if "industry" in meta else None
-        isin_number = meta["isin"].strip().lower() if "isin" in meta else None
-        date = dt.string_to_datetime(record["lastUpdateTime"], "%d-%b-%Y %H:%M:%S")
+        industry = meta["industry"].strip() if "industry" in meta else None
+        isin_number = meta["isin"].strip() if "isin" in meta else None
+        date = dt.string_to_datetime(
+            record["lastUpdateTime"], "%d-%b-%Y %H:%M:%S", self.timezone
+        )
 
         if industry is not None and isin_number is not None:
             if equity.isin_number is None or equity.industry is None:
@@ -257,9 +262,13 @@ class PullEquityData:
         near_week_low = nh.str_to_float(record["nearWKL"])
 
         price_change_month_ago = nh.str_to_float(record["perChange30d"])
-        date_month_ago = dt.string_to_datetime(record["date30dAgo"], "%d-%b-%Y")
+        date_month_ago = dt.string_to_datetime(
+            record["date30dAgo"], "%d-%b-%Y", self.timezone
+        )
         price_change_year_ago = nh.str_to_float(record["perChange365d"])
-        date_year_ago = dt.string_to_datetime(record["date365dAgo"], "%d-%b-%Y")
+        date_year_ago = dt.string_to_datetime(
+            record["date365dAgo"], "%d-%b-%Y", self.timezone
+        )
 
         entity = {}
         entity["id"] = pk

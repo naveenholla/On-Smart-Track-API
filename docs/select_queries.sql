@@ -15,3 +15,22 @@ SELECT * FROM public.market_equity;
 SELECT * FROM public.market_index;
 SELECT * FROM public.market_equityindex ORDER BY sector, equity_id, index_id;
 SELECT index_id, sum(equity_weightage) FROM public.market_equityindex group by index_id
+
+SELECT * FROM public.market_equityendofday
+SELECT * FROM public.market_equityendofdaycalcutated
+SELECT * FROM public.market_equityderivativeendofday
+
+SELECT * FROM public.market_indexendofday
+SELECT * FROM public.market_indexderivativeendofday
+
+SELECT * FROM public.market_equitylivedata
+SELECT * FROM public.market_equitylivefuture
+SELECT * FROM public.market_equityliveopeninterest
+SELECT * FROM public.market_equityliveoptionchain
+
+SELECT * FROM public.market_indexlivedata
+SELECT * FROM public.market_indexlivefuture
+SELECT * FROM public.market_indexliveopeninterest
+SELECT * FROM public.market_indexliveoptionchain
+
+

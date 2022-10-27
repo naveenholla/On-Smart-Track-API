@@ -1,9 +1,8 @@
-from datetime import datetime
-
 import pytest
 
 from ontrack.market.data.endofdata import EndOfDayData
 from ontrack.market.data.initialize import InitializeData
+from ontrack.market.data.tests.test_base import test_date
 from ontrack.market.models.index import IndexDerivativeEndOfDay, IndexEndOfDay
 from ontrack.market.models.lookup import Exchange, Index
 
@@ -62,7 +61,7 @@ class TestPullIndexData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
 
@@ -70,7 +69,7 @@ class TestPullIndexData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
         assert records_count == self.index_eod_qs.all().count()
@@ -81,7 +80,7 @@ class TestPullIndexData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_index_derivative_eod_data(date, True)
         assert result is not None
 
@@ -89,7 +88,7 @@ class TestPullIndexData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
         assert records_count == self.index_derivative_eod_qs.all().count()

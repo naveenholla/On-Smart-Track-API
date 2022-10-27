@@ -1,10 +1,9 @@
-from datetime import datetime
-
 import pytest
 
 from ontrack.market.data.endofdata import EndOfDayData
 from ontrack.market.data.initialize import InitializeData
 from ontrack.market.data.livedata import LiveData
+from ontrack.market.data.tests.test_base import test_date
 from ontrack.market.models.equity import (
     EquityDerivativeEndOfDay,
     EquityEndOfDay,
@@ -66,7 +65,7 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
 
@@ -74,7 +73,7 @@ class TestPullEquityData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
         assert records_count == self.equity_eod_qs.all().count()
@@ -85,7 +84,7 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
         assert result is not None
 
@@ -93,7 +92,7 @@ class TestPullEquityData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
         assert records_count == self.equity_derivative_eod_qs.all().count()

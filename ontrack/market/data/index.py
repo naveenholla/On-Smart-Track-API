@@ -34,6 +34,7 @@ class PullIndexData:
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        self.timezone = self.exchange.time_zone.zone
         self.urls = Configurations.get_urls_config()
 
     def __parse_lookup_data(self, record):
@@ -80,7 +81,7 @@ class PullIndexData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         index_name = record["Index Name"].strip().lower()
-        date = dt.string_to_datetime(record["Index Date"], "%d-%m-%Y")
+        date = dt.string_to_datetime(record["Index Date"], "%d-%m-%Y", self.timezone)
 
         index = self.index_qs.unique_search(name=index_name).first()
         if index is None:
@@ -143,8 +144,10 @@ class PullIndexData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y")
-        expiry_date = dt.string_to_datetime(record["EXPIRY_DT"], "%d-%b-%Y")
+        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
+        expiry_date = dt.string_to_datetime(
+            record["EXPIRY_DT"], "%d-%b-%Y", self.timezone
+        )
         instrument = record["INSTRUMENT"].strip().lower()
 
         if instrument != InstrumentType.FUTIDX.lower():

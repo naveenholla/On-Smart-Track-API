@@ -1,8 +1,7 @@
-from datetime import datetime
-
 import pytest
 
 from ontrack.market.data.endofdata import EndOfDayData
+from ontrack.market.data.tests.test_base import test_date
 from ontrack.market.models.lookup import Exchange
 from ontrack.market.models.participant import (
     ParticipantActivity,
@@ -28,7 +27,7 @@ class TestPullParticipantData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
         assert result is not None
 
@@ -36,7 +35,7 @@ class TestPullParticipantData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
         assert result is not None
         assert records_count == self.participant_qs.all().count()
@@ -47,7 +46,7 @@ class TestPullParticipantData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
         assert result is not None
 
@@ -55,7 +54,7 @@ class TestPullParticipantData:
         assert records_count > 0
 
         # check update logic
-        date = datetime(2022, 10, 20)
+        date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
         assert result is not None
         assert records_count == self.participant_stats_qs.all().count()

@@ -30,6 +30,16 @@ class DateTimeHelper:
         return DateTimeHelper.current_date_time().timetz()
 
     @staticmethod
+    def get_date_time(year, month, day, hour=0, minute=0, second=0, time_zone=None):
+        if time_zone is None:
+            time_zone = "Asia/Kolkata"
+
+        t = tz.gettz(time_zone)
+        d = datetime(year, month, day, hour, minute, second)
+        d = d.replace(tzinfo=t)
+        return d
+
+    @staticmethod
     def get_future_date(
         date=None,
         weeks=0,
@@ -106,9 +116,12 @@ class DateTimeHelper:
         return datetimeObj.strftime(f)
 
     @staticmethod
-    def string_to_datetime(datetimeStr, dateFormat=None) -> datetime:
+    def string_to_datetime(datetimeStr, dateFormat=None, time_zone=None) -> datetime:
         if datetimeStr is None:
             return None
+
+        if time_zone is None:
+            time_zone = "Asia/Kolkata"
 
         if isinstance(datetimeStr, datetime):
             return datetimeStr
@@ -121,7 +134,11 @@ class DateTimeHelper:
         f = Configurations.get_default_values_config()["default_date_time_format"]
         if dateFormat is not None and len(dateFormat) > 0:
             f = dateFormat
-        return datetime.strptime(datetimeStr, f)
+
+        t = tz.gettz(time_zone)
+        d = datetime.strptime(datetimeStr, f)
+        d = d.replace(tzinfo=t)
+        return d
 
     @staticmethod
     def convert_string_to_time(

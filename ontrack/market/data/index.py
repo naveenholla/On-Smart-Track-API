@@ -7,7 +7,7 @@ from ontrack.market.querysets.index import (
     IndexLiveOpenInterestQuerySet,
 )
 from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
-from ontrack.utils.base.enum import InstrumentType
+from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.filesystem import FileSystemHelper
@@ -29,6 +29,8 @@ class PullIndexData:
         index_derivative_eod_qs: IndexDerivativeQuerySet = None,
         index_live_qs: IndexLiveDataQuerySet = None,
         index_live_open_interest_qs: IndexLiveOpenInterestQuerySet = None,
+        index_live_derivative_qs: IndexDerivativeQuerySet = None,
+        index_live_option_chain_qs: IndexDerivativeQuerySet = None,
     ):
         self.logger = ApplicationLogger()
         self.exchange_qs = exchange_qs
@@ -37,6 +39,8 @@ class PullIndexData:
         self.index_derivative_eod_qs = index_derivative_eod_qs
         self.index_live_qs = index_live_qs
         self.index_live_open_interest_qs = index_live_open_interest_qs
+        self.index_live_derivative_qs = index_live_derivative_qs
+        self.index_live_option_chain_qs = index_live_option_chain_qs
 
         self.exchange_symbol = exchange_symbol
 
@@ -293,6 +297,61 @@ class PullIndexData:
 
         return entity
 
+    def __parse_live_derivative_data(self, record, date, list_name):
+        symbol = record["underlying"].strip().lower()
+        instrument = record["instrumentType"]
+        expiry_date = dt.string_to_datetime(
+            record["expiryDate"], "%d-%b-%Y", self.timezone
+        )
+
+        index = self.index_qs.unique_search(symbol).first()
+        if index is None:
+            return None
+
+        pk = None
+        existing_entity = self.index_live_derivative_qs.unique_search(
+            date, instrument=instrument, expiry_date=expiry_date, entity_id=index.id
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        contract = record["contract"]
+        identifier = record["identifier"]
+        strike_price = nh.str_to_float(record["strikePrice"])
+        ot = OptionType.PE if record["optionType"].lower() == "put" else OptionType.CE
+        option_type = ot
+        last_price = nh.str_to_float(record["lastPrice"])
+        point_changed = nh.str_to_float(record["change"])
+        percentage_changed = nh.str_to_float(record["pChange"])
+        volumn = nh.str_to_float(record["volume"])
+        open_interest = nh.str_to_float(record["openInterest"])
+        change_in_open_interest = 0
+        no_of_trades = nh.str_to_float(record["noOfTrades"])
+
+        entity = {}
+        entity["id"] = pk
+        entity["entity"] = index
+        entity["instrument"] = instrument
+        entity["contract"] = contract
+        entity["identifier"] = identifier
+        entity["expiry_date"] = expiry_date
+        entity["list_type"] = list_name
+        entity["strike_price"] = strike_price
+        entity["option_type"] = option_type
+        entity["last_price"] = last_price
+        entity["point_changed"] = point_changed
+        entity["percentage_changed"] = percentage_changed
+        entity["volumn"] = volumn
+        entity["open_interest"] = open_interest
+        entity["change_in_open_interest"] = change_in_open_interest
+        entity["no_of_trades"] = no_of_trades
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
@@ -463,5 +522,39 @@ class PullIndexData:
 
             if entity is not None:
                 entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_derivative_data(self):
+        url_records = self.urls["live_index_future_data"]
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        headers = Configurations.get_header_values_config()
+
+        entities = []
+        for url_record in url_records:
+            url = url_record["url"]
+            list_name = url_record["name"]
+            self.logger.log_debug(f"Started with {url}.")
+
+            # pull csv containing all the listed equities from web
+            data = LogicHelper.pull_data_from_external_api(
+                record=url_record, headers=headers
+            )
+
+            if data is None:
+                return None
+
+            date = dt.string_to_datetime(
+                data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
+            )
+            for record in data["data"]:
+                entity = self.__parse_live_derivative_data(record, date, list_name)
+
+                if entity is not None:
+                    entities.append(entity)
 
         return entities

@@ -73,6 +73,7 @@ class LiveDerivativeData(TradableEntity):
     instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
     contract = models.CharField(max_length=200)
     identifier = models.CharField(max_length=200)
+    list_type = models.CharField(max_length=200, null=True, blank=True)
     expiry_date = models.DateField()
     strike_price = models.DecimalField(**numeric_field_values)
     option_type = models.CharField(

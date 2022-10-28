@@ -8,6 +8,7 @@ from ontrack.market.models.equity import (
     EquityDerivativeEndOfDay,
     EquityEndOfDay,
     EquityLiveData,
+    EquityLiveDerivativeData,
     EquityLiveOpenInterest,
 )
 from ontrack.market.models.lookup import Equity, Exchange
@@ -22,6 +23,7 @@ class TestPullEquityData:
         self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.all()
         self.equity_live_data_qs = EquityLiveData.backend.all()
         self.equity_live_open_interest_qs = EquityLiveOpenInterest.backend.all()
+        self.equity_live_derivative_qs = EquityLiveDerivativeData.backend.all()
 
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):
@@ -132,3 +134,20 @@ class TestPullEquityData:
         result = self.livedata.load_equity_live_open_interest_data(True)
         assert result is not None
         assert records_count == self.equity_live_open_interest_qs.all().count()
+
+    @pytest.mark.integration
+    @pytest.mark.live_data_pull
+    def test_pull_parse_live_derivative_data(self):
+        assert self.exchange_fixture is not None
+        assert self.exchange_fixture.symbol is not None
+
+        result = self.livedata.load_equity_live_derivative_data(True)
+        assert result is not None
+
+        records_count = self.equity_live_derivative_qs.all().count()
+        assert records_count > 0
+
+        # check update logic
+        result = self.livedata.load_equity_live_derivative_data(True)
+        assert result is not None
+        assert records_count == self.equity_live_derivative_qs.all().count()

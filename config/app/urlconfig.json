@@ -406,7 +406,9 @@
       "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
       "parent_website": "https://www.nseindia.com/",
       "name": "Bank Nifty Future"
-    },
+    }
+  ],
+  "live_misc_future_data": [
     {
       "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=top20_contracts",
       "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",

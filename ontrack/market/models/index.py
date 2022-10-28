@@ -121,6 +121,8 @@ class IndexLiveOptionChain(EntityLiveOptionChain):
         Index, related_name="live_optionchain", on_delete=models.CASCADE
     )
 
+    backend = IndexDerivativeBackendManager()
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
 
@@ -132,6 +134,8 @@ class IndexLiveFuture(EntityLiveFuture):
     entity = models.ForeignKey(
         Index, related_name="live_future", on_delete=models.CASCADE
     )
+
+    backend = IndexDerivativeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

@@ -138,7 +138,7 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay):
 
 
 class EquityLiveDerivativeData(LiveDerivativeData):
-    index = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="derivative_live_data", on_delete=models.CASCADE
     )
 
@@ -147,7 +147,7 @@ class EquityLiveDerivativeData(LiveDerivativeData):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "index",
+            "entity",
             "date",
             "instrument",
             "expiry_date",
@@ -187,6 +187,8 @@ class EquityLiveOptionChain(EntityLiveOptionChain):
         Equity, related_name="live_optionchain", on_delete=models.CASCADE
     )
 
+    backend = EquityDerivativeBackendManager()
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
 
@@ -198,6 +200,8 @@ class EquityLiveFuture(EntityLiveFuture):
     entity = models.ForeignKey(
         Equity, related_name="live_future", on_delete=models.CASCADE
     )
+
+    backend = EquityDerivativeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

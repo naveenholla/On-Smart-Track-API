@@ -1,5 +1,5 @@
 from ontrack.market.querysets.equity import (
-    EquityDerivativeEndOfDayQuerySet,
+    EquityDerivativeQuerySet,
     EquityEndOfDayQuerySet,
     EquityLiveDataQuerySet,
     EquityLiveOpenInterestQuerySet,
@@ -12,9 +12,9 @@ class EquityEndOfDayBackendManager(EndOfDayBackendManagerAbstract):
         return EquityEndOfDayQuerySet(self.model, using=self._db)
 
 
-class EquityDerivativeEndOfDayBackendManager(EndOfDayBackendManagerAbstract):
+class EquityDerivativeBackendManager(EndOfDayBackendManagerAbstract):
     def get_queryset(self):
-        return EquityDerivativeEndOfDayQuerySet(self.model, using=self._db)
+        return EquityDerivativeQuerySet(self.model, using=self._db)
 
 
 class EquityLiveDataBackendManager(EndOfDayBackendManagerAbstract):

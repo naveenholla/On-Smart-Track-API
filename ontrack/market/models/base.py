@@ -69,6 +69,30 @@ class DerivativeEndOfDay(TradableEntity):
         abstract = True
 
 
+class LiveDerivativeData(TradableEntity):
+    instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
+    contract = models.CharField(max_length=200)
+    identifier = models.CharField(max_length=200)
+    expiry_date = models.DateField()
+    strike_price = models.DecimalField(**numeric_field_values)
+    option_type = models.CharField(
+        max_length=50, choices=OptionType.choices, null=True, blank=True
+    )
+    last_price = models.DecimalField(**numeric_field_values)
+    point_changed = models.DecimalField(**numeric_field_values)
+    percentage_changed = models.DecimalField(**numeric_field_values)
+    volumn = models.DecimalField(**numeric_field_values)
+    open_interest = models.DecimalField(**numeric_field_values)
+    change_in_open_interest = models.DecimalField(**numeric_field_values)
+    no_of_trades = models.DecimalField(**numeric_field_values)
+
+    date = models.DateTimeField()
+    pull_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class EntityLiveData(TradingInformation):
     year_high = models.DecimalField(**numeric_field_values)
     year_low = models.DecimalField(**numeric_field_values)

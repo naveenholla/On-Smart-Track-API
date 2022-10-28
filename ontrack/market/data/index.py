@@ -1,7 +1,7 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.index import (
-    IndexDerivativeEndOfDayQuerySet,
+    IndexDerivativeQuerySet,
     IndexEndOfDayQuerySet,
     IndexLiveDataQuerySet,
     IndexLiveOpenInterestQuerySet,
@@ -26,7 +26,7 @@ class PullIndexData:
         exchange_qs: ExchangeQuerySet = None,
         index_qs: IndexQuerySet = None,
         index_eod_qs: IndexEndOfDayQuerySet = None,
-        index_derivative_eod_qs: IndexDerivativeEndOfDayQuerySet = None,
+        index_derivative_eod_qs: IndexDerivativeQuerySet = None,
         index_live_qs: IndexLiveDataQuerySet = None,
         index_live_open_interest_qs: IndexLiveOpenInterestQuerySet = None,
     ):
@@ -96,7 +96,7 @@ class PullIndexData:
 
         pk = None
         existing_entity = self.index_eod_qs.unique_search(
-            date, index_id=index.id
+            date, entity_id=index.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -121,7 +121,7 @@ class PullIndexData:
 
         entity = {}
         entity["id"] = pk
-        entity["index"] = index
+        entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -166,7 +166,10 @@ class PullIndexData:
 
         pk = None
         existing_entity = self.index_derivative_eod_qs.unique_search(
-            date, index_id=index.id, expiry_date=expiry_date
+            date,
+            instrument=InstrumentType.FUTIDX,
+            expiry_date=expiry_date,
+            entity_id=index.id,
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -189,7 +192,7 @@ class PullIndexData:
 
         entity = {}
         entity["id"] = pk
-        entity["index"] = index
+        entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -224,7 +227,7 @@ class PullIndexData:
 
         pk = None
         existing_entity = self.index_live_qs.unique_search(
-            date, index_id=index.id
+            date, entity_id=index.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -259,7 +262,7 @@ class PullIndexData:
 
         entity = {}
         entity["id"] = pk
-        entity["index"] = index
+        entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -299,7 +302,7 @@ class PullIndexData:
 
         pk = None
         existing_entity = self.index_live_open_interest_qs.unique_search(
-            date, index_id=index.id
+            date, entity_id=index.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -313,7 +316,7 @@ class PullIndexData:
 
         entity = {}
         entity["id"] = pk
-        entity["index"] = index
+        entity["entity"] = index
         entity["lastest_open_interest"] = lastest_open_interest
         entity["previous_open_interest"] = previous_open_interest
         entity["change_in_open_interest"] = change_in_open_interest
@@ -422,8 +425,11 @@ class PullIndexData:
             return None
 
         entities = []
+        date = dt.string_to_datetime(
+            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
+        )
         for record in data["data"]:
-            entity = self.__parse_live_data(record)
+            entity = self.__parse_live_data(record, date)
 
             if entity is not None:
                 entities.append(entity)

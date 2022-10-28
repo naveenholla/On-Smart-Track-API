@@ -1,40 +1,21 @@
 from django.db import models
 from django.db.models import Q
 
+from ontrack.market.querysets.base import EntityQuerySet
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper
 
 
-class ExchangeQuerySet(models.QuerySet):
-    def unique_search(self, symbol=None):
-        if symbol is None:
-            return self.none()
-
-        lookups = Q(symbol__iexact=symbol)
-        return self.filter(lookups)
+class ExchangeQuerySet(EntityQuerySet):
+    pass
 
 
-class EquityQuerySet(models.QuerySet):
-    def unique_search(self, symbol=None):
-        if symbol is None:
-            return self.none()
-
-        lookups = Q(symbol__iexact=symbol)
-        return self.filter(lookups)
+class EquityQuerySet(EntityQuerySet):
+    pass
 
 
-class IndexQuerySet(models.QuerySet):
-    def unique_search(self, symbol=None, name=None):
-        if symbol is None and name is None:
-            return self.none()
-
-        if symbol is not None:
-            lookups = Q(symbol__iexact=symbol)
-
-        if name is not None:
-            lookups = Q(name__iexact=name)
-
-        return self.filter(lookups)
+class IndexQuerySet(EntityQuerySet):
+    pass
 
 
 class EquityIndexQuerySet(models.QuerySet):

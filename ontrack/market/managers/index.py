@@ -1,5 +1,5 @@
 from ontrack.market.querysets.index import (
-    IndexDerivativeEndOfDayQuerySet,
+    IndexDerivativeQuerySet,
     IndexEndOfDayQuerySet,
     IndexLiveDataQuerySet,
     IndexLiveOpenInterestQuerySet,
@@ -12,9 +12,9 @@ class IndexEndOfDayBackendManager(EndOfDayBackendManagerAbstract):
         return IndexEndOfDayQuerySet(self.model, using=self._db)
 
 
-class IndexDerivativeEndOfDayBackendManager(EndOfDayBackendManagerAbstract):
+class IndexDerivativeBackendManager(EndOfDayBackendManagerAbstract):
     def get_queryset(self):
-        return IndexDerivativeEndOfDayQuerySet(self.model, using=self._db)
+        return IndexDerivativeQuerySet(self.model, using=self._db)
 
 
 class IndexLiveDataBackendManager(EndOfDayBackendManagerAbstract):

@@ -394,34 +394,47 @@
     "website": "https://www.nseindia.com/market-data/oi-spurts",
     "parent_website": "https://www.nseindia.com/"
   },
-  "live_nifty_future_data": {
-    "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nse50_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
-    "parent_website": "https://www.nseindia.com/"
-  },
-  "live_banknifty_future_data": {
-    "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nifty_bank_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
-    "parent_website": "https://www.nseindia.com/"
-  },
-  "live_top20_stock_future_data": {
-    "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=stock_fut",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
-    "parent_website": "https://www.nseindia.com/"
-  },
-  "live_top20_contracts_data": {
-    "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=top20_contracts",
-    "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
-    "parent_website": "https://www.nseindia.com/"
-  },
-  "live_option_chain": {
-    "url": "https://www.nseindia.com/api/option-chain-{0}?symbol={1}",
+  "live_index_future_data": [
+    {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nse50_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+      "parent_website": "https://www.nseindia.com/",
+      "name": "Nifty 50 Future"
+    },
+    {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=nifty_bank_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+      "parent_website": "https://www.nseindia.com/",
+      "name": "Bank Nifty Future"
+    },
+    {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=top20_contracts",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+      "parent_website": "https://www.nseindia.com/",
+      "name": "Top 20 Contracts"
+    }
+  ],
+  "live_equity_future_data": [
+    {
+      "url": "https://www.nseindia.com/api/liveEquity-derivatives?index=stock_fut",
+      "website": "https://www.nseindia.com/market-data/equity-derivatives-watch",
+      "parent_website": "https://www.nseindia.com/",
+      "name": "Equity Future"
+    }
+  ],
+  "live_index_option_chain": {
+    "url": "https://www.nseindia.com/api/option-chain-indices?symbol={1}",
     "website": "https://www.nseindia.com/option-chain",
     "parent_website": "https://www.nseindia.com/",
-    "arg1_options": [
-      "indices",
-      "equities"
-    ],
+    "arg2_options": [
+      "&",
+      "%26"
+    ]
+  },
+  "live_equity_option_chain": {
+    "url": "https://www.nseindia.com/api/option-chain-equities?symbol={1}",
+    "website": "https://www.nseindia.com/option-chain",
+    "parent_website": "https://www.nseindia.com/",
     "arg2_options": [
       "&",
       "%26"

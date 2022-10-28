@@ -1,7 +1,7 @@
 from django.utils.text import slugify
 
 from ontrack.market.querysets.equity import (
-    EquityDerivativeEndOfDayQuerySet,
+    EquityDerivativeQuerySet,
     EquityEndOfDayQuerySet,
     EquityLiveDataQuerySet,
     EquityLiveOpenInterestQuerySet,
@@ -26,7 +26,7 @@ class PullEquityData:
         exchange_qs: ExchangeQuerySet = None,
         equity_qs: EquityQuerySet = None,
         equity_eod_qs: EquityEndOfDayQuerySet = None,
-        equity_derivative_eod_qs: EquityDerivativeEndOfDayQuerySet = None,
+        equity_derivative_eod_qs: EquityDerivativeQuerySet = None,
         equity_live_qs: EquityLiveDataQuerySet = None,
         equity_live_open_interest_qs: EquityLiveOpenInterestQuerySet = None,
     ):
@@ -96,7 +96,7 @@ class PullEquityData:
 
         pk = None
         existing_entity = self.equity_eod_qs.unique_search(
-            date, equity_id=equity.id
+            date, entity_id=equity.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -120,7 +120,7 @@ class PullEquityData:
 
         entity = {}
         entity["id"] = pk
-        entity["equity"] = equity
+        entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -163,7 +163,10 @@ class PullEquityData:
 
         pk = None
         existing_entity = self.equity_derivative_eod_qs.unique_search(
-            date, equity_id=equity.id, expiry_date=expiry_date
+            date,
+            instrument=InstrumentType.FUTSTK,
+            expiry_date=expiry_date,
+            entity_id=equity.id,
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -186,7 +189,7 @@ class PullEquityData:
 
         entity = {}
         entity["id"] = pk
-        entity["equity"] = equity
+        entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -238,7 +241,7 @@ class PullEquityData:
 
         pk = None
         existing_entity = self.equity_live_qs.unique_search(
-            date, equity_id=equity.id
+            date, entity_id=equity.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -274,7 +277,7 @@ class PullEquityData:
 
         entity = {}
         entity["id"] = pk
-        entity["equity"] = equity
+        entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
         entity["high_price"] = high_price
@@ -315,7 +318,7 @@ class PullEquityData:
 
         pk = None
         existing_entity = self.equity_live_open_interest_qs.unique_search(
-            date, equity_id=equity.id
+            date, entity_id=equity.id
         ).first()
         if existing_entity is not None:
             pk = existing_entity.id
@@ -332,7 +335,7 @@ class PullEquityData:
 
         entity = {}
         entity["id"] = pk
-        entity["equity"] = equity
+        entity["entity"] = equity
         entity["lastest_open_interest"] = lastest_open_interest
         entity["previous_open_interest"] = previous_open_interest
         entity["change_in_open_interest"] = change_in_open_interest

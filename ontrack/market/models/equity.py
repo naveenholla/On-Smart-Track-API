@@ -1,7 +1,7 @@
 from django.db import models
 
 from ontrack.market.managers.equity import (
-    EquityDerivativeEndOfDayBackendManager,
+    EquityDerivativeBackendManager,
     EquityEndOfDayBackendManager,
     EquityLiveDataBackendManager,
     EquityLiveOpenInterestManager,
@@ -9,9 +9,10 @@ from ontrack.market.managers.equity import (
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
     EntityLiveData,
+    EntityLiveFuture,
     EntityLiveOpenInterest,
     EntityLiveOptionChain,
-    TradableEntity,
+    LiveDerivativeData,
     TradingInformation,
     numeric_field_values,
 )
@@ -20,7 +21,7 @@ from ontrack.utils.base.model import BaseModel
 
 
 class EquityEndOfDay(TradingInformation):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="eod_data", on_delete=models.CASCADE
     )
 
@@ -31,14 +32,14 @@ class EquityEndOfDay(TradingInformation):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
-        unique_together = ("equity", "date")
+        unique_together = ("entity", "date")
 
     def __str__(self):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityEndOfDayCalcutated(BaseModel):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="eod_calculated_data", on_delete=models.CASCADE
     )
 
@@ -53,14 +54,14 @@ class EquityEndOfDayCalcutated(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
-        unique_together = ("equity", "date")
+        unique_together = ("entity", "date")
 
     def __str__(self):
         return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityInsiderTrade(BaseModel):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="insider_trades", on_delete=models.CASCADE
     )
     category_of_person = models.CharField(max_length=100)
@@ -77,7 +78,7 @@ class EquityInsiderTrade(BaseModel):
 
 
 class EquityPledged(BaseModel):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="equity_pledged", on_delete=models.CASCADE
     )
     total_shares = models.IntegerField()
@@ -94,7 +95,7 @@ class EquityPledged(BaseModel):
 
 
 class EquitySast(BaseModel):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="equity_sast", on_delete=models.CASCADE
     )
     total_acquisition = models.IntegerField()
@@ -110,16 +111,16 @@ class EquitySast(BaseModel):
 
 
 class EquityDerivativeEndOfDay(DerivativeEndOfDay):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
 
-    backend = EquityDerivativeEndOfDayBackendManager()
+    backend = EquityDerivativeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "equity",
+            "entity",
             "date",
             "instrument",
             "expiry_date",
@@ -136,8 +137,35 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay):
         )
 
 
+class EquityLiveDerivativeData(LiveDerivativeData):
+    index = models.ForeignKey(
+        Equity, related_name="derivative_live_data", on_delete=models.CASCADE
+    )
+
+    backend = EquityDerivativeBackendManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+        unique_together = (
+            "index",
+            "date",
+            "instrument",
+            "expiry_date",
+            "strike_price",
+            "option_type",
+        )
+
+    def __str__(self):
+        return (
+            f"{self.index.name}-"
+            f"{self.date.strftime('%d/%m/%Y')}-"
+            f"{self.instrument}-"
+            f"{self.expiry_date.strftime('%d/%m/%Y')}"
+        )
+
+
 class EquityLiveData(EntityLiveData):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="live_data", on_delete=models.CASCADE
     )
 
@@ -146,7 +174,7 @@ class EquityLiveData(EntityLiveData):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "equity",
+            "entity",
             "date",
         )
 
@@ -155,7 +183,7 @@ class EquityLiveData(EntityLiveData):
 
 
 class EquityLiveOptionChain(EntityLiveOptionChain):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="live_optionchain", on_delete=models.CASCADE
     )
 
@@ -163,11 +191,11 @@ class EquityLiveOptionChain(EntityLiveOptionChain):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.symbol
+        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityLiveFuture(TradableEntity):
-    equity = models.ForeignKey(
+class EquityLiveFuture(EntityLiveFuture):
+    entity = models.ForeignKey(
         Equity, related_name="live_future", on_delete=models.CASCADE
     )
 
@@ -179,7 +207,7 @@ class EquityLiveFuture(TradableEntity):
 
 
 class EquityLiveOpenInterest(EntityLiveOpenInterest):
-    equity = models.ForeignKey(
+    entity = models.ForeignKey(
         Equity, related_name="live_openInterest", on_delete=models.CASCADE
     )
 
@@ -188,7 +216,7 @@ class EquityLiveOpenInterest(EntityLiveOpenInterest):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "equity",
+            "entity",
             "date",
         )
 

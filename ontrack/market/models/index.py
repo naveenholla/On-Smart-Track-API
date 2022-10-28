@@ -1,7 +1,7 @@
 from django.db import models
 
 from ontrack.market.managers.index import (
-    IndexDerivativeEndOfDayBackendManager,
+    IndexDerivativeBackendManager,
     IndexEndOfDayBackendManager,
     IndexLiveDataBackendManager,
     IndexLiveOpenInterestManager,
@@ -9,9 +9,10 @@ from ontrack.market.managers.index import (
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
     EntityLiveData,
+    EntityLiveFuture,
     EntityLiveOpenInterest,
     EntityLiveOptionChain,
-    TradableEntity,
+    LiveDerivativeData,
     TradingInformation,
     numeric_field_values,
 )
@@ -21,7 +22,7 @@ from ontrack.utils.base.model import BaseModel
 
 
 class IndexEndOfDay(TradingInformation):
-    index = models.ForeignKey(Index, related_name="eod_data", on_delete=models.CASCADE)
+    entity = models.ForeignKey(Index, related_name="eod_data", on_delete=models.CASCADE)
 
     index_pe = models.DecimalField(**numeric_field_values)
     index_pb = models.DecimalField(**numeric_field_values)
@@ -31,23 +32,50 @@ class IndexEndOfDay(TradingInformation):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
-        unique_together = ("index", "date")
+        unique_together = ("entity", "date")
 
     def __str__(self):
         return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class IndexDerivativeEndOfDay(DerivativeEndOfDay):
-    index = models.ForeignKey(
+    entity = models.ForeignKey(
         Index, related_name="derivative_eod_data", on_delete=models.CASCADE
     )
 
-    backend = IndexDerivativeEndOfDayBackendManager()
+    backend = IndexDerivativeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "index",
+            "entity",
+            "date",
+            "instrument",
+            "expiry_date",
+            "strike_price",
+            "option_type",
+        )
+
+    def __str__(self):
+        return (
+            f"{self.index.name}-"
+            f"{self.date.strftime('%d/%m/%Y')}-"
+            f"{self.instrument}-"
+            f"{self.expiry_date.strftime('%d/%m/%Y')}"
+        )
+
+
+class IndexLiveDerivativeData(LiveDerivativeData):
+    entity = models.ForeignKey(
+        Index, related_name="derivative_live_data", on_delete=models.CASCADE
+    )
+
+    backend = IndexDerivativeBackendManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+        unique_together = (
+            "entity",
             "date",
             "instrument",
             "expiry_date",
@@ -65,7 +93,9 @@ class IndexDerivativeEndOfDay(DerivativeEndOfDay):
 
 
 class IndexLiveData(EntityLiveData):
-    index = models.ForeignKey(Index, related_name="live_data", on_delete=models.CASCADE)
+    entity = models.ForeignKey(
+        Index, related_name="live_data", on_delete=models.CASCADE
+    )
 
     one_week_ago = models.DecimalField(**numeric_field_values)
     one_month_ago = models.DecimalField(**numeric_field_values)
@@ -78,7 +108,7 @@ class IndexLiveData(EntityLiveData):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "index",
+            "entity",
             "date",
         )
 
@@ -87,7 +117,7 @@ class IndexLiveData(EntityLiveData):
 
 
 class IndexLiveOptionChain(EntityLiveOptionChain):
-    index = models.ForeignKey(
+    entity = models.ForeignKey(
         Index, related_name="live_optionchain", on_delete=models.CASCADE
     )
 
@@ -95,11 +125,11 @@ class IndexLiveOptionChain(EntityLiveOptionChain):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.symbol
+        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class IndexLiveFuture(TradableEntity):
-    index = models.ForeignKey(
+class IndexLiveFuture(EntityLiveFuture):
+    entity = models.ForeignKey(
         Index, related_name="live_future", on_delete=models.CASCADE
     )
 
@@ -111,7 +141,7 @@ class IndexLiveFuture(TradableEntity):
 
 
 class IndexLiveOpenInterest(EntityLiveOpenInterest):
-    index = models.ForeignKey(
+    entity = models.ForeignKey(
         Index, related_name="live_openInterest", on_delete=models.CASCADE
     )
 
@@ -120,7 +150,7 @@ class IndexLiveOpenInterest(EntityLiveOpenInterest):
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         unique_together = (
-            "index",
+            "entity",
             "date",
         )
 

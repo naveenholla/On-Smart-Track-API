@@ -18,14 +18,16 @@ from ontrack.market.models.lookup import Equity, Exchange
 class TestPullEquityData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_qs = Exchange.backend.all()
-        self.equity_qs = Equity.backend.all()
-        self.equity_eod_qs = EquityEndOfDay.backend.all()
-        self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.all()
-        self.equity_live_data_qs = EquityLiveData.backend.all()
-        self.equity_live_open_interest_qs = EquityLiveOpenInterest.backend.all()
-        self.equity_live_derivative_qs = EquityLiveDerivativeData.backend.all()
-        self.equity_live_option_chain_qs = EquityLiveOptionChain.backend.all()
+        self.exchange_qs = Exchange.backend.get_queryset()
+        self.equity_qs = Equity.backend.get_queryset()
+        self.equity_eod_qs = EquityEndOfDay.backend.get_queryset()
+        self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.get_queryset()
+        self.equity_live_data_qs = EquityLiveData.backend.get_queryset()
+        self.equity_live_open_interest_qs = (
+            EquityLiveOpenInterest.backend.get_queryset()
+        )
+        self.equity_live_derivative_qs = EquityLiveDerivativeData.backend.get_queryset()
+        self.equity_live_option_chain_qs = EquityLiveOptionChain.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):

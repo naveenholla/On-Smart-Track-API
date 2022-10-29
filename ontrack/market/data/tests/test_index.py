@@ -18,14 +18,14 @@ from ontrack.market.models.lookup import Exchange, Index
 class TestPullIndexData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_qs = Exchange.backend.all()
-        self.index_qs = Index.backend.all()
-        self.index_eod_qs = IndexEndOfDay.backend.all()
-        self.index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.all()
-        self.index_live_data_qs = IndexLiveData.backend.all()
-        self.index_live_open_interest_qs = IndexLiveOpenInterest.backend.all()
-        self.index_live_derivative_qs = IndexLiveDerivativeData.backend.all()
-        self.index_live_option_chain_qs = IndexLiveOptionChain.backend.all()
+        self.exchange_qs = Exchange.backend.get_queryset()
+        self.index_qs = Index.backend.get_queryset()
+        self.index_eod_qs = IndexEndOfDay.backend.get_queryset()
+        self.index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.get_queryset()
+        self.index_live_data_qs = IndexLiveData.backend.get_queryset()
+        self.index_live_open_interest_qs = IndexLiveOpenInterest.backend.get_queryset()
+        self.index_live_derivative_qs = IndexLiveDerivativeData.backend.get_queryset()
+        self.index_live_option_chain_qs = IndexLiveOptionChain.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
     def index_data_fixture(self, exchange_fixture):

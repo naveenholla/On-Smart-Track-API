@@ -120,6 +120,7 @@ def test_get_future_past_date_week(args, input_time_obj, is_future):
         assert result == expected
 
 
+@pytest.mark.unittest
 @pytest.mark.parametrize(
     "time_zone,expected_hour,expected_minute",
     [("UTC", 10, 1), ("US/Pacific", 17, 1), ("Asia/Kolkata", 4, 31)],
@@ -148,3 +149,40 @@ def test_set_time_to_date(input_time_obj, time_zone, expected_hour, expected_min
         assert d.hour == expected_hour
         assert d.minute == expected_minute
         assert d.second == 3
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize(
+    "datetimeStr, dateFormat, time_zone, expected",
+    [
+        (None, None, None, None),
+        (test_datetime, None, None, test_datetime),
+        ("-", None, None, None),
+        ("NIL", None, None, None),
+        ("    ", None, None, None),
+        ("2022-10-20", "%Y-%m-%d", None, dt.get_date_time(2022, 10, 20)),
+        (
+            "2022-10-20",
+            "%Y-%m-%d",
+            "UTC",
+            dt.get_date_time(2022, 10, 20, time_zone="UTC"),
+        ),
+    ],
+)
+def test_str_to_datetime(datetimeStr, dateFormat, time_zone, expected):
+    value = dt.str_to_datetime(datetimeStr, dateFormat, time_zone)
+    assert value == expected
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize(
+    "datetimeStr, dateFormat, expected",
+    [
+        (test_datetime, None, test_datetime.strftime("%Y-%m-%d %H:%M:%S.%f %z")),
+        (test_datetime, "%Y-%m-%d", test_datetime.strftime("%Y-%m-%d")),
+        (test_datetime, "%Y-%b-%d", test_datetime.strftime("%Y-%b-%d")),
+    ],
+)
+def test_datetime_to_str(datetimeStr, dateFormat, expected):
+    value = dt.datetime_to_str(datetimeStr, dateFormat)
+    assert value == expected

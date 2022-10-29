@@ -12,9 +12,9 @@ from ontrack.market.models.participant import (
 class TestPullParticipantData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_qs = Exchange.backend.all()
-        self.participant_qs = ParticipantActivity.backend.all()
-        self.participant_stats_qs = ParticipantStatsActivity.backend.all()
+        self.exchange_qs = Exchange.backend.get_queryset()
+        self.participant_qs = ParticipantActivity.backend.get_queryset()
+        self.participant_stats_qs = ParticipantStatsActivity.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):

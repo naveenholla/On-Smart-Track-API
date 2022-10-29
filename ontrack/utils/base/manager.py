@@ -2,8 +2,8 @@ from django.db import models
 
 
 class BackendManagerAbstarct(models.Manager):
-    def unique_search(self, query):
-        return self.get_queryset().unique_search(query=query)
+    def unique_search(self, symbol=None, name=None):
+        return self.get_queryset().unique_search(symbol=symbol, name=name)
 
     def bulk_create_or_update(
         self, records_to_create, records_to_update, fields_to_update

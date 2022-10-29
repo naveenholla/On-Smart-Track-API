@@ -9,10 +9,10 @@ from ontrack.utils.config import Configurations
 class TestPullEquityIndexData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_qs = Exchange.backend.all()
-        self.index_qs = Index.backend.all()
-        self.equity_qs = Equity.backend.all()
-        self.equityindex_qs = EquityIndex.backend.all()
+        self.exchange_qs = Exchange.backend.get_queryset()
+        self.index_qs = Index.backend.get_queryset()
+        self.equity_qs = Equity.backend.get_queryset()
+        self.equityindex_qs = EquityIndex.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
     def equity_index_data_fixture(self, exchange_fixture):

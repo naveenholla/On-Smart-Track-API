@@ -139,9 +139,7 @@ class DateTimeHelper:
         return d
 
     @staticmethod
-    def convert_string_to_time(
-        timeStr: str, timeFormat: str = None
-    ) -> time.struct_time:
+    def str_to_time(timeStr: str, timeFormat: str = None) -> time.struct_time:
         f = Configurations.get_default_value_by_key("default_time_format")
         if timeFormat is not None and len(timeFormat) > 0:
             f = timeFormat
@@ -211,7 +209,7 @@ class DateTimeHelper:
     @staticmethod
     def set_market_time(time_key, dateTimeObj=None) -> datetime:
         exchangeObj = DateTimeHelper.get_exchange_object()
-        time_value = DateTimeHelper.convert_string_to_time(exchangeObj[time_key])
+        time_value = DateTimeHelper.str_to_time(exchangeObj[time_key])
         timezone = exchangeObj["time_zone"]["zone"]
         return DateTimeHelper.set_time_to_date(
             time_value.tm_hour,

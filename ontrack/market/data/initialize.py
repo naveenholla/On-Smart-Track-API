@@ -62,14 +62,15 @@ class InitializeData:
             "market.exchange",
             "market.marketdaytype",
             "market.marketdaycategory",
+            "market.marketday",
         ]
 
         for fixture in fixtures:
             self.load_fixture_data(fixture, temp_folder_path)
 
     def load_equity_data(self, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        equity_qs = Equity.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        equity_qs = Equity.backend.get_queryset()
 
         pull_equity_obj = PullEquityData(
             self.exchange_symbol,
@@ -84,8 +85,8 @@ class InitializeData:
         return result
 
     def load_index_data(self, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        index_qs = Index.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        index_qs = Index.backend.get_queryset()
 
         pull_index_obj = PullIndexData(
             self.exchange_symbol,
@@ -99,10 +100,10 @@ class InitializeData:
         return result
 
     def load_equity_index_data(self, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        equity_qs = Equity.backend.all()
-        index_qs = Index.backend.all()
-        equityindex_qs = EquityIndex.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        equity_qs = Equity.backend.get_queryset()
+        index_qs = Index.backend.get_queryset()
+        equityindex_qs = EquityIndex.backend.get_queryset()
 
         pull_equity_index_obj = PullEquityIndexData(
             exchange_qs, index_qs, equity_qs, equityindex_qs
@@ -115,10 +116,10 @@ class InitializeData:
 
     def load_holidays_data(self, save_data=True):
 
-        exchange_qs = Exchange.backend.all()
-        daytype_qs = MarketDayType.backend.all()
-        category_qs = MarketDayCategory.backend.all()
-        day_qs = MarketDay.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        daytype_qs = MarketDayType.backend.get_queryset()
+        category_qs = MarketDayCategory.backend.get_queryset()
+        day_qs = MarketDay.backend.get_queryset()
 
         holiday_obj = HolidayData(exchange_qs, daytype_qs, category_qs, day_qs)
         result = holiday_obj.pull_parse_exchange_holidays()

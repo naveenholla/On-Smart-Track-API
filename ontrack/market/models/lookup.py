@@ -32,6 +32,26 @@ class Exchange(BaseModel):
 
     backend = ExchangeBackendManager()
 
+    def get_days_by_category(
+        self, day_type_name: MarketDayTypeEnum, category_name: HolidayCategoryType
+    ):
+        if not self.day_types:
+            return None
+
+        day_type = self.day_types.filter(name__iexact=day_type_name).first()
+
+        if not day_type or not day_type.categories:
+            return None
+
+        category = day_type.categories.filter(
+            display_name__iexact=category_name
+        ).first()
+
+        if not category or not category.days:
+            return None
+
+        return category.days
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         verbose_name = "Exchange"

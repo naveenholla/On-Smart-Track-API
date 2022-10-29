@@ -19,9 +19,9 @@ class EndOfDayData:
         self.exchange_symbol = exchange_symbol
 
     def load_equity_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        equity_qs = Equity.backend.all()
-        equity_eod_qs = EquityEndOfDay.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        equity_qs = Equity.backend.get_queryset()
+        equity_eod_qs = EquityEndOfDay.backend.get_queryset()
 
         pull_equity_obj = PullEquityData(
             self.exchange_symbol, exchange_qs, equity_qs, equity_eod_qs
@@ -34,10 +34,10 @@ class EndOfDayData:
         return result
 
     def load_equity_derivative_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        equity_qs = Equity.backend.all()
-        equity_eod_qs = EquityEndOfDay.backend.all()
-        equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        equity_qs = Equity.backend.get_queryset()
+        equity_eod_qs = EquityEndOfDay.backend.get_queryset()
+        equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.get_queryset()
 
         pull_equity_obj = PullEquityData(
             self.exchange_symbol,
@@ -54,9 +54,9 @@ class EndOfDayData:
         return result
 
     def load_index_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        index_qs = Index.backend.all()
-        index_eod_qs = IndexEndOfDay.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        index_qs = Index.backend.get_queryset()
+        index_eod_qs = IndexEndOfDay.backend.get_queryset()
 
         pull_index_obj = PullIndexData(
             self.exchange_symbol, exchange_qs, index_qs, index_eod_qs
@@ -69,10 +69,10 @@ class EndOfDayData:
         return result
 
     def load_index_derivative_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        index_qs = Index.backend.all()
-        index_eod_qs = IndexEndOfDay.backend.all()
-        index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        index_qs = Index.backend.get_queryset()
+        index_eod_qs = IndexEndOfDay.backend.get_queryset()
+        index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.get_queryset()
 
         pull_index_obj = PullIndexData(
             self.exchange_symbol,
@@ -89,8 +89,8 @@ class EndOfDayData:
         return result
 
     def load_participant_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        participant_qs = ParticipantActivity.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        participant_qs = ParticipantActivity.backend.get_queryset()
 
         pull_particpant_obj = PullParticipantData(
             self.exchange_symbol,
@@ -105,9 +105,9 @@ class EndOfDayData:
         return result
 
     def load_participant_stats_eod_data(self, date, save_data=True):
-        exchange_qs = Exchange.backend.all()
-        participant_qs = ParticipantActivity.backend.all()
-        participant_stats_qs = ParticipantStatsActivity.backend.all()
+        exchange_qs = Exchange.backend.get_queryset()
+        participant_qs = ParticipantActivity.backend.get_queryset()
+        participant_stats_qs = ParticipantStatsActivity.backend.get_queryset()
 
         pull_particpant_obj = PullParticipantData(
             self.exchange_symbol,

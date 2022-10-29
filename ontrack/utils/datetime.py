@@ -153,14 +153,13 @@ class DateTimeHelper:
 
     @staticmethod
     def get_exchange_object():
-        exchange_name = get_context_value_by_key("exchange_name")
-        exchangeObj = Configurations.get_exchange(exchange_name)
+        exchangeObj = get_context_value_by_key("exchange")
         return exchangeObj
 
     @staticmethod
     def get_exchange_off_days():
         exchangeObj = DateTimeHelper.get_exchange_object()
-        return exchangeObj["day_types"]
+        return exchangeObj.get
 
     @staticmethod
     def is_holiday(datetimeObj: date) -> bool:

@@ -8,7 +8,6 @@ from ontrack.utils.base.enum import AdminSettingKey, ExchangeType
 from ontrack.utils.config import Configurations
 from ontrack.utils.context import (
     application_context,
-    application_context_destroy,
     get_context_value_by_key,
     get_correlation_id,
 )
@@ -44,7 +43,7 @@ class LookupDataPullLogic:
             ]
 
         if last_pull_date is not None:
-            date = DateTimeHelper.string_to_datetime(last_pull_date)
+            date = DateTimeHelper.str_to_datetime(last_pull_date)
             if DateTimeHelper.current_date_time() < DateTimeHelper.get_future_date(
                 date=date, days=days_pause
             ):
@@ -55,9 +54,7 @@ class LookupDataPullLogic:
         date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
         AdminSetting.backend.save_setting(
             date_key,
-            DateTimeHelper.convert_datetime_to_string(
-                DateTimeHelper.current_date_time()
-            ),
+            DateTimeHelper.datetime_to_str(DateTimeHelper.current_date_time()),
         )
 
     def pull_equity_data(self, urls):
@@ -436,7 +433,6 @@ class LookupDataPullLogic:
                 self.logger.log_info(
                     f"Completed pull_equity_lookup_data task. {output}"
                 )
-                application_context_destroy()
             return output
 
         except Exception as e:
@@ -458,7 +454,6 @@ class LookupDataPullLogic:
                 self.create_lookup_files()
 
                 self.logger.log_info("Completed execute_create_lookup_data_files task.")
-                application_context_destroy()
             return "Done"
         except Exception as e:
             message = f"Request exception from execute_create_lookup_data_files task - `{format(e)}`."

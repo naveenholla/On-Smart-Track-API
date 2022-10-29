@@ -88,7 +88,7 @@ class PullEquityData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["DATE1"], "%d-%b-%Y", self.timezone)
+        date = dt.str_to_datetime(record["DATE1"], "%d-%b-%Y", self.timezone)
         series = record["SERIES"].strip().lower()
 
         if series != "eq":
@@ -152,10 +152,8 @@ class PullEquityData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
-        expiry_date = dt.string_to_datetime(
-            record["EXPIRY_DT"], "%d-%b-%Y", self.timezone
-        )
+        date = dt.str_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
+        expiry_date = dt.str_to_datetime(record["EXPIRY_DT"], "%d-%b-%Y", self.timezone)
         instrument = record["INSTRUMENT"].strip().lower()
 
         if instrument != InstrumentType.FUTSTK.lower():
@@ -267,11 +265,11 @@ class PullEquityData:
         near_week_low = nh.str_to_float(record["nearWKL"])
 
         price_change_month_ago = nh.str_to_float(record["perChange30d"])
-        date_month_ago = dt.string_to_datetime(
+        date_month_ago = dt.str_to_datetime(
             record["date30dAgo"], "%d-%b-%Y", self.timezone
         )
         price_change_year_ago = nh.str_to_float(record["perChange365d"])
-        date_year_ago = dt.string_to_datetime(
+        date_year_ago = dt.str_to_datetime(
             record["date365dAgo"], "%d-%b-%Y", self.timezone
         )
 
@@ -312,7 +310,7 @@ class PullEquityData:
     def __parse_live_derivative_data(self, record, date, list_name):
         symbol = record["underlying"].strip().lower()
         instrument = record["instrumentType"]
-        expiry_date = dt.string_to_datetime(
+        expiry_date = dt.str_to_datetime(
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
@@ -366,7 +364,7 @@ class PullEquityData:
 
     def __parse_live_option_chain_pe_ce(self, record, date, option_type):
         symbol = record["underlying"].strip().lower()
-        expiry_date = dt.string_to_datetime(
+        expiry_date = dt.str_to_datetime(
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
         strike_price = nh.str_to_float(record["strikePrice"])
@@ -584,9 +582,7 @@ class PullEquityData:
             return None
 
         entities = []
-        date = dt.string_to_datetime(
-            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
-        )
+        date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
 
@@ -614,9 +610,7 @@ class PullEquityData:
             return None
 
         entities = []
-        date = dt.string_to_datetime(
-            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
-        )
+        date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
         for record in data["data"]:
             entity = self.__parse_live_open_interest(record, date)
 
@@ -648,7 +642,7 @@ class PullEquityData:
             if data is None:
                 return None
 
-            date = dt.string_to_datetime(
+            date = dt.str_to_datetime(
                 data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
             for record in data["data"]:
@@ -683,7 +677,7 @@ class PullEquityData:
 
             records = data["records"]
 
-            date = dt.string_to_datetime(
+            date = dt.str_to_datetime(
                 records["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
 

@@ -35,11 +35,6 @@ def application_context(**kwargs):
     application_context_handler.remove()
 
 
-def application_context_destroy():
-    # application_context_handler.remove()
-    pass
-
-
 def get_correlation_id():
     try:
         from celery._state import get_current_task

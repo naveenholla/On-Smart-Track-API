@@ -199,7 +199,7 @@ class PullParticipantData:
             columns.append(c)
         df.columns = columns
 
-        date_str = dt.convert_datetime_to_string(date, "%d-%b-%Y")
+        date_str = dt.datetime_to_str(date, "%d-%b-%Y")
 
         result_records = []
 

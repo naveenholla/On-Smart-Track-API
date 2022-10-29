@@ -4,7 +4,7 @@ import pytest
 import pytz
 from freezegun import freeze_time
 
-from ontrack.utils.datetime import DateTimeHelper
+from ontrack.utils.datetime import DateTimeHelper as dt
 
 utcTimeZone = pytz.timezone("UTC")
 test_year = 2021
@@ -57,21 +57,21 @@ test_time = time(
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date_freeze_time():
-    date_obj = DateTimeHelper.current_date_time()
+    date_obj = dt.current_date_time()
     assert date_obj == test_datetime
 
 
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date():
-    date_obj = DateTimeHelper.current_date()
+    date_obj = dt.current_date()
     assert date_obj == test_date_obj
 
 
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_time():
-    time_obj = DateTimeHelper.current_time()
+    time_obj = dt.current_time()
     assert time_obj == test_time
 
 
@@ -111,15 +111,40 @@ def test_get_future_past_date_week(args, input_time_obj, is_future):
             assert input_time_obj != test_datetime
 
         if is_future:
-            result = DateTimeHelper.get_future_date(date=input_time_obj, **args)
+            result = dt.get_future_date(date=input_time_obj, **args)
             expected = input_time_obj + timedelta(**args)
         else:
-            result = DateTimeHelper.get_past_date(date=input_time_obj, **args)
+            result = dt.get_past_date(date=input_time_obj, **args)
             expected = input_time_obj - timedelta(**args)
 
         assert result == expected
 
 
-@pytest.mark.unittest
-def test_set_time_to_date():
-    pass
+@pytest.mark.parametrize(
+    "time_zone,expected_hour,expected_minute",
+    [("UTC", 10, 1), ("US/Pacific", 17, 1), ("Asia/Kolkata", 4, 31)],
+)
+@pytest.mark.parametrize(
+    "input_time_obj",
+    [None, test_datetime_2],
+    ids=["Current Date", "Specific Date"],
+)
+def test_set_time_to_date(input_time_obj, time_zone, expected_hour, expected_minute):
+    with freeze_time(test_datetime):
+        if input_time_obj is None:
+            input_time_obj = test_datetime
+        else:
+            assert input_time_obj != test_datetime
+
+        d = dt.set_time_to_date(
+            hours=10,
+            minutes=1,
+            seconds=3,
+            time_zone=time_zone,
+            dateTimeObj=input_time_obj,
+        )
+        assert d.tzinfo.zone == "UTC"
+
+        assert d.hour == expected_hour
+        assert d.minute == expected_minute
+        assert d.second == 3

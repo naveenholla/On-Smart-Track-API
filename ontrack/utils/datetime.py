@@ -107,16 +107,14 @@ class DateTimeHelper:
         )
 
     @staticmethod
-    def convert_datetime_to_string(
-        datetimeObj: datetime, dateFormat: str = None
-    ) -> str:
-        f = Configurations.get_default_values_config()["default_date_time_format"]
+    def datetime_to_str(datetimeObj: datetime, dateFormat: str = None) -> str:
+        f = Configurations.get_default_value_by_key("default_date_time_format")
         if dateFormat is not None and len(dateFormat) > 0:
             f = dateFormat
         return datetimeObj.strftime(f)
 
     @staticmethod
-    def string_to_datetime(datetimeStr, dateFormat=None, time_zone=None) -> datetime:
+    def str_to_datetime(datetimeStr, dateFormat=None, time_zone=None) -> datetime:
         if datetimeStr is None:
             return None
 
@@ -131,7 +129,7 @@ class DateTimeHelper:
         if datetimeStr == "-" or datetimeStr.lower() == "nil" or datetimeStr == "":
             return None
 
-        f = Configurations.get_default_values_config()["default_date_time_format"]
+        f = Configurations.get_default_value_by_key("default_date_time_format")
         if dateFormat is not None and len(dateFormat) > 0:
             f = dateFormat
 
@@ -144,14 +142,14 @@ class DateTimeHelper:
     def convert_string_to_time(
         timeStr: str, timeFormat: str = None
     ) -> time.struct_time:
-        f = Configurations.get_default_values_config()["default_time_format"]
+        f = Configurations.get_default_value_by_key("default_time_format")
         if timeFormat is not None and len(timeFormat) > 0:
             f = timeFormat
         return time.strptime(timeStr, f)
 
     @staticmethod
     def get_today_date_string(dateFormat: str) -> str:
-        return DateTimeHelper.convert_datetime_to_string(
+        return DateTimeHelper.datetime_to_str(
             DateTimeHelper.current_date_time(), dateFormat
         )
 
@@ -184,7 +182,7 @@ class DateTimeHelper:
             category_name=holiday_category_name,
         )
 
-        dateStr = DateTimeHelper.convert_datetime_to_string(datetimeObj, "%Y-%m-%d")
+        dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
         dayOfWeek = calendar.day_name[datetimeObj.weekday()]
 
         if special_trading_days:

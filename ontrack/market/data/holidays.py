@@ -25,7 +25,7 @@ class HolidayData:
         self.day_qs = day_qs
 
     def __process_record(self, daytype, category, record):
-        date = dt.string_to_datetime(record["tradingDate"], "%d-%b-%Y", self.timezone)
+        date = dt.str_to_datetime(record["tradingDate"], "%d-%b-%Y", self.timezone)
         day = record["day"] if "day" in record else None
         is_working = record["is_working_day"] if "is_working_day" in record else False
         start_time = record["start_time"] if "start_time" in record else None

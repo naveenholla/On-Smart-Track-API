@@ -8,11 +8,7 @@ from ontrack.utils.base.enum import (
     MarketDayTypeEnum,
 )
 from ontrack.utils.config import Configurations
-from ontrack.utils.context import (
-    application_context,
-    application_context_destroy,
-    get_correlation_id,
-)
+from ontrack.utils.context import application_context, get_correlation_id
 from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
@@ -32,18 +28,18 @@ class IndicesDataPullLogic:
         last_pull_date = AdminSetting.backend.get_setting(date_key)
 
         if last_pull_date is None:
-            return DateTimeHelper.string_to_datetime(
+            return DateTimeHelper.str_to_datetime(
                 Configurations.get_default_values_config()[
                     "default_start_date_indices_data_pull"
                 ]
             )
 
-        return DateTimeHelper.string_to_datetime(last_pull_date)
+        return DateTimeHelper.str_to_datetime(last_pull_date)
 
     def save_pull_indices_eod_data_task_time(self, date):
         date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
         AdminSetting.backend.save_setting(
-            date_key, DateTimeHelper.convert_datetime_to_string(date)
+            date_key, DateTimeHelper.datetime_to_str(date)
         )
 
     def pull_indices_eod_data(self, urls, date):
@@ -116,9 +112,7 @@ class IndicesDataPullLogic:
                 # index.save()
                 continue
 
-            record["date"] = DateTimeHelper.string_to_datetime(
-                record["date"], "%d-%m-%Y"
-            )
+            record["date"] = DateTimeHelper.str_to_datetime(record["date"], "%d-%m-%Y")
             d = IndexEndOfDay(
                 index=index,
                 open_price=NumberHelper.str_to_float(record["open_price"]),
@@ -226,7 +220,6 @@ class IndicesDataPullLogic:
                 self.logger.log_info(
                     f"Completed execute_pull_indices_eod_data_task task. {output}"
                 )
-                application_context_destroy()
             return output
 
         except Exception as e:

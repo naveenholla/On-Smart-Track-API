@@ -92,7 +92,7 @@ class PullIndexData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         index_name = record["Index Name"].strip().lower()
-        date = dt.string_to_datetime(record["Index Date"], "%d-%m-%Y", self.timezone)
+        date = dt.str_to_datetime(record["Index Date"], "%d-%m-%Y", self.timezone)
 
         index = self.index_qs.unique_search(name=index_name).first()
         if index is None:
@@ -155,10 +155,8 @@ class PullIndexData:
         # remove extra spaces in the dictionaty keys
         record = {k.strip(): v for (k, v) in record.items()}
         symbol = record["SYMBOL"].strip().lower()
-        date = dt.string_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
-        expiry_date = dt.string_to_datetime(
-            record["EXPIRY_DT"], "%d-%b-%Y", self.timezone
-        )
+        date = dt.str_to_datetime(record["TIMESTAMP"], "%d-%b-%Y", self.timezone)
+        expiry_date = dt.str_to_datetime(record["EXPIRY_DT"], "%d-%b-%Y", self.timezone)
         instrument = record["INSTRUMENT"].strip().lower()
 
         if instrument != InstrumentType.FUTIDX.lower():
@@ -256,11 +254,11 @@ class PullIndexData:
         unchanged = nh.str_to_float(record["unchanged"] if "unchanged" in record else 0)
 
         price_change_month_ago = nh.str_to_float(record["perChange30d"])
-        date_month_ago = dt.string_to_datetime(
+        date_month_ago = dt.str_to_datetime(
             record["date30dAgo"], "%d-%b-%Y", self.timezone
         )
         price_change_year_ago = nh.str_to_float(record["perChange365d"])
-        date_year_ago = dt.string_to_datetime(
+        date_year_ago = dt.str_to_datetime(
             record["date365dAgo"], "%d-%b-%Y", self.timezone
         )
 
@@ -300,7 +298,7 @@ class PullIndexData:
     def __parse_live_derivative_data(self, record, date, list_name):
         symbol = record["underlying"].strip().lower()
         instrument = record["instrumentType"]
-        expiry_date = dt.string_to_datetime(
+        expiry_date = dt.str_to_datetime(
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
@@ -354,7 +352,7 @@ class PullIndexData:
 
     def __parse_live_option_chain_pe_ce(self, record, date, option_type):
         symbol = record["underlying"].strip().lower()
-        expiry_date = dt.string_to_datetime(
+        expiry_date = dt.str_to_datetime(
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
         strike_price = nh.str_to_float(record["strikePrice"])
@@ -569,9 +567,7 @@ class PullIndexData:
             return None
 
         entities = []
-        date = dt.string_to_datetime(
-            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
-        )
+        date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
 
@@ -599,9 +595,7 @@ class PullIndexData:
             return None
 
         entities = []
-        date = dt.string_to_datetime(
-            data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
-        )
+        date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
         for record in data["data"]:
             entity = self.__parse_live_open_interest(record, date)
 
@@ -633,7 +627,7 @@ class PullIndexData:
             if data is None:
                 return None
 
-            date = dt.string_to_datetime(
+            date = dt.str_to_datetime(
                 data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
             for record in data["data"]:
@@ -668,7 +662,7 @@ class PullIndexData:
 
             records = data["records"]
 
-            date = dt.string_to_datetime(
+            date = dt.str_to_datetime(
                 records["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
 

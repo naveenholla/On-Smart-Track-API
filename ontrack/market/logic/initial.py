@@ -2,11 +2,7 @@ import pytz
 import requests
 
 from ontrack.utils.config import Configurations
-from ontrack.utils.context import (
-    application_context,
-    application_context_destroy,
-    get_correlation_id,
-)
+from ontrack.utils.context import application_context, get_correlation_id
 from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
@@ -189,7 +185,7 @@ class InitialDataPullLogic:
 
                         category_days = holiday_data_all[category_code]
                         for category_day in category_days:
-                            category_day_date = DateTimeHelper.string_to_datetime(
+                            category_day_date = DateTimeHelper.str_to_datetime(
                                 category_day["tradingDate"], "%d-%b-%Y"
                             )
                             category_day_day = None
@@ -235,7 +231,6 @@ class InitialDataPullLogic:
                 self.logger.log_info(
                     "Completed execute_intial_market_lookup_data_task task."
                 )
-                application_context_destroy()
             return "Done"
         except Exception as e:
             message = f"Request exception from execute_intial_market_lookup_data_task task - `{format(e)}`."

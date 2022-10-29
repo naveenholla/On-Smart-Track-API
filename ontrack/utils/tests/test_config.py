@@ -25,6 +25,12 @@ def test_get_default_values_config():
 
 
 @pytest.mark.unittest
+def test_get_default_value_by_key():
+    value = Configurations.get_default_value_by_key("option_chain_strick_price_count")
+    assert value == 20
+
+
+@pytest.mark.unittest
 def test_urls_config_caching():
     Configurations.clear_cache()
 

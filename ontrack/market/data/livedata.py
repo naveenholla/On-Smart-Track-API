@@ -173,3 +173,9 @@ class LiveData:
 
         self.load_equity_live_open_interest_data()
         self.load_index_live_open_interest_data()
+
+        self.load_equity_live_derivative_data()
+        self.load_index_live_derivative_data()
+
+        self.load_equity_live_option_chain_data()
+        self.load_index_live_option_chain_data()

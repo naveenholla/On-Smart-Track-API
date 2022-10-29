@@ -189,20 +189,28 @@ class DateTimeHelper:
         return days
 
     @staticmethod
-    def is_holiday(datetimeObj: date) -> bool:
+    def is_special_trading_day(datetimeObj: date):
         special_trading_days = DateTimeHelper.get_exchange_special_days()
+
+        dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
+        if special_trading_days:
+            special_day = [
+                x for x in special_trading_days if x["date"] and x["date"] == dateStr
+            ]
+            if special_day and len(special_day) > 0:
+                return special_day
+        return None
+
+    @staticmethod
+    def is_holiday(datetimeObj: date) -> bool:
         weekly_off_days = DateTimeHelper.get_exchange_weekly_off()
         holidays = DateTimeHelper.get_exchange_trading_holidays()
 
         dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
         dayOfWeek = calendar.day_name[datetimeObj.weekday()]
 
-        if special_trading_days:
-            special_day = [
-                x for x in special_trading_days if x["date"] and x["date"] == dateStr
-            ]
-            if special_day and len(special_day) > 0:
-                return False
+        if DateTimeHelper.is_special_trading_day(datetimeObj) is not None:
+            return False
 
         if weekly_off_days:
             weekly_off = [
@@ -233,15 +241,27 @@ class DateTimeHelper:
     @staticmethod
     def get_market_start_time(dateTimeObj=None) -> datetime:
         exchangeObj = DateTimeHelper.get_exchange_object()
+
+        time = exchangeObj.start_time
+        special_day = DateTimeHelper.is_special_trading_day(dateTimeObj)
+        if special_day is not None:
+            time = special_day.start_time
+
         return DateTimeHelper.set_market_time(
-            exchangeObj.start_time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
+            time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
         )
 
     @staticmethod
     def get_market_end_time(dateTimeObj=None) -> datetime:
         exchangeObj = DateTimeHelper.get_exchange_object()
+
+        time = exchangeObj.end_time
+        special_day = DateTimeHelper.is_special_trading_day(dateTimeObj)
+        if special_day is not None:
+            time = special_day.end_time
+
         return DateTimeHelper.set_market_time(
-            exchangeObj.end_time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
+            time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
         )
 
     @staticmethod

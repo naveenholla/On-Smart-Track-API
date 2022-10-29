@@ -56,10 +56,13 @@ class LogicHelper:
         return records_to_create, records_to_update
 
     @staticmethod
-    def pull_data_from_external_api(record, headers=None):
+    def pull_data_from_external_api(record, headers=None, url=None):
         try:
             data = None
-            url = record["url"]
+
+            if url is None:
+                url = record["url"]
+
             parent_website = (
                 record["parent_website"] if "parent_website" in record else None
             )

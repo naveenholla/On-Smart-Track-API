@@ -5,11 +5,13 @@ from ontrack.market.models.equity import (
     EquityLiveData,
     EquityLiveDerivativeData,
     EquityLiveOpenInterest,
+    EquityLiveOptionChain,
 )
 from ontrack.market.models.index import (
     IndexLiveData,
     IndexLiveDerivativeData,
     IndexLiveOpenInterest,
+    IndexLiveOptionChain,
 )
 from ontrack.market.models.lookup import Equity, Exchange, Index
 from ontrack.utils.logger import ApplicationLogger
@@ -126,6 +128,42 @@ class LiveData:
         result = pull_equity_obj.pull_parse_live_derivative_data()
         if save_data:
             self.commonobj.create_or_update(result, EquityLiveDerivativeData)
+
+        return result
+
+    def load_index_live_option_chain_data(self, save_data=True):
+        exchange_qs = Exchange.backend.all()
+        index_qs = Index.backend.all()
+        index_live_option_chain_qs = IndexLiveOptionChain.backend.all()
+
+        pull_index_obj = PullIndexData(
+            self.exchange_symbol,
+            exchange_qs,
+            index_qs,
+            index_live_option_chain_qs=index_live_option_chain_qs,
+        )
+
+        result = pull_index_obj.pull_parse_live_option_chain_data()
+        if save_data:
+            self.commonobj.create_or_update(result, IndexLiveOptionChain)
+
+        return result
+
+    def load_equity_live_option_chain_data(self, save_data=True):
+        exchange_qs = Exchange.backend.all()
+        equity_qs = Equity.backend.all()
+        equity_live_option_chain_qs = EquityLiveOptionChain.backend.all()
+
+        pull_equity_obj = PullEquityData(
+            self.exchange_symbol,
+            exchange_qs,
+            equity_qs,
+            equity_live_option_chain_qs=equity_live_option_chain_qs,
+        )
+
+        result = pull_equity_obj.pull_parse_live_option_chain_data()
+        if save_data:
+            self.commonobj.create_or_update(result, EquityLiveOptionChain)
 
         return result
 

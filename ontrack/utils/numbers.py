@@ -1,14 +1,13 @@
-import decimal
 import math
 
 
 class NumberHelper:
     @staticmethod
-    def roundOff(price) -> decimal:  # Round off to 2 decimal places
-        return round(price, 2)
+    def roundOff(price, digits=2) -> float:  # Round off to 2 decimal places
+        return round(price, digits)
 
     @staticmethod
-    def roundToMarketPrice(price) -> decimal:
+    def round_to_market_Price(price) -> float:
         # this will convert 2.33 -> 2.35
 
         x = round(price, 2) * 20
@@ -16,16 +15,32 @@ class NumberHelper:
         return y / 20
 
     @staticmethod
-    def getNearestStrikePrice(price, nearestMultiple=50) -> decimal:
-        inputPrice = int(price)
-        remainder = int(inputPrice % nearestMultiple)
-        if remainder < int(nearestMultiple / 2):
-            return inputPrice - remainder
+    def get_nearest_strike_price(price, strikeDifference) -> float:
+        if isinstance(strikeDifference, int):
+            price = int(price)
+            remainder = int(price % strikeDifference)
+            center = int(strikeDifference / 2)
         else:
-            return inputPrice + (nearestMultiple - remainder)
+            remainder = price % strikeDifference
+            center = strikeDifference / 2
+
+        if remainder < center:
+            value = price - remainder
+        else:
+            value = price + (strikeDifference - remainder)
+
+        return NumberHelper.round_to_market_Price(value)
 
     @staticmethod
-    def str_to_float(value):
+    def get_upper_lower_limit(price, strikeDifference, record_limit) -> float:
+        price = NumberHelper.get_nearest_strike_price(price, strikeDifference)
+
+        return price - (strikeDifference * (record_limit - 1)), price + (
+            strikeDifference * (record_limit - 1)
+        )
+
+    @staticmethod
+    def str_to_float(value) -> float:
         if value is None:
             return 0.00
 
@@ -38,3 +53,10 @@ class NumberHelper:
             return 0.00
 
         return float(value)
+
+    @staticmethod
+    def ceil(value: float) -> float:
+        if value is None:
+            return 0.00
+
+        return math.ceil(value)

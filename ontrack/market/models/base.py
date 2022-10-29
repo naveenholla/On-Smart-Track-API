@@ -139,6 +139,7 @@ class EntityLiveOpenInterest(BaseModel):
 
 class EntityLiveOptionChain(BaseModel):
     strike_price = models.DecimalField(**numeric_field_values)
+    instrument = models.CharField(max_length=50, choices=InstrumentType.choices)
     option_type = models.CharField(
         max_length=50, choices=OptionType.choices, null=True, blank=True
     )

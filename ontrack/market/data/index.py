@@ -352,6 +352,91 @@ class PullIndexData:
 
         return entity
 
+    def __parse_live_option_chain_pe_ce(self, record, date, option_type):
+        symbol = record["underlying"].strip().lower()
+        expiry_date = dt.string_to_datetime(
+            record["expiryDate"], "%d-%b-%Y", self.timezone
+        )
+        strike_price = nh.str_to_float(record["strikePrice"])
+        instrument = InstrumentType.OPTIDX
+
+        index = self.index_qs.unique_search(symbol).first()
+        if index is None:
+            return None
+
+        pk = None
+        existing_entity = self.index_live_option_chain_qs.unique_search(
+            date,
+            instrument=instrument,
+            expiry_date=expiry_date,
+            entity_id=index.id,
+            strike_price=strike_price,
+            option_type=option_type,
+        ).first()
+        if existing_entity is not None:
+            pk = existing_entity.id
+
+        open_interest = nh.str_to_float(record["openInterest"])
+        change_in_open_interest = nh.str_to_float(record["changeinOpenInterest"])
+        percentage_change_in_oi = nh.str_to_float(record["pchangeinOpenInterest"])
+        total_traded_volume = nh.str_to_float(record["totalTradedVolume"])
+        implied_volatility = nh.str_to_float(record["impliedVolatility"])
+        last_traded_price = nh.str_to_float(record["lastPrice"])
+        change = nh.str_to_float(record["change"])
+        percentage_change = nh.str_to_float(record["pChange"])
+        total_buy_quantity = nh.str_to_float(record["totalBuyQuantity"])
+        total_sell_quantity = nh.str_to_float(record["totalSellQuantity"])
+        bid_quantity = nh.str_to_float(record["bidQty"])
+        bid_price = nh.str_to_float(record["bidprice"])
+        ask_quantity = nh.str_to_float(record["askQty"])
+        ask_price = nh.str_to_float(record["askPrice"])
+
+        entity = {}
+        entity["id"] = pk
+        entity["entity"] = index
+        entity["strike_price"] = strike_price
+        entity["instrument"] = instrument
+        entity["option_type"] = option_type
+        entity["expiry_date"] = expiry_date
+        entity["open_interest"] = open_interest
+        entity["change_in_open_interest"] = change_in_open_interest
+        entity["percentage_change_in_oi"] = percentage_change_in_oi
+
+        entity["total_traded_volume"] = total_traded_volume
+        entity["implied_volatility"] = implied_volatility
+        entity["last_traded_price"] = last_traded_price
+        entity["change"] = change
+        entity["percentage_change"] = percentage_change
+        entity["total_buy_quantity"] = total_buy_quantity
+        entity["total_sell_quantity"] = total_sell_quantity
+        entity["bid_quantity"] = bid_quantity
+        entity["bid_price"] = bid_price
+        entity["ask_quantity"] = ask_quantity
+        entity["ask_price"] = ask_price
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
+    def __parse_live_option_chain(self, record, date, upper_lower_limit):
+        strike_price = nh.str_to_float(record["strikePrice"])
+        if strike_price < upper_lower_limit[0] or strike_price > upper_lower_limit[1]:
+            return None
+
+        pe_entity = self.__parse_live_option_chain_pe_ce(
+            record["PE"], date, OptionType.PE
+        )
+        ce_entity = self.__parse_live_option_chain_pe_ce(
+            record["CE"], date, OptionType.CE
+        )
+
+        if pe_entity is None or ce_entity is None:
+            return None
+
+        return pe_entity, ce_entity
+
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
@@ -556,5 +641,53 @@ class PullIndexData:
 
                 if entity is not None:
                     entities.append(entity)
+
+        return entities
+
+    def pull_parse_live_option_chain_data(self):
+        url_record = self.urls["live_index_option_chain"]
+
+        if self.exchange is None:
+            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return None
+
+        headers = Configurations.get_header_values_config()
+
+        entities = []
+        for arg in url_record["arg0_options"]:
+            url = url_record["url"].replace("{0}", arg.upper().replace("&", "%26"))
+            self.logger.log_debug(f"Started with {url}.")
+
+            # pull csv containing all the listed equities from web
+            data = LogicHelper.pull_data_from_external_api(
+                record=url_record, headers=headers, url=url
+            )
+
+            if data is None:
+                return None
+
+            records = data["records"]
+
+            date = dt.string_to_datetime(
+                records["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
+            )
+
+            strick_limit = Configurations.get_default_value_by_key(
+                "option_chain_strick_price_count"
+            )
+            strike_prices = records["strikePrices"]
+            center = nh.ceil(len(strike_prices) / 2)
+            strikeDifference = strike_prices[center] - strike_prices[center - 1]
+            price = nh.str_to_float(records["underlyingValue"])
+            upper_lower_limit = nh.get_upper_lower_limit(
+                price, strikeDifference, strick_limit
+            )
+
+            for record in data["filtered"]["data"]:
+                entity = self.__parse_live_option_chain(record, date, upper_lower_limit)
+
+                if entity is not None:
+                    entities.append(entity[0])
+                    entities.append(entity[1])
 
         return entities

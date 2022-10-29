@@ -48,6 +48,10 @@ class Configurations:
         return Configurations.__get_config("default_values")
 
     @staticmethod
+    def get_default_value_by_key(key):
+        return Configurations.get_default_values_config()[key]
+
+    @staticmethod
     @lru_cache(1)
     def get_header_values_config():
         return Configurations.__get_config("header_values")

@@ -50,7 +50,7 @@ class Exchange(BaseModel):
         if not category or not category.days:
             return None
 
-        return category.days
+        return list(category.days.all())
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

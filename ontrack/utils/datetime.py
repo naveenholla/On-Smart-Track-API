@@ -7,6 +7,8 @@ from dateutil import tz
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 
+from ontrack.utils.base.enum import HolidayCategoryType, MarketDayTypeEnum
+
 from .config import Configurations
 from .context import get_context_value_by_key
 from .logger import ApplicationLogger
@@ -159,25 +161,38 @@ class DateTimeHelper:
     @staticmethod
     def get_exchange_off_days():
         exchangeObj = DateTimeHelper.get_exchange_object()
-        return exchangeObj.get
+
+        daytype = MarketDayTypeEnum.TRADING_HOLIDAYS
+        category = HolidayCategoryType.EQUITIES
+        days = exchangeObj.get_days_by_category(daytype, category)
+
+        return days
+
+    @staticmethod
+    def get_exchange_special_days():
+        exchangeObj = DateTimeHelper.get_exchange_object()
+
+        daytype = MarketDayTypeEnum.SPECIAL_TRADING_DAYS
+        category = HolidayCategoryType.SPECIAL_TRADING_HOURS
+        days = exchangeObj.get_days_by_category(daytype, category)
+
+        return days
+
+    @staticmethod
+    def get_exchange_trading_holidays():
+        exchangeObj = DateTimeHelper.get_exchange_object()
+
+        daytype = MarketDayTypeEnum.TRADING_HOLIDAYS
+        category = get_context_value_by_key("holiday_category_name")
+        days = exchangeObj.get_days_by_category(daytype, category)
+
+        return days
 
     @staticmethod
     def is_holiday(datetimeObj: date) -> bool:
-        exchange_name = get_context_value_by_key("exchange_name")
-        holiday_category_name = get_context_value_by_key("holiday_category_name")
-        holiday_day_type = get_context_value_by_key("holiday_day_type")
-
-        special_trading_days = Configurations.get_exchange_special_days(
-            exchange_name=exchange_name
-        )
-        weekly_off_days = Configurations.get_exchange_weekly_off(
-            exchange_name=exchange_name
-        )
-        holidays = Configurations.get_exchange_days_by_type(
-            exchange_name=exchange_name,
-            day_type_name=holiday_day_type,
-            category_name=holiday_category_name,
-        )
+        special_trading_days = DateTimeHelper.get_exchange_special_days()
+        weekly_off_days = DateTimeHelper.get_exchange_weekly_off()
+        holidays = DateTimeHelper.get_exchange_trading_holidays()
 
         dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
         dayOfWeek = calendar.day_name[datetimeObj.weekday()]
@@ -206,10 +221,7 @@ class DateTimeHelper:
         return DateTimeHelper.is_holiday(DateTimeHelper.current_date_time())
 
     @staticmethod
-    def set_market_time(time_key, dateTimeObj=None) -> datetime:
-        exchangeObj = DateTimeHelper.get_exchange_object()
-        time_value = DateTimeHelper.str_to_time(exchangeObj[time_key])
-        timezone = exchangeObj["time_zone"]["zone"]
+    def set_market_time(time_value, timezone, dateTimeObj=None) -> datetime:
         return DateTimeHelper.set_time_to_date(
             time_value.tm_hour,
             time_value.tm_min,
@@ -220,26 +232,31 @@ class DateTimeHelper:
 
     @staticmethod
     def get_market_start_time(dateTimeObj=None) -> datetime:
+        exchangeObj = DateTimeHelper.get_exchange_object()
         return DateTimeHelper.set_market_time(
-            time_key="start_time", dateTimeObj=dateTimeObj
+            exchangeObj.start_time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
         )
 
     @staticmethod
     def get_market_end_time(dateTimeObj=None) -> datetime:
+        exchangeObj = DateTimeHelper.get_exchange_object()
         return DateTimeHelper.set_market_time(
-            time_key="end_time", dateTimeObj=dateTimeObj
+            exchangeObj.end_time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
         )
 
     @staticmethod
     def get_market_refresh_time(dateTimeObj=None) -> datetime:
+        exchangeObj = DateTimeHelper.get_exchange_object()
         return DateTimeHelper.set_market_time(
-            time_key="data_refresh_time", dateTimeObj=dateTimeObj
+            exchangeObj.data_refresh_time,
+            exchangeObj.time_zone.zone,
+            dateTimeObj=dateTimeObj,
         )
 
     @staticmethod
     def remove_time(dateTimeObj=None) -> datetime:
         exchangeObj = DateTimeHelper.get_exchange_object()
-        timezone = exchangeObj["time_zone"]["zone"]
+        timezone = exchangeObj.time_zone.zone
         return DateTimeHelper.set_time_to_date(
             0, 0, 0, time_zone=timezone, dateTimeObj=dateTimeObj
         )

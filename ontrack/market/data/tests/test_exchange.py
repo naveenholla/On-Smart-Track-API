@@ -20,4 +20,4 @@ class TestExchangeData:
         self.exchange_qs.unique_search()
         days = self.exchange_fixture.get_days_by_category(daytype, category)
         assert days is not None
-        assert len(list(days.all())) > 0
+        assert len(days) > 0

@@ -159,11 +159,11 @@ class DateTimeHelper:
         return exchangeObj
 
     @staticmethod
-    def get_exchange_off_days():
+    def get_exchange_weekly_off():
         exchangeObj = DateTimeHelper.get_exchange_object()
 
-        daytype = MarketDayTypeEnum.TRADING_HOLIDAYS
-        category = HolidayCategoryType.EQUITIES
+        daytype = MarketDayTypeEnum.WEEKLY_OFF_DAYS
+        category = HolidayCategoryType.WEEKEND
         days = exchangeObj.get_days_by_category(daytype, category)
 
         return days
@@ -189,16 +189,51 @@ class DateTimeHelper:
         return days
 
     @staticmethod
+    def compare_date(date1: datetime, date2: datetime):
+        if date1 is None or date2 is None:
+            return False
+
+        return (
+            date1.day == date2.day
+            and date1.month == date2.month
+            and date1.year == date2.year
+        )
+
+    @staticmethod
+    def compare_date_time(date1: datetime, date2: datetime, operator="eq"):
+        if date1 is None or date2 is None:
+            return False
+
+        from_zone = date1.tzinfo
+        date2 = date2.astimezone(from_zone)
+
+        if operator == "eq":
+            return date1 == date2
+
+        if operator == "gte":
+            return date1 >= date2
+
+        if operator == "gt":
+            return date1 > date2
+
+        if operator == "lte":
+            return date1 <= date2
+
+        if operator == "lt":
+            return date1 < date2
+
+    @staticmethod
     def is_special_trading_day(datetimeObj: date):
         special_trading_days = DateTimeHelper.get_exchange_special_days()
 
-        dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
         if special_trading_days:
             special_day = [
-                x for x in special_trading_days if x["date"] and x["date"] == dateStr
+                x
+                for x in special_trading_days
+                if DateTimeHelper.compare_date(x.date, datetimeObj)
             ]
             if special_day and len(special_day) > 0:
-                return special_day
+                return special_day[0]
         return None
 
     @staticmethod
@@ -206,7 +241,6 @@ class DateTimeHelper:
         weekly_off_days = DateTimeHelper.get_exchange_weekly_off()
         holidays = DateTimeHelper.get_exchange_trading_holidays()
 
-        dateStr = DateTimeHelper.datetime_to_str(datetimeObj, "%Y-%m-%d")
         dayOfWeek = calendar.day_name[datetimeObj.weekday()]
 
         if DateTimeHelper.is_special_trading_day(datetimeObj) is not None:
@@ -216,12 +250,14 @@ class DateTimeHelper:
             weekly_off = [
                 x
                 for x in weekly_off_days
-                if x["day"] and str(x["day"]).lower() == dayOfWeek.lower()
+                if x.day and str(x.day).lower() == dayOfWeek.lower()
             ]
             if weekly_off and len(weekly_off) > 0:
                 return True
 
-        holiday = [x for x in holidays if x["date"] and x["date"] == dateStr]
+        holiday = [
+            x for x in holidays if DateTimeHelper.compare_date(x.date, datetimeObj)
+        ]
         return holiday and len(holiday) > 0
 
     @staticmethod
@@ -231,9 +267,9 @@ class DateTimeHelper:
     @staticmethod
     def set_market_time(time_value, timezone, dateTimeObj=None) -> datetime:
         return DateTimeHelper.set_time_to_date(
-            time_value.tm_hour,
-            time_value.tm_min,
-            time_value.tm_sec,
+            time_value.hour,
+            time_value.minute,
+            time_value.second,
             time_zone=timezone,
             dateTimeObj=dateTimeObj,
         )
@@ -291,7 +327,7 @@ class DateTimeHelper:
         DateTimeHelper.logger.log_debug(
             f"market_refresh_time:{market_refresh_time}, dateTimeObj:{dateTimeObj}, cuurent_time: {now}"
         )
-        return now >= market_refresh_time
+        return DateTimeHelper.compare_date_time(now, market_refresh_time, "gte")
 
     @staticmethod
     def is_market_open() -> bool:
@@ -301,7 +337,9 @@ class DateTimeHelper:
         now = DateTimeHelper.current_date_time()
         marketStartTime = DateTimeHelper.get_market_start_time()
         marketEndTime = DateTimeHelper.get_market_end_time()
-        return now >= marketStartTime and now <= marketEndTime
+        return DateTimeHelper.compare_date_time(
+            now, marketStartTime, "gte"
+        ) and DateTimeHelper.compare_date_time(now, marketEndTime, "lt")
 
     @staticmethod
     def is_market_close_for_the_day() -> bool:
@@ -312,10 +350,10 @@ class DateTimeHelper:
 
         now = DateTimeHelper.current_date_time()
         marketEndTime = DateTimeHelper.get_market_end_time()
-        return now > marketEndTime
+        return DateTimeHelper.compare_date_time(now, marketEndTime, "gte")
 
     @staticmethod
-    def get_epoch(datetimeObj=None) -> int:
+    def __get_epoch(datetimeObj=None) -> int:
         # This method converts given datetimeObj to epoch seconds
         if datetimeObj is None:
             datetimeObj = DateTimeHelper.current_date_time()
@@ -324,10 +362,15 @@ class DateTimeHelper:
 
     @staticmethod
     def wait_time_till_market_opens():
-        nowEpoch = DateTimeHelper.get_epoch(DateTimeHelper.current_date_time())
-        marketStartTimeEpoch = DateTimeHelper.get_epoch(
-            DateTimeHelper.get_market_start_time()
-        )
+        now = DateTimeHelper.current_date_time()
+        market_start_time = DateTimeHelper.get_market_start_time()
+
+        from_zone = now.tzinfo
+        market_start_time = market_start_time.astimezone(from_zone)
+
+        nowEpoch = DateTimeHelper.__get_epoch(now)
+        marketStartTimeEpoch = DateTimeHelper.__get_epoch(market_start_time)
+
         waitSeconds = marketStartTimeEpoch - nowEpoch
         return waitSeconds
 
@@ -356,7 +399,7 @@ class DateTimeHelper:
 
         expiryDateMarketEndTime = DateTimeHelper.get_market_end_time(datetimeExpiryDay)
         now = DateTimeHelper.current_date_time()
-        if now > expiryDateMarketEndTime:
+        if DateTimeHelper.compare_date_time(now, expiryDateMarketEndTime, "gte"):
             # as this month expiry is already over get next month expiry
             datetimeExpiryDay = DateTimeHelper.get_monthly_expiry_day_date(
                 datetimeObj, index + 1
@@ -387,7 +430,7 @@ class DateTimeHelper:
 
         expiryDateMarketEndTime = DateTimeHelper.get_market_end_time(datetimeExpiryDay)
         now = DateTimeHelper.current_date_time()
-        if now > expiryDateMarketEndTime:
+        if DateTimeHelper.compare_date_time(now, expiryDateMarketEndTime, "gte"):
             datetimeExpiryDay = DateTimeHelper.get_weekly_expiry_day_date(
                 dateTimeObj, index + 1
             )
@@ -413,7 +456,7 @@ class DateTimeHelper:
         expiryDateTimeMonthly = DateTimeHelper.get_monthly_expiry_day_date(None, index)
         # Check if monthly and weekly expiry same
         weekAndMonthExpriySame = False
-        if expiryDateTime == expiryDateTimeMonthly:
+        if DateTimeHelper.compare_date_time(expiryDateTime, expiryDateTimeMonthly):
             weekAndMonthExpriySame = True
             logging.info("Weekly and Monthly expiry is same for %s", expiryDateTime)
 

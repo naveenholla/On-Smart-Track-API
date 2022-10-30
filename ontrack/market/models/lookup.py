@@ -54,10 +54,7 @@ class Exchange(BaseModel):
 
     @property
     def timezone_name(self):
-        try:
-            return self.timezone_name
-        except Exception:
-            return "Asia/Kolkata"
+        return self.time_zone.zone
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

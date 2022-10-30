@@ -57,7 +57,7 @@ class Exchange(BaseModel):
         try:
             return self.time_zone.zone
         except Exception:
-            return "Asia/Kolkata"
+            return "Asia/Kolkata"  # TODO: Need to Fix This for GITHUB Test Cases
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

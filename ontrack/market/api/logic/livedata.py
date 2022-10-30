@@ -1,5 +1,5 @@
-from ontrack.market.data.equity import PullEquityData
-from ontrack.market.data.index import PullIndexData
+from ontrack.market.api.data.equity import PullEquityData
+from ontrack.market.api.data.index import PullIndexData
 from ontrack.market.models.equity import (
     EquityLiveData,
     EquityLiveDerivativeData,

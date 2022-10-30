@@ -1,7 +1,7 @@
 import pytest
 
-from ontrack.market.data.endofdata import EndOfDayData
-from ontrack.market.data.tests.test_base import test_date
+from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.tests.test_base import test_date
 from ontrack.market.models.lookup import Exchange
 from ontrack.market.models.participant import (
     ParticipantActivity,

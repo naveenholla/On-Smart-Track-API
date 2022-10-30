@@ -1,6 +1,6 @@
-from ontrack.market.data.endofdata import EndOfDayData
-from ontrack.market.data.initialize import InitializeData
-from ontrack.market.data.livedata import LiveData
+from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.logic.initialize import InitializeData
+from ontrack.market.api.logic.livedata import LiveData
 from ontrack.utils.datetime import DateTimeHelper
 
 

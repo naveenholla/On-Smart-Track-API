@@ -291,7 +291,7 @@ class DateTimeHelper:
             time = special_day.start_time
 
         return DateTimeHelper.set_market_time(
-            time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
+            time, exchangeObj.timezone_name, dateTimeObj=dateTimeObj
         )
 
     @staticmethod
@@ -307,7 +307,7 @@ class DateTimeHelper:
             time = special_day.end_time
 
         return DateTimeHelper.set_market_time(
-            time, exchangeObj.time_zone.zone, dateTimeObj=dateTimeObj
+            time, exchangeObj.timezone_name, dateTimeObj=dateTimeObj
         )
 
     @staticmethod
@@ -315,14 +315,14 @@ class DateTimeHelper:
         exchangeObj = DateTimeHelper.get_exchange_object()
         return DateTimeHelper.set_market_time(
             exchangeObj.data_refresh_time,
-            exchangeObj.time_zone.zone,
+            exchangeObj.timezone_name,
             dateTimeObj=dateTimeObj,
         )
 
     @staticmethod
     def remove_time(dateTimeObj=None) -> datetime:
         exchangeObj = DateTimeHelper.get_exchange_object()
-        timezone = exchangeObj.time_zone.zone
+        timezone = exchangeObj.timezone_name
         return DateTimeHelper.set_time_to_date(
             0, 0, 0, time_zone=timezone, dateTimeObj=dateTimeObj
         )

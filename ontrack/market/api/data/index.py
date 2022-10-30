@@ -45,7 +45,7 @@ class PullIndexData:
         self.exchange_symbol = exchange_symbol
 
         self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
-        self.timezone = self.exchange.time_zone.zone
+        self.timezone = self.exchange.timezone_name
         self.urls = Configurations.get_urls_config()
 
     def __parse_lookup_data(self, record):

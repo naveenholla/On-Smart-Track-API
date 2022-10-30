@@ -52,6 +52,13 @@ class Exchange(BaseModel):
 
         return list(category.days.all())
 
+    @property
+    def timezone_name(self):
+        try:
+            return self.timezone_name
+        except Exception:
+            return "Asia/Kolkata"
+
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
         verbose_name = "Exchange"

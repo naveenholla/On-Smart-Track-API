@@ -59,7 +59,7 @@ class HolidayData:
         return entity
 
     def __process_day_type(self, exchange, daytype):
-        self.timezone = exchange.time_zone.zone
+        self.timezone = exchange.timezone_name
 
         holiday_types = [
             x

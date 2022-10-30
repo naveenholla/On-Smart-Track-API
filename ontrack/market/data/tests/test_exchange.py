@@ -128,6 +128,10 @@ class TestExchangeData:
             holiday_category_name=HolidayCategoryType.EQUITIES,
             holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAYS,
         ):
+            date = dt.get_date_time(2022, 1, 26, 10, 0, 0)
+            with freeze_time(date):
+                assert not dt.is_market_open()
+
             date = dt.get_date_time(2022, 10, 20, 21, 0, 0)
             with freeze_time(date):
                 assert not dt.is_market_open()

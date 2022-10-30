@@ -109,11 +109,11 @@ class DateTimeHelper:
         )
 
     @staticmethod
-    def datetime_to_str(datetimeObj: datetime, dateFormat: str = None) -> str:
+    def datetime_to_str(dateTimeObj: datetime, dateFormat: str = None) -> str:
         f = Configurations.get_default_value_by_key("default_date_time_format")
         if dateFormat is not None and len(dateFormat) > 0:
             f = dateFormat
-        return datetimeObj.strftime(f)
+        return dateTimeObj.strftime(f)
 
     @staticmethod
     def str_to_datetime(datetimeStr, dateFormat=None, time_zone=None) -> datetime:
@@ -223,27 +223,30 @@ class DateTimeHelper:
             return date1 < date2
 
     @staticmethod
-    def is_special_trading_day(datetimeObj: date):
+    def is_special_trading_day(dateTimeObj: date):
         special_trading_days = DateTimeHelper.get_exchange_special_days()
 
         if special_trading_days:
             special_day = [
                 x
                 for x in special_trading_days
-                if DateTimeHelper.compare_date(x.date, datetimeObj)
+                if DateTimeHelper.compare_date(x.date, dateTimeObj)
             ]
             if special_day and len(special_day) > 0:
                 return special_day[0]
         return None
 
     @staticmethod
-    def is_holiday(datetimeObj: date) -> bool:
+    def is_holiday(dateTimeObj: date = None) -> bool:
+        if dateTimeObj is None:
+            dateTimeObj = DateTimeHelper.current_date_time()
+
         weekly_off_days = DateTimeHelper.get_exchange_weekly_off()
         holidays = DateTimeHelper.get_exchange_trading_holidays()
 
-        dayOfWeek = calendar.day_name[datetimeObj.weekday()]
+        dayOfWeek = calendar.day_name[dateTimeObj.weekday()]
 
-        if DateTimeHelper.is_special_trading_day(datetimeObj) is not None:
+        if DateTimeHelper.is_special_trading_day(dateTimeObj) is not None:
             return False
 
         if weekly_off_days:
@@ -256,13 +259,9 @@ class DateTimeHelper:
                 return True
 
         holiday = [
-            x for x in holidays if DateTimeHelper.compare_date(x.date, datetimeObj)
+            x for x in holidays if DateTimeHelper.compare_date(x.date, dateTimeObj)
         ]
         return holiday and len(holiday) > 0
-
-    @staticmethod
-    def is_holiday_today() -> bool:
-        return DateTimeHelper.is_holiday(DateTimeHelper.current_date_time())
 
     @staticmethod
     def set_market_time(time_value, timezone, dateTimeObj=None) -> datetime:
@@ -276,6 +275,9 @@ class DateTimeHelper:
 
     @staticmethod
     def get_market_start_time(dateTimeObj=None) -> datetime:
+        if dateTimeObj is None:
+            dateTimeObj = DateTimeHelper.current_date_time()
+
         exchangeObj = DateTimeHelper.get_exchange_object()
 
         time = exchangeObj.start_time
@@ -289,6 +291,9 @@ class DateTimeHelper:
 
     @staticmethod
     def get_market_end_time(dateTimeObj=None) -> datetime:
+        if dateTimeObj is None:
+            dateTimeObj = DateTimeHelper.current_date_time()
+
         exchangeObj = DateTimeHelper.get_exchange_object()
 
         time = exchangeObj.end_time
@@ -331,7 +336,7 @@ class DateTimeHelper:
 
     @staticmethod
     def is_market_open() -> bool:
-        if DateTimeHelper.is_holiday_today():
+        if DateTimeHelper.is_holiday():
             return False
 
         now = DateTimeHelper.current_date_time()
@@ -345,7 +350,7 @@ class DateTimeHelper:
     def is_market_close_for_the_day() -> bool:
         # This method returns true if the current time is > marketEndTime
         # Please note this will not return true if current time is < marketStartTime on a trading day
-        if DateTimeHelper.is_holiday_today():
+        if DateTimeHelper.is_holiday():
             return True
 
         now = DateTimeHelper.current_date_time()
@@ -353,11 +358,11 @@ class DateTimeHelper:
         return DateTimeHelper.compare_date_time(now, marketEndTime, "gte")
 
     @staticmethod
-    def __get_epoch(datetimeObj=None) -> int:
-        # This method converts given datetimeObj to epoch seconds
-        if datetimeObj is None:
-            datetimeObj = DateTimeHelper.current_date_time()
-        epochSeconds = datetime.timestamp(datetimeObj)
+    def __get_epoch(dateTimeObj=None) -> int:
+        # This method converts given dateTimeObj to epoch seconds
+        if dateTimeObj is None:
+            dateTimeObj = DateTimeHelper.current_date_time()
+        epochSeconds = datetime.timestamp(dateTimeObj)
         return int(epochSeconds)  # converting double to long
 
     @staticmethod
@@ -375,15 +380,15 @@ class DateTimeHelper:
         return waitSeconds
 
     @staticmethod
-    def get_monthly_expiry_day_date(datetimeObj=None, index=0) -> datetime:
-        if datetimeObj is None:
-            datetimeObj = DateTimeHelper.current_date_time()
+    def get_monthly_expiry_day_date(dateTimeObj=None, index=0) -> datetime:
+        if dateTimeObj is None:
+            dateTimeObj = DateTimeHelper.current_date_time()
 
         if index > 0:
-            datetimeObj = datetimeObj + relativedelta(months=index)
+            dateTimeObj = dateTimeObj + relativedelta(months=index)
 
-        year = datetimeObj.year
-        month = datetimeObj.month
+        year = dateTimeObj.year
+        month = dateTimeObj.month
         lastDay = calendar.monthrange(year, month)[
             1
         ]  # 2nd entry is the last day of the month
@@ -402,7 +407,7 @@ class DateTimeHelper:
         if DateTimeHelper.compare_date_time(now, expiryDateMarketEndTime, "gte"):
             # as this month expiry is already over get next month expiry
             datetimeExpiryDay = DateTimeHelper.get_monthly_expiry_day_date(
-                datetimeObj, index + 1
+                dateTimeObj, index + 1
             )
 
         return datetimeExpiryDay

@@ -13,3 +13,6 @@ class InitializeData:
         ]
 
         self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
+
+    def load_initial_data(self):
+        self.load_fixtures_all_data()

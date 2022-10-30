@@ -1,5 +1,6 @@
+from ontrack.lookup.api.logic.initialize import InitializeData as lookup_initialization
 from ontrack.market.api.logic.endofdata import EndOfDayData
-from ontrack.market.api.logic.initialize import InitializeData
+from ontrack.market.api.logic.initialize import InitializeData as market_initialization
 from ontrack.market.api.logic.livedata import LiveData
 from ontrack.utils.datetime import DateTimeHelper
 
@@ -7,7 +8,10 @@ from ontrack.utils.datetime import DateTimeHelper
 def initilize_data(step=1):
 
     if step == 1:
-        obj = InitializeData("nse")
+        obj = market_initialization("nse")
+        obj.load_initial_data()
+
+        obj = lookup_initialization()
         obj.load_initial_data()
 
     if step <= 2:

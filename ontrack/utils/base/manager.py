@@ -21,3 +21,20 @@ class EndOfDayBackendManagerAbstract(BackendManagerAbstarct):
 
     def delete_records_after_date(self, date):
         self.get_queryset().search_records_after_date(date).delete()
+
+
+class CommonLogic:
+    def create_or_update(self, data, entityType):
+        if data is None or len(data) == 0:
+            return
+
+        records_to_create = [x for x in data if x["id"] is None]
+        records_to_update = [x for x in data if x["id"] is not None]
+        new_records = [entityType(**values) for values in records_to_create]
+        existing_records = [entityType(**values) for values in records_to_update]
+
+        record_keys = list(data[0].keys())
+        record_keys.remove("id")
+        entityType.backend.bulk_create_or_update(
+            new_records, existing_records, record_keys
+        )

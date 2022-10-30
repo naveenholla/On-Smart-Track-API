@@ -29,6 +29,17 @@ def test_get_default_value_by_key():
     value = Configurations.get_default_value_by_key("option_chain_strick_price_count")
     assert value == 20
 
+    value = Configurations.get_default_value_by_key(
+        "option_chain_strick_price_count".upper()
+    )
+    assert value == 20
+
+    value = Configurations.get_default_value_by_key("NOT_EXISTS")
+    assert value is None
+
+    value = Configurations.get_default_value_by_key(None)
+    assert value is None
+
 
 @pytest.mark.unittest
 @pytest.mark.skip

@@ -1,0 +1,32 @@
+[
+{
+    "model": "lookup.setting",
+    "pk": 1,
+    "fields": {
+        "updated_at": "2022-10-30T07:33:32.213Z",
+        "created_at": "2022-10-30T07:33:32.213Z",
+        "key": "DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS",
+        "value": "200"
+    }
+},
+{
+    "model": "lookup.setting",
+    "pk": 2,
+    "fields": {
+        "updated_at": "2022-10-30T07:33:47.042Z",
+        "created_at": "2022-10-30T07:33:47.042Z",
+        "key": "DATAPULL_EQUITY_EOD_DATA_PAUSE_HOURS",
+        "value": "20"
+    }
+},
+{
+    "model": "lookup.setting",
+    "pk": 3,
+    "fields": {
+        "updated_at": "2022-10-30T07:34:07.290Z",
+        "created_at": "2022-10-30T07:34:07.290Z",
+        "key": "DATAPULL_INDICES_EOD_DATA_PAUSE_HOURS",
+        "value": "20"
+    }
+}
+]

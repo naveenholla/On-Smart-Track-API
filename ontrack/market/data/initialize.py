@@ -1,7 +1,3 @@
-from django.conf import settings
-from django.core.management import call_command
-
-from ontrack.market.data.common import CommonData
 from ontrack.market.data.equity import PullEquityData
 from ontrack.market.data.holidays import HolidayData
 from ontrack.market.data.index import PullIndexData
@@ -15,33 +11,17 @@ from ontrack.market.models.lookup import (
     MarketDayCategory,
     MarketDayType,
 )
-from ontrack.utils.filesystem import FileSystemHelper
+from ontrack.utils.base.fixtures import FixtureData
+from ontrack.utils.base.manager import CommonLogic
 from ontrack.utils.logger import ApplicationLogger
 
 
 class InitializeData:
     def __init__(self, exchange_symbol):
         self.logger = ApplicationLogger()
-        self.commonobj = CommonData()
+        self.commonobj = CommonLogic()
+        self.fixtureData = FixtureData()
         self.exchange_symbol = exchange_symbol
-
-    def load_fixture_data(self, fixture, temp_folder_path=None):
-        temp_folder = FileSystemHelper.create_temp_folder("fixtures", temp_folder_path)
-        app_folder = settings.APPS_FOLDER_NAME
-
-        fixture_details = fixture.split(".")
-        app_name = fixture_details[0]
-        model = fixture_details[1]
-        source = f"{app_folder}/{app_name}/fixtures/{model}.json"
-        destination = temp_folder / f"{model}.json"
-
-        with open(source, "rb") as f:
-            data = f.read()
-
-        with open(destination, "wb") as f_new:
-            f_new.write(data)
-
-        call_command("loaddata", destination)
 
     def load_fixtures_all_data(self, temp_folder_path=None):
         fixtures = [
@@ -54,8 +34,7 @@ class InitializeData:
             "market.equityindex",
         ]
 
-        for fixture in fixtures:
-            self.load_fixture_data(fixture, temp_folder_path)
+        self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
 
     def load_fixtures_data(self, temp_folder_path=None):
         fixtures = [
@@ -65,8 +44,7 @@ class InitializeData:
             "market.marketday",
         ]
 
-        for fixture in fixtures:
-            self.load_fixture_data(fixture, temp_folder_path)
+        self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
 
     def load_equity_data(self, save_data=True):
         exchange_qs = Exchange.backend.get_queryset()

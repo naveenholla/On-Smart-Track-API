@@ -223,6 +223,11 @@ class DateTimeHelper:
             return date1 < date2
 
     @staticmethod
+    def compare_current_date_time(date: datetime, operator="eq"):
+        now = DateTimeHelper.current_date_time()
+        return DateTimeHelper.compare_date_time(now, date, operator)
+
+    @staticmethod
     def is_special_trading_day(dateTimeObj: date):
         special_trading_days = DateTimeHelper.get_exchange_special_days()
 

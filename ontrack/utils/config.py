@@ -45,7 +45,12 @@ class Configurations:
 
     @staticmethod
     def get_default_value_by_key(key):
-        return Configurations.get_default_values_config()[key]
+        if key is None:
+            return None
+
+        key = key.lower()
+        config = Configurations.get_default_values_config()
+        return config[key] if key in config else None
 
     @staticmethod
     @lru_cache(1)

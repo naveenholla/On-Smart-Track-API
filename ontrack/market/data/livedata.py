@@ -1,4 +1,3 @@
-from ontrack.market.data.common import CommonData
 from ontrack.market.data.equity import PullEquityData
 from ontrack.market.data.index import PullIndexData
 from ontrack.market.models.equity import (
@@ -14,13 +13,14 @@ from ontrack.market.models.index import (
     IndexLiveOptionChain,
 )
 from ontrack.market.models.lookup import Equity, Exchange, Index
+from ontrack.utils.base.manager import CommonLogic
 from ontrack.utils.logger import ApplicationLogger
 
 
 class LiveData:
     def __init__(self, exchange_symbol):
         self.logger = ApplicationLogger()
-        self.commonobj = CommonData()
+        self.commonobj = CommonLogic()
         self.exchange_symbol = exchange_symbol
 
     def load_equity_live_data(self, save_data=True):

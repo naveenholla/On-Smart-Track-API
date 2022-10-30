@@ -1,4 +1,3 @@
-from ontrack.market.data.common import CommonData
 from ontrack.market.data.equity import PullEquityData
 from ontrack.market.data.index import PullIndexData
 from ontrack.market.data.participant import PullParticipantData
@@ -9,13 +8,14 @@ from ontrack.market.models.participant import (
     ParticipantActivity,
     ParticipantStatsActivity,
 )
+from ontrack.utils.base.manager import CommonLogic
 from ontrack.utils.logger import ApplicationLogger
 
 
 class EndOfDayData:
     def __init__(self, exchange_symbol):
         self.logger = ApplicationLogger()
-        self.commonobj = CommonData()
+        self.commonobj = CommonLogic()
         self.exchange_symbol = exchange_symbol
 
     def load_equity_eod_data(self, date, save_data=True):

@@ -1,7 +1,7 @@
 import pytest
 
 from ontrack.market.api.data.holidays import HolidayData
-from ontrack.market.api.logic.initialize import InitializeData
+from ontrack.market.api.logic.lookup import InitializeData
 from ontrack.market.models.lookup import (
     Exchange,
     MarketDay,

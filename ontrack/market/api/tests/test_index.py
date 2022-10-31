@@ -1,8 +1,8 @@
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
-from ontrack.market.api.logic.initialize import InitializeData
 from ontrack.market.api.logic.livedata import LiveData
+from ontrack.market.api.logic.lookup import InitializeData
 from ontrack.market.api.tests.test_base import test_date
 from ontrack.market.models.index import (
     IndexDerivativeEndOfDay,
@@ -44,29 +44,33 @@ class TestPullIndexData:
 
         result = self.initializeData.load_index_data(True)
         assert result is not None
+        records = result[0]
+        assert len(records) > 0
 
-        stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]
+        stocks_with_lot_size = [x for x in records if x["lot_size"] > 0]
         assert len(stocks_with_lot_size) > 2
 
-        stock = [x for x in result if x["symbol"] == "nifty"][0]
+        stock = [x for x in records if x["symbol"] == "nifty"][0]
         assert stock["lot_size"] > 0
 
-        stock = [x for x in result if x["symbol"] == "cnxauto"][0]
+        stock = [x for x in records if x["symbol"] == "cnxauto"][0]
         assert stock["is_sectoral"]
 
         index_fixture = self.index_qs.unique_search(symbol="banknifty").first()
         assert index_fixture is not None and index_fixture.id is not None
         symbol = index_fixture.symbol
-        stock2 = [x for x in result if x["symbol"] == symbol][0]
+        stock2 = [x for x in records if x["symbol"] == symbol][0]
         assert stock2["id"] == index_fixture.id
-
-        records_count = self.index_qs.all().count()
-        assert records_count > 0
 
         # check update logic
         result = self.initializeData.load_index_data(True)
         assert result is not None
-        assert records_count == self.index_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -77,15 +81,23 @@ class TestPullIndexData:
         date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
-
-        records_count = self.index_eod_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
         assert result is not None
-        assert records_count == self.index_eod_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -96,15 +108,23 @@ class TestPullIndexData:
         date = test_date
         result = self.endofdaydata.load_index_derivative_eod_data(date, True)
         assert result is not None
-
-        records_count = self.index_derivative_eod_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_index_eod_data(date, True)
+        result = self.endofdaydata.load_index_derivative_eod_data(date, True)
         assert result is not None
-        assert records_count == self.index_derivative_eod_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -114,14 +134,22 @@ class TestPullIndexData:
 
         result = self.livedata.load_index_live_data(True)
         assert result is not None
-
-        records_count = self.index_live_data_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_index_live_data(True)
         assert result is not None
-        assert records_count == self.index_live_data_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -131,14 +159,22 @@ class TestPullIndexData:
 
         result = self.livedata.load_index_live_open_interest_data(True)
         assert result is not None
-
-        records_count = self.index_live_open_interest_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_index_live_open_interest_data(True)
         assert result is not None
-        assert records_count == self.index_live_open_interest_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -148,14 +184,22 @@ class TestPullIndexData:
 
         result = self.livedata.load_index_live_derivative_data(True)
         assert result is not None
-
-        records_count = self.index_live_derivative_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_index_live_derivative_data(True)
         assert result is not None
-        assert records_count == self.index_live_derivative_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -165,11 +209,19 @@ class TestPullIndexData:
 
         result = self.livedata.load_index_live_option_chain_data(True)
         assert result is not None
-
-        records_count = self.index_live_option_chain_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_index_live_option_chain_data(True)
         assert result is not None
-        assert records_count == self.index_live_option_chain_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0

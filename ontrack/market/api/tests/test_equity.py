@@ -1,8 +1,8 @@
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
-from ontrack.market.api.logic.initialize import InitializeData
 from ontrack.market.api.logic.livedata import LiveData
+from ontrack.market.api.logic.lookup import InitializeData
 from ontrack.market.api.tests.test_base import test_date
 from ontrack.market.models.equity import (
     EquityDerivativeEndOfDay,
@@ -46,26 +46,30 @@ class TestPullEquityData:
 
         result = self.initializeData.load_equity_data(True)
         assert result is not None
+        records = result[0]
+        assert len(records) > 0
 
-        stocks_with_lot_size = [x for x in result if x["lot_size"] > 0]
+        stocks_with_lot_size = [x for x in records if x["lot_size"] > 0]
         assert len(stocks_with_lot_size) > 150
 
-        stock = [x for x in result if x["symbol"] == "hdfcbank"][0]
+        stock = [x for x in records if x["symbol"] == "hdfcbank"][0]
         assert stock["lot_size"] > 0
 
         equity_fixture = self.equity_qs.unique_search(symbol="reliance").first()
         assert equity_fixture is not None and equity_fixture.id is not None
         symbol = equity_fixture.symbol
-        stock2 = [x for x in result if x["symbol"] == symbol][0]
+        stock2 = [x for x in records if x["symbol"] == symbol][0]
         assert stock2["id"] == equity_fixture.id
-
-        records_count = self.equity_qs.all().count()
-        assert records_count > 0
 
         # check update logic
         result = self.initializeData.load_equity_data(True)
         assert result is not None
-        assert records_count == self.equity_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -76,15 +80,23 @@ class TestPullEquityData:
         date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
-
-        records_count = self.equity_eod_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
         assert result is not None
-        assert records_count == self.equity_eod_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -95,15 +107,23 @@ class TestPullEquityData:
         date = test_date
         result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
         assert result is not None
-
-        records_count = self.equity_derivative_eod_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_equity_eod_data(date, True)
+        result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
         assert result is not None
-        assert records_count == self.equity_derivative_eod_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -113,14 +133,22 @@ class TestPullEquityData:
 
         result = self.livedata.load_equity_live_data(True)
         assert result is not None
-
-        records_count = self.equity_live_data_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_equity_live_data(True)
         assert result is not None
-        assert records_count == self.equity_live_data_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -130,14 +158,22 @@ class TestPullEquityData:
 
         result = self.livedata.load_equity_live_open_interest_data(True)
         assert result is not None
-
-        records_count = self.equity_live_open_interest_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_equity_live_open_interest_data(True)
         assert result is not None
-        assert records_count == self.equity_live_open_interest_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -147,14 +183,22 @@ class TestPullEquityData:
 
         result = self.livedata.load_equity_live_derivative_data(True)
         assert result is not None
-
-        records_count = self.equity_live_derivative_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_equity_live_derivative_data(True)
         assert result is not None
-        assert records_count == self.equity_live_derivative_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -164,11 +208,19 @@ class TestPullEquityData:
 
         result = self.livedata.load_equity_live_option_chain_data(True)
         assert result is not None
-
-        records_count = self.equity_live_option_chain_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         result = self.livedata.load_equity_live_option_chain_data(True)
         assert result is not None
-        assert records_count == self.equity_live_option_chain_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0

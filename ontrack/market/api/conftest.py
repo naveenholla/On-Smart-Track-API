@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.market.api.logic.initialize import InitializeData
+from ontrack.market.api.logic.lookup import InitializeData
 from ontrack.market.api.tests.factories import ExchangeFactory
 from ontrack.market.models.lookup import Exchange
 

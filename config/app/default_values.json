@@ -3,7 +3,7 @@
     "default_time_format": "%H:%M:%S",
     "default_date_time_format": "%Y-%m-%d %H:%M:%S.%f %z",
     "default_datapull_equity_lookup_pause": 5,
-    "days_for_delete_lookup_data": 2,
+    "lookup_data_older_than_days_can_be_deleted": 5,
     "days_for_delete_equity_eod_data": 750,
     "days_for_delete_indices_eod_data": 750,
     "default_start_date_equity_data_pull": "2022-09-20 00:00:00.000000 +00:00",

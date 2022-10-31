@@ -35,7 +35,7 @@ class IndexEndOfDay(TradingInformation):
         unique_together = ("entity", "date")
 
     def __str__(self):
-        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class IndexDerivativeEndOfDay(DerivativeEndOfDay):
@@ -58,7 +58,7 @@ class IndexDerivativeEndOfDay(DerivativeEndOfDay):
 
     def __str__(self):
         return (
-            f"{self.index.name}-"
+            f"{self.entity.name}-"
             f"{self.date.strftime('%d/%m/%Y')}-"
             f"{self.instrument}-"
             f"{self.expiry_date.strftime('%d/%m/%Y')}"
@@ -85,7 +85,7 @@ class IndexLiveDerivativeData(LiveDerivativeData):
 
     def __str__(self):
         return (
-            f"{self.index.name}-"
+            f"{self.entity.name}-"
             f"{self.date.strftime('%d/%m/%Y')}-"
             f"{self.instrument}-"
             f"{self.expiry_date.strftime('%d/%m/%Y')}"
@@ -113,7 +113,7 @@ class IndexLiveData(EntityLiveData):
         )
 
     def __str__(self):
-        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class IndexLiveOptionChain(EntityLiveOptionChain):
@@ -127,7 +127,7 @@ class IndexLiveOptionChain(EntityLiveOptionChain):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class IndexLiveFuture(EntityLiveFuture):
@@ -141,7 +141,7 @@ class IndexLiveFuture(EntityLiveFuture):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class IndexLiveOpenInterest(EntityLiveOpenInterest):
@@ -159,7 +159,7 @@ class IndexLiveOpenInterest(EntityLiveOpenInterest):
         )
 
     def __str__(self):
-        return f"{self.index.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class MajorIndexData(BaseModel):

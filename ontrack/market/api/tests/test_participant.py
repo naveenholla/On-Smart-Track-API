@@ -30,15 +30,23 @@ class TestPullParticipantData:
         date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
         assert result is not None
-
-        records_count = self.participant_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
         assert result is not None
-        assert records_count == self.participant_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -49,12 +57,20 @@ class TestPullParticipantData:
         date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
         assert result is not None
-
-        records_count = self.participant_stats_qs.all().count()
-        assert records_count > 0
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created > 0
+        assert record_updated == 0
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
         assert result is not None
-        assert records_count == self.participant_stats_qs.all().count()
+        records = result[0]
+        assert len(records) > 0
+        record_created = result[1][0]
+        record_updated = result[1][1]
+        assert record_created == 0
+        assert record_updated > 0

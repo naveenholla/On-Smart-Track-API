@@ -64,6 +64,7 @@ class PullEquityIndexData:
         entity["index"] = index
         entity["equity"] = equity
         entity["equity_weightage"] = weight
+        entity["date"] = dt.current_date_time()
         entity["updated_at"] = dt.current_date_time()
 
         if parent is not None:

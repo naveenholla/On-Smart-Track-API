@@ -35,7 +35,7 @@ class EquityEndOfDay(TradingInformation):
         unique_together = ("entity", "date")
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityEndOfDayCalcutated(BaseModel):
@@ -57,7 +57,7 @@ class EquityEndOfDayCalcutated(BaseModel):
         unique_together = ("entity", "date")
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityInsiderTrade(BaseModel):
@@ -74,7 +74,7 @@ class EquityInsiderTrade(BaseModel):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.equity.name
+        return self.entity.name
 
 
 class EquityPledged(BaseModel):
@@ -91,7 +91,7 @@ class EquityPledged(BaseModel):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.equity.name
+        return self.entity.name
 
 
 class EquitySast(BaseModel):
@@ -107,7 +107,7 @@ class EquitySast(BaseModel):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.equity.name
+        return self.entity.name
 
 
 class EquityDerivativeEndOfDay(DerivativeEndOfDay):
@@ -130,7 +130,7 @@ class EquityDerivativeEndOfDay(DerivativeEndOfDay):
 
     def __str__(self):
         return (
-            f"{self.equity.name}-"
+            f"{self.entity.name}-"
             f"{self.date.strftime('%d/%m/%Y')}-"
             f"{self.instrument}-"
             f"{self.expiry_date.strftime('%d/%m/%Y')}"
@@ -157,7 +157,7 @@ class EquityLiveDerivativeData(LiveDerivativeData):
 
     def __str__(self):
         return (
-            f"{self.index.name}-"
+            f"{self.entity.name}-"
             f"{self.date.strftime('%d/%m/%Y')}-"
             f"{self.instrument}-"
             f"{self.expiry_date.strftime('%d/%m/%Y')}"
@@ -179,7 +179,7 @@ class EquityLiveData(EntityLiveData):
         )
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityLiveOptionChain(EntityLiveOptionChain):
@@ -193,7 +193,7 @@ class EquityLiveOptionChain(EntityLiveOptionChain):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityLiveFuture(EntityLiveFuture):
@@ -207,7 +207,7 @@ class EquityLiveFuture(EntityLiveFuture):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
 class EquityLiveOpenInterest(EntityLiveOpenInterest):
@@ -225,4 +225,4 @@ class EquityLiveOpenInterest(EntityLiveOpenInterest):
         )
 
     def __str__(self):
-        return f"{self.equity.name}-{self.date.strftime('%d/%m/%Y')}"
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"

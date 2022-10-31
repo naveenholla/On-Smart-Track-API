@@ -80,6 +80,7 @@ class PullEquityData:
         entity["chart_symbol"] = chart_symbol
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
         entity["strike_difference"] = strike_diff
+        entity["date"] = dt.current_date_time()
         entity["updated_at"] = dt.current_date_time()
 
         return entity

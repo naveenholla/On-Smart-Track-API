@@ -15,13 +15,6 @@ def test_urls_config():
 def test_get_default_values_config():
     get_default_values_config = Configurations.get_default_values_config()
     assert "default_datapull_equity_lookup_pause" in get_default_values_config
-    assert "days_for_delete_lookup_data" in get_default_values_config
-    assert "days_for_delete_equity_eod_data" in get_default_values_config
-    assert "days_for_delete_indices_eod_data" in get_default_values_config
-    assert "default_date_format" in get_default_values_config
-    assert "default_time_format" in get_default_values_config
-    assert "default_date_time_format" in get_default_values_config
-    assert "average_days_count" in get_default_values_config
 
 
 @pytest.mark.unittest

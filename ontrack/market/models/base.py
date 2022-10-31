@@ -19,6 +19,7 @@ class MarketEntity(BaseModel):
     lot_size = models.IntegerField(default=0, null=True, blank=True)
     strike_difference = models.IntegerField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
+    date = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True

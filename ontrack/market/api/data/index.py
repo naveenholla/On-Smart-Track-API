@@ -84,6 +84,7 @@ class PullIndexData:
         entity["is_sectoral"] = record["is_sector"]
         entity["is_active"] = record["is_active"]
         entity["strike_difference"] = strike_diff
+        entity["date"] = dt.current_date_time()
         entity["updated_at"] = dt.current_date_time()
 
         return entity

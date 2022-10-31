@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.lookup.api.logic.initialize import InitializeData
+from ontrack.lookup.api.logic.lookup import InitializeData
 from ontrack.lookup.api.tests.factories import SettingFactory
 from ontrack.lookup.models import Setting
 

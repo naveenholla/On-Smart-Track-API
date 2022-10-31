@@ -1,7 +1,7 @@
 import pytest
 
 from ontrack.market.api.data.index_equity import PullEquityIndexData
-from ontrack.market.api.logic.initialize import InitializeData
+from ontrack.market.api.logic.lookup import InitializeData
 from ontrack.market.models.lookup import Equity, EquityIndex, Exchange, Index
 from ontrack.utils.config import Configurations
 

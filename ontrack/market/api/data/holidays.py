@@ -58,53 +58,44 @@ class HolidayData:
 
         return entity
 
-    def __process_day_type(self, exchange, daytype):
-        self.timezone = exchange.timezone_name
+    def __process_day_type(self, type_record):
+        exchange_symbol = type_record["exchange_symbol"]
+        day_type_name = type_record["type"]
 
-        holiday_types = [
-            x
-            for x in self.holiday_config
-            if x["exchange_symbol"] == exchange.symbol and x["type"] == daytype.name
-        ]
+        exchange = self.exchange_qs.unique_search(exchange_symbol).first()
+        day_type = self.daytype_qs.unique_search(day_type_name).first()
 
-        if not holiday_types:
+        if exchange is None or day_type is None:
             self.logger.log_info(
-                f"Holiday types not exists [{exchange.symbol}] [{daytype.name}]."
+                f"Exchange '{exchange_symbol}' of Holiday types '{day_type_name}' not exists."
             )
-
             return None
 
-        self.logger.log_debug(
-            f"Started with Config Holiday [{exchange.symbol}] [{daytype.name}]."
-        )
+        self.logger.log_debug(f"Starting with {exchange.symbol}.")
+        self.timezone = exchange.timezone_name
 
         headers = Configurations.get_header_values_config()
-        holiday_type = holiday_types[0]
-        holidays = LogicHelper.pull_data_from_external_api(holiday_type, headers)
+        holidays = LogicHelper.pull_data_from_external_api(type_record, headers)
 
         entities = []
-        for category in list(daytype.categories.all()):
+        for category in list(exchange.holiday_categories.all()):
             if category.code not in holidays:
                 self.logger.log_debug("Category not enabled or exists.")
                 continue
 
             records = holidays[category.code]
             for record in records:
-                entity = self.__process_record(daytype, category, record)
+                entity = self.__process_record(day_type, category, record)
                 entities.append(entity)
         return entities
 
     def pull_parse_exchange_holidays(self):
-        exchanges = self.exchange_qs.all()
         self.holiday_config = Configurations.get_urls_config()["holidays"]
 
         results = []
-        for exchange in exchanges:
-            self.logger.log_debug(f"Starting with {exchange.symbol}.")
-
-            for datatype in list(exchange.day_types.all()):
-                result = self.__process_day_type(exchange, datatype)
-                if result is not None:
-                    results += result
+        for record in self.holiday_config:
+            result = self.__process_day_type(record)
+            if result is not None:
+                results += result
 
         return results

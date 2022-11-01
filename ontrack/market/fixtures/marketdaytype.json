@@ -5,8 +5,7 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
-        "name": "Trading Holidays",
-        "exchange": 1
+        "name": "Trading Holidays"
     }
 },
 {
@@ -15,8 +14,7 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
-        "name": "Clearing Holidays",
-        "exchange": 1
+        "name": "Clearing Holidays"
     }
 },
 {
@@ -25,8 +23,7 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
-        "name": "Weekly Off Days",
-        "exchange": 1
+        "name": "Weekly Off Days"
     }
 },
 {
@@ -35,8 +32,7 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
-        "name": "Special Trading Days",
-        "exchange": 1
+        "name": "Special Trading Days"
     }
 }
 ]

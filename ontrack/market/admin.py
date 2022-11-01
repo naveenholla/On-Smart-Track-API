@@ -41,8 +41,8 @@ class ExportCsvMixin:
     export_as_csv.short_description = "Export Selected"
 
 
-class MarketDayTypeInline(admin.StackedInline):
-    model = MarketDayType
+class MarketDayCategoryInline(admin.StackedInline):
+    model = MarketDayCategory
     extra = 0
 
 
@@ -62,26 +62,31 @@ class ExchangeAdmin(admin.ModelAdmin):
         "symbol__icontains",
     )
 
-    inlines = [MarketDayTypeInline]
+    inlines = [MarketDayCategoryInline]
     list_per_page = 100
 
 
 @admin.register(MarketDayType)
 class MarketDayTypeAdmin(admin.ModelAdmin):
-    list_display = ("name", "exchange")
-    list_filter = ("exchange",)
+    list_display = ("name",)
     search_fields = ("name__icontains",)
 
 
 @admin.register(MarketDayCategory)
 class MarketDayCategoryAdmin(admin.ModelAdmin):
     list_display = (
+        "exchange",
         "code",
         "display_name",
         "parent_name",
     )
-    list_filter = ("parent_name",)
+    list_filter = (
+        "exchange",
+        "parent_name",
+    )
     search_fields = (
+        "exchange__name__icontains",
+        "exchange__symbol__icontains",
         "display_name__icontains",
         "parent_name__icontains",
         "code__icontains",

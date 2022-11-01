@@ -5,13 +5,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Capital Market",
         "display_name": "Equities",
-        "code": "CM",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "CM"
     }
 },
 {
@@ -20,13 +17,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Capital Market",
         "display_name": "Mutual Funds",
-        "code": "MF",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "MF"
     }
 },
 {
@@ -35,13 +29,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Capital Market",
         "display_name": "Securities Lending & Borrowing Schemes",
-        "code": "SLBS",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "SLBS"
     }
 },
 {
@@ -50,13 +41,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Debt Market",
         "display_name": "Corporate Bonds",
-        "code": "CBM",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "CBM"
     }
 },
 {
@@ -65,13 +53,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Debt Market",
         "display_name": "New Debt Segment",
-        "code": "NDM",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "NDM"
     }
 },
 {
@@ -80,13 +65,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Debt Market",
         "display_name": "Negotiated Trade Reporting Platform",
-        "code": "NTRP",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "NTRP"
     }
 },
 {
@@ -95,13 +77,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Derivatives Market",
         "display_name": "Currency Derivatives",
-        "code": "CD",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "CD"
     }
 },
 {
@@ -110,13 +89,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Derivatives Market",
         "display_name": "Commodity Derivatives",
-        "code": "COM",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "COM"
     }
 },
 {
@@ -125,13 +101,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Derivatives Market",
         "display_name": "Equity Derivatives",
-        "code": "FO",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "FO"
     }
 },
 {
@@ -140,13 +113,10 @@
     "fields": {
         "updated_at": "2022-10-20T00:00:00Z",
         "created_at": "2022-10-20T00:00:00Z",
+        "exchange": 1,
         "parent_name": "Derivatives Market",
         "display_name": "Interest Rate Derivatives",
-        "code": "IRD",
-        "daytype": [
-            1,
-            2
-        ]
+        "code": "IRD"
     }
 },
 {
@@ -155,12 +125,10 @@
     "fields": {
         "updated_at": "2022-10-22T14:52:09.811Z",
         "created_at": "2022-10-22T14:52:09.812Z",
+        "exchange": 1,
         "parent_name": "Weekend",
         "display_name": "Weekend",
-        "code": "Weekend",
-        "daytype": [
-            3
-        ]
+        "code": "Weekend"
     }
 },
 {
@@ -169,12 +137,10 @@
     "fields": {
         "updated_at": "2022-10-22T14:53:13.865Z",
         "created_at": "2022-10-22T14:53:13.865Z",
+        "exchange": 1,
         "parent_name": "Special Trading",
         "display_name": "Special Trading Hours",
-        "code": "Special_Hours",
-        "daytype": [
-            4
-        ]
+        "code": "Special_Hours"
     }
 }
 ]

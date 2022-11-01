@@ -13,6 +13,7 @@ urlpatterns = [
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
+    path("api/market/", include("ontrack.market.api.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

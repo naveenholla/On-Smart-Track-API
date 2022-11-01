@@ -35,22 +35,19 @@ class Exchange(BaseModel):
     def get_days_by_category(
         self, day_type_name: MarketDayTypeEnum, category_name: HolidayCategoryType
     ):
-        if not self.day_types:
+        if not self.holiday_categories:
             return None
 
-        day_type = self.day_types.filter(name__iexact=day_type_name).first()
-
-        if not day_type or not day_type.categories:
-            return None
-
-        category = day_type.categories.filter(
+        category = self.holiday_categories.filter(
             display_name__iexact=category_name
         ).first()
 
         if not category or not category.days:
             return None
 
-        return list(category.days.all())
+        days = category.days.filter(daytype__name__iexact=day_type_name)
+
+        return list(days.all())
 
     @property
     def timezone_name(self):
@@ -69,16 +66,13 @@ class Exchange(BaseModel):
 
 
 class MarketDayType(BaseModel):
-    name = models.CharField(max_length=50, choices=MarketDayTypeEnum.choices)
-    exchange = models.ForeignKey(
-        Exchange, related_name="day_types", on_delete=models.CASCADE
+    name = models.CharField(
+        max_length=50, choices=MarketDayTypeEnum.choices, unique=True
     )
-
     backend = MarketDayTypeBackendManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
-        unique_together = ("exchange", "name")
         verbose_name = "Market Day Type"
         verbose_name_plural = "Market Day Types"
 
@@ -87,7 +81,10 @@ class MarketDayType(BaseModel):
 
 
 class MarketDayCategory(BaseModel):
-    daytype = models.ManyToManyField(MarketDayType, related_name="categories")
+    exchange = models.ForeignKey(
+        Exchange, related_name="holiday_categories", on_delete=models.CASCADE
+    )
+
     parent_name = models.CharField(
         max_length=50, choices=HolidayParentCategoryType.choices
     )
@@ -98,6 +95,7 @@ class MarketDayCategory(BaseModel):
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]
+        unique_together = ("exchange", "code")
         verbose_name = "Market Day Category"
         verbose_name_plural = "Market Day Categories"
 
@@ -124,7 +122,7 @@ class MarketDay(BaseModel):
     backend = MarketDayBackendManager()
 
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = ["date"]
         unique_together = ("category", "date", "day")
         verbose_name = "Market Day"
         verbose_name_plural = "Market Days"

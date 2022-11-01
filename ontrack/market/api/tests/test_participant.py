@@ -1,7 +1,11 @@
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
-from ontrack.market.api.tests.test_base import test_date
+from ontrack.market.api.tests.test_base import (
+    assert_record_creation,
+    assert_record_updation,
+    test_date,
+)
 from ontrack.market.models.lookup import Exchange
 from ontrack.market.models.participant import (
     ParticipantActivity,
@@ -29,24 +33,12 @@ class TestPullParticipantData:
 
         date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_participant_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -56,21 +48,9 @@ class TestPullParticipantData:
 
         date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)

@@ -1,9 +1,16 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
 
+from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.livedata import LiveData
 from ontrack.market.api.logic.lookup import InitializeData
-from ontrack.market.api.tests.test_base import test_date
+from ontrack.market.api.tests.test_base import (
+    assert_record_creation,
+    assert_record_updation,
+    test_date,
+)
 from ontrack.market.models.equity import (
     EquityDerivativeEndOfDay,
     EquityEndOfDay,
@@ -12,7 +19,9 @@ from ontrack.market.models.equity import (
     EquityLiveOpenInterest,
     EquityLiveOptionChain,
 )
-from ontrack.market.models.lookup import Equity, Exchange
+from ontrack.market.models.lookup import Equity, EquityIndex, Exchange
+from ontrack.utils.base.enum import AdminSettingKey
+from ontrack.utils.config import Configurations
 
 
 class TestPullEquityData:
@@ -63,13 +72,7 @@ class TestPullEquityData:
 
         # check update logic
         result = self.initializeData.load_equity_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -79,24 +82,12 @@ class TestPullEquityData:
 
         date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_equity_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -106,24 +97,12 @@ class TestPullEquityData:
 
         date = test_date
         result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -132,23 +111,11 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_equity_live_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_equity_live_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -157,23 +124,11 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_equity_live_open_interest_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_equity_live_open_interest_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -182,23 +137,11 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_equity_live_derivative_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_equity_live_derivative_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -207,20 +150,34 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_equity_live_option_chain_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_equity_live_option_chain_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
+
+    @pytest.mark.unittest
+    def test_execute_equity_lookup_data_task(self):
+        obj = InitializeData("None")
+        obj.load_equity_data = MagicMock(return_value=(None, (1, 0)))
+        obj.load_index_data = MagicMock(return_value=(None, (1, 0)))
+        obj.load_equity_index_data = MagicMock(return_value=(None, (1, 0)))
+        obj.settings.save_task_execution_time = MagicMock()
+        EquityIndex.backend.delete_old_records = MagicMock()
+        Configurations.get_default_value_by_key = MagicMock(return_value=2000)
+
+        with patch.object(SettingLogic, "can_execute_task", return_value=False):
+            obj.execute_equity_lookup_data_task()
+            obj.load_equity_data.assert_not_called()
+            obj.load_index_data.assert_not_called()
+            obj.load_equity_index_data.assert_not_called()
+
+        with patch.object(SettingLogic, "can_execute_task", return_value=True):
+            obj.execute_equity_lookup_data_task()
+            obj.load_equity_data.assert_called()
+            obj.load_index_data.assert_called()
+            obj.load_equity_index_data.assert_called()
+            EquityIndex.backend.delete_old_records.assert_called_with(2000)
+            obj.settings.save_task_execution_time.assert_called_with(
+                AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
+            )

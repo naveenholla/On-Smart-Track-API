@@ -28,5 +28,15 @@
         "key": "DATAPULL_INDICES_EOD_DATA_PAUSE_HOURS",
         "value": "20"
     }
+},
+{
+    "model": "lookup.setting",
+    "pk": 4,
+    "fields": {
+        "updated_at": "2022-10-30T07:34:07.290Z",
+        "created_at": "2022-10-30T07:34:07.290Z",
+        "key": "DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS",
+        "value": "200"
+    }
 }
 ]

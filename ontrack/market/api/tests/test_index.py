@@ -3,7 +3,11 @@ import pytest
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.livedata import LiveData
 from ontrack.market.api.logic.lookup import InitializeData
-from ontrack.market.api.tests.test_base import test_date
+from ontrack.market.api.tests.test_base import (
+    assert_record_creation,
+    assert_record_updation,
+    test_date,
+)
 from ontrack.market.models.index import (
     IndexDerivativeEndOfDay,
     IndexEndOfDay,
@@ -64,13 +68,7 @@ class TestPullIndexData:
 
         # check update logic
         result = self.initializeData.load_index_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -80,24 +78,12 @@ class TestPullIndexData:
 
         date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_index_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -107,24 +93,12 @@ class TestPullIndexData:
 
         date = test_date
         result = self.endofdaydata.load_index_derivative_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         date = test_date
         result = self.endofdaydata.load_index_derivative_eod_data(date, True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -133,23 +107,11 @@ class TestPullIndexData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_index_live_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_index_live_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -158,23 +120,11 @@ class TestPullIndexData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_index_live_open_interest_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_index_live_open_interest_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -183,23 +133,11 @@ class TestPullIndexData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_index_live_derivative_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_index_live_derivative_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -208,20 +146,8 @@ class TestPullIndexData:
         assert self.exchange_fixture.symbol is not None
 
         result = self.livedata.load_index_live_option_chain_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created > 0
-        assert record_updated == 0
+        assert_record_creation(result)
 
         # check update logic
         result = self.livedata.load_index_live_option_chain_data(True)
-        assert result is not None
-        records = result[0]
-        assert len(records) > 0
-        record_created = result[1][0]
-        record_updated = result[1][1]
-        assert record_created == 0
-        assert record_updated > 0
+        assert_record_updation(result)

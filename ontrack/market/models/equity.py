@@ -8,6 +8,7 @@ from ontrack.market.managers.equity import (
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
+    EntityCalcutatedValues,
     EntityLiveData,
     EntityLiveFuture,
     EntityLiveOpenInterest,
@@ -38,7 +39,7 @@ class EquityEndOfDay(TradingInformation):
         return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
 
 
-class EquityEndOfDayCalcutated(BaseModel):
+class EquityEodCalcutatedValues(EntityCalcutatedValues):
     entity = models.ForeignKey(
         Equity, related_name="eod_calculated_data", on_delete=models.CASCADE
     )
@@ -47,8 +48,6 @@ class EquityEndOfDayCalcutated(BaseModel):
     average_volumn = models.DecimalField(**numeric_field_values)
     average_delivery_percentage = models.DecimalField(**numeric_field_values)
     average_open_interest = models.DecimalField(**numeric_field_values)
-    date = models.DateField()
-    pull_date = models.DateTimeField(auto_now=True)
 
     backend = EquityEndOfDayBackendManager()
 

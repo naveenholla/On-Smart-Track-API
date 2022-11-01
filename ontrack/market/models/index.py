@@ -8,6 +8,7 @@ from ontrack.market.managers.index import (
 )
 from ontrack.market.models.base import (
     DerivativeEndOfDay,
+    EntityCalcutatedValues,
     EntityLiveData,
     EntityLiveFuture,
     EntityLiveOpenInterest,
@@ -27,6 +28,21 @@ class IndexEndOfDay(TradingInformation):
     index_pe = models.DecimalField(**numeric_field_values)
     index_pb = models.DecimalField(**numeric_field_values)
     index_div_yield = models.DecimalField(**numeric_field_values)
+
+    backend = IndexEndOfDayBackendManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+        unique_together = ("entity", "date")
+
+    def __str__(self):
+        return f"{self.entity.name}-{self.date.strftime('%d/%m/%Y')}"
+
+
+class IndexEodCalcutatedValues(EntityCalcutatedValues):
+    entity = models.ForeignKey(
+        Index, related_name="eod_calculated_data", on_delete=models.CASCADE
+    )
 
     backend = IndexEndOfDayBackendManager()
 

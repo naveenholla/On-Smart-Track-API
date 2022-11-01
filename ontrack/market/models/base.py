@@ -166,3 +166,32 @@ class EntityLiveOptionChain(BaseModel):
 
     class Meta:
         abstract = True
+
+
+class EntityCalcutatedValues(BaseModel):
+    pivot = models.DecimalField(**numeric_field_values)
+    central_pivot_range = models.DecimalField(**numeric_field_values)
+    average_central_pivot_range = models.DecimalField(**numeric_field_values)
+    candle_type = models.CharField(max_length=100)
+    relative_strength = models.DecimalField(**numeric_field_values)
+    relative_strength_indicator = models.DecimalField(**numeric_field_values)
+
+    sma_5 = models.DecimalField(**numeric_field_values)
+    sma_20 = models.DecimalField(**numeric_field_values)
+    sma_50 = models.DecimalField(**numeric_field_values)
+    sma_100 = models.DecimalField(**numeric_field_values)
+    sma_200 = models.DecimalField(**numeric_field_values)
+
+    ema_5 = models.DecimalField(**numeric_field_values)
+    ema_20 = models.DecimalField(**numeric_field_values)
+    ema_50 = models.DecimalField(**numeric_field_values)
+    ema_100 = models.DecimalField(**numeric_field_values)
+    ema_200 = models.DecimalField(**numeric_field_values)
+
+    standard_deviation = models.DecimalField(**numeric_field_values)
+
+    date = models.DateField()
+    pull_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True

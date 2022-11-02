@@ -22,6 +22,11 @@ class DateTimeHelper:
         return timezone.now()
 
     @staticmethod
+    def current_dt_display_str() -> str:
+        cdt = DateTimeHelper.current_date_time()
+        return DateTimeHelper.datetime_to_display_str(cdt)
+
+    @staticmethod
     def current_date() -> datetime:
         return DateTimeHelper.current_date_time().replace(
             hour=0, minute=0, second=0, microsecond=0
@@ -114,6 +119,12 @@ class DateTimeHelper:
         if dateFormat is not None and len(dateFormat) > 0:
             f = dateFormat
         return dateTimeObj.strftime(f)
+
+    @staticmethod
+    def datetime_to_display_str(date) -> str:
+        f = Configurations.get_default_value_by_key("display_date_time_format")
+        cdt_str = DateTimeHelper.datetime_to_str(date, f)
+        return cdt_str
 
     @staticmethod
     def str_to_datetime(datetimeStr, dateFormat=None, time_zone=None) -> datetime:

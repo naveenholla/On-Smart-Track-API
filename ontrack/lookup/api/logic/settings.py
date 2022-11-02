@@ -12,7 +12,7 @@ class SettingLogic:
         last_execute_date_str = AdminSetting.backend.get_setting(date_key)
 
         if last_execute_date_str is None:
-            return True
+            return True, dt.current_date_time()
 
         pause_hours = "0"
         if pause_hours_key is not None:
@@ -21,7 +21,7 @@ class SettingLogic:
 
         last_execute_date = dt.str_to_datetime(last_execute_date_str)
         nextRunDay = dt.get_future_date(date=last_execute_date, hours=pause_hours)
-        return dt.compare_current_date_time(nextRunDay, "gte")
+        return dt.compare_current_date_time(nextRunDay, "gte"), nextRunDay
 
     def save_task_execution_time(self, date_key, date=None):
         if date is None:

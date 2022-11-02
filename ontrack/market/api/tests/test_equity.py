@@ -20,7 +20,7 @@ from ontrack.market.models.equity import (
 )
 from ontrack.market.models.lookup import Equity, EquityIndex, Exchange
 from ontrack.utils.base.enum import AdminSettingKey
-from ontrack.utils.config import Configurations
+from ontrack.utils.datetime import DateTimeHelper as dt
 
 
 class TestPullEquityData:
@@ -162,25 +162,26 @@ class TestPullEquityData:
         obj.load_index_data = MagicMock(return_value=(None, (1, 0)))
         obj.load_equity_index_data = MagicMock(return_value=(None, (1, 0)))
         obj.settings.save_task_execution_time = MagicMock()
+        obj.settings.can_execute_task = MagicMock(
+            return_value=(False, dt.current_date_time())
+        )
 
-        obj.settings.can_execute_task = MagicMock(return_value=False)
-        obj.execute_equity_lookup_data_task()
+        obj.execute_market_lookup_data_task()
+
         obj.load_equity_data.assert_not_called()
         obj.load_index_data.assert_not_called()
         obj.load_equity_index_data.assert_not_called()
 
-        with patch.object(
-            Configurations, "get_default_value_by_key", return_value=2000
-        ):
-            with patch.object(
-                EquityIndex.backend, "delete_old_records", return_value=None
-            ):
-                obj.settings.can_execute_task = MagicMock(return_value=True)
-                obj.execute_equity_lookup_data_task()
-                obj.load_equity_data.assert_called()
-                obj.load_index_data.assert_called()
-                obj.load_equity_index_data.assert_called()
-                EquityIndex.backend.delete_old_records.assert_called_with(2000)
-                obj.settings.save_task_execution_time.assert_called_with(
-                    AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
-                )
+        with patch.object(EquityIndex.backend, "delete_old_records", return_value=None):
+            obj.settings.can_execute_task = MagicMock(
+                return_value=(True, dt.current_date_time())
+            )
+
+            obj.execute_market_lookup_data_task()
+
+            obj.load_equity_data.assert_called()
+            obj.load_index_data.assert_called()
+            obj.load_equity_index_data.assert_called()
+            obj.settings.save_task_execution_time.assert_called_with(
+                AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
+            )

@@ -26,11 +26,11 @@ class TestSettingData:
         with freeze_time(date):
             assert self.setting_logic.can_execute_task(
                 "Non-Existing-Key", "pause-hours-key"
-            )
+            )[0]
 
             self.setting_logic.save_task_execution_time(date_key)
-            assert not self.setting_logic.can_execute_task(date_key, pause_hour_key)
+            assert not self.setting_logic.can_execute_task(date_key, pause_hour_key)[0]
 
         date = dt.get_future_date(date, hours=201)
         with freeze_time(date):
-            assert self.setting_logic.can_execute_task(date_key, pause_hour_key)
+            assert self.setting_logic.can_execute_task(date_key, pause_hour_key)[0]

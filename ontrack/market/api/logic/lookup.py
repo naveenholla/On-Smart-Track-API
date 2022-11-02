@@ -17,6 +17,7 @@ from ontrack.utils.base.fixtures import FixtureData
 from ontrack.utils.base.manager import CommonLogic
 from ontrack.utils.config import Configurations
 from ontrack.utils.context import application_context, get_correlation_id
+from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
 
@@ -108,7 +109,26 @@ class InitializeData:
     def load_initial_data(self):
         self.load_fixtures_all_data()
 
-    def execute_equity_lookup_data_task(self):
+    def execute_initial_lookup_data_task(self):
+        try:
+            self.logger.log_info("Started execute initial lookup task.")
+
+            output = ""
+            correlationid = get_correlation_id()
+            with application_context(
+                correlationid=correlationid, exchange_name=self.exchange_symbol
+            ):
+                self.load_fixtures_all_data()
+
+            self.logger.log_info(f"Completed. {output}")
+            return output
+
+        except Exception as e:
+            message = f"Exception - `{format(e)}`."
+            self.logger.log_critical(message=message)
+            raise Error_While_Data_Pull() from e
+
+    def execute_market_lookup_data_task(self):
         try:
             self.logger.log_info("Started execute equity lookup task.")
 
@@ -120,8 +140,12 @@ class InitializeData:
                 date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
                 pause_hour_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
 
-                if not self.settings.can_execute_task(date_key, pause_hour_key):
-                    message = "Task is paused for time being."
+                can_excute_task = self.settings.can_execute_task(
+                    date_key, pause_hour_key
+                )
+                next_run_date_str = dt.datetime_to_display_str(can_excute_task[1])
+                if not can_excute_task[0]:
+                    message = f"Task is paused for time being till {next_run_date_str}."
                     self.logger.log_info(message)
                     return message
 
@@ -163,8 +187,12 @@ class InitializeData:
                 date_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_DATE
                 pause_hour_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
 
-                if not self.settings.can_execute_task(date_key, pause_hour_key):
-                    message = "Task is paused for time being."
+                can_excute_task = self.settings.can_execute_task(
+                    date_key, pause_hour_key
+                )
+                next_run_date_str = dt.datetime_to_display_str(can_excute_task[1])
+                if not can_excute_task[0]:
+                    message = f"Task is paused for time being till {next_run_date_str}."
                     self.logger.log_info(message)
                     return message
 

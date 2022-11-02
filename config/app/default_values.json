@@ -2,6 +2,7 @@
     "default_date_format": "%Y-%m-%d",
     "default_time_format": "%H:%M:%S",
     "default_date_time_format": "%Y-%m-%d %H:%M:%S.%f %z",
+    "display_date_time_format": "%a, %d-%b-%Y %I:%M %p %z(%Z)",
     "default_datapull_equity_lookup_pause": 5,
     "lookup_data_older_than_days_can_be_deleted": 5,
     "days_for_delete_equity_eod_data": 750,

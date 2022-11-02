@@ -9,6 +9,7 @@ from ontrack.utils.base.mixins import (
     StaffEditorPermissionMixin,
     SuperAdminPermissionMixin,
 )
+from ontrack.utils.datetime import DateTimeHelper as dt
 
 
 class ExchangeListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
@@ -21,12 +22,38 @@ class ExchangeDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView
     serializer_class = lookup.ExchangeDetailsSerializer
 
 
-class EndOfDayTaskAPIView(SuperAdminPermissionMixin, APIView):
+class InitialDataTaskAPIView(SuperAdminPermissionMixin, APIView):
+    def put(self, request, *args, **kwargs):
+        obj = InitializeData("")
+        result = obj.execute_initial_lookup_data_task()
+        return Response(
+            data={"datetime": dt.current_dt_display_str(), "result": result}
+        )
+
+
+class HolidaysLookupDataTaskAPIView(SuperAdminPermissionMixin, APIView):
     def put(self, request, *args, **kwargs):
         exchange = request.data.get("exchange")
-        task_name = request.data.get("task_name")
         obj = InitializeData(exchange)
-        result = obj.execute_equity_lookup_data_task()
+        result = obj.execute_holidays_lookup_data_task()
         return Response(
-            data={"result": result, "exchange": exchange, "task_name": task_name}
+            data={
+                "datetime": dt.current_dt_display_str(),
+                "exchange": exchange,
+                "result": result,
+            }
+        )
+
+
+class MarketLookupDataTaskAPIView(SuperAdminPermissionMixin, APIView):
+    def put(self, request, *args, **kwargs):
+        exchange = request.data.get("exchange")
+        obj = InitializeData(exchange)
+        result = obj.execute_market_lookup_data_task()
+        return Response(
+            data={
+                "datetime": dt.current_dt_display_str(),
+                "exchange": exchange,
+                "result": result,
+            }
         )

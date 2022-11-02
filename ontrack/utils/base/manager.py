@@ -2,6 +2,9 @@ from django.db import models
 
 
 class BackendManagerAbstarct(models.Manager):
+    def unique_entity(self, uid=None):
+        return self.get_queryset().unique_entity(uid)
+
     def unique_search(self, symbol=None, name=None):
         return self.get_queryset().unique_search(symbol=symbol, name=name)
 

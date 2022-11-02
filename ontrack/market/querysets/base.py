@@ -5,6 +5,14 @@ from ontrack.utils.datetime import DateTimeHelper as dt
 
 
 class BaseEntityQuerySet(models.QuerySet):
+    def unique_entity(self, uid):
+        if uid is None:
+            return self.none()
+
+        lookups = Q(id=uid)
+
+        return self.filter(lookups)
+
     def unique_search(self, symbol=None, name=None):
         if symbol is None and name is None:
             return self.none()

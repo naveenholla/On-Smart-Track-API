@@ -64,7 +64,13 @@ class MarketDayTypeSerializer(NonNullModelSerializer):
         ]
 
 
-class ExchangeSerializer(NonNullModelSerializer):
+class ExchangeListCreateSerializer(NonNullModelSerializer):
+    class Meta:
+        model = Exchange
+        fields = ["id", "name", "symbol", "start_time", "end_time", "data_refresh_time"]
+
+
+class ExchangeDetailsSerializer(NonNullModelSerializer):
     holiday_categories = MarketDayCategorySerializer(many=True)
     timezone = serializers.SerializerMethodField(read_only=True)
 

@@ -1,3 +1,4 @@
+from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
 from ontrack.market.api.data.participant import PullParticipantData
@@ -12,10 +13,15 @@ from ontrack.utils.base.enum import AdminSettingKey, HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
+from ontrack.utils.logger import ApplicationLogger
+from ontrack.utils.numbers import NumberHelper as nh
 
 
 class EndOfDayData(BaseLogic):
     def __init__(self, exchange_symbol: str):
+        self.logger = ApplicationLogger()
+        self.settings = SettingLogic()
+
         self.exchange_symbol = exchange_symbol
 
         self.exchange_qs = Exchange.backend.get_queryset()
@@ -32,6 +38,8 @@ class EndOfDayData(BaseLogic):
 
         self.participant_qs = ParticipantActivity.backend.get_queryset()
         self.participant_stats_qs = ParticipantStatsActivity.backend.get_queryset()
+
+        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
 
     def load_equity_eod_data(self, date, save_data=True):
         pull_equity_obj = PullEquityData(
@@ -121,12 +129,15 @@ class EndOfDayData(BaseLogic):
 
         self.load_participant_eod_data(date)
 
-    def execute_pull_equity_eod_data_task(self):
-        output = ""
+    def execute_equity_eod_data_task(self):
+        output = []
         with application_context(
-            exchange_name=self.exchange_symbol,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
+            if self.exchange is None:
+                return "Exchange is required."
+
             date_key = AdminSettingKey.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
             pause_hour_key = AdminSettingKey.DATAPULL_EOD_DATA_PAUSE_HOURS
             default_value_key = AdminSettingKey.DEFAULT_START_DATE_EQUITY_DATA_PULL
@@ -140,35 +151,36 @@ class EndOfDayData(BaseLogic):
             pause_hours = self.settings.get_by_key(
                 AdminSettingKey.DATAPULL_EOD_DATA_PAUSE_HOURS
             )
+            pause_hours = nh.str_to_float(pause_hours)
             run_date = cet[2]
             currentdate = dt.current_date()
 
             self.logger.log_debug(f"Current Date:{currentdate}")
             self.logger.log_debug(f"Date:{run_date}")
 
-            while run_date <= currentdate:
+            while dt.compare_date_time(run_date, currentdate, "lte"):
                 self.logger.log_debug(f"Processing Date:{run_date}")
-                next_run_date = dt.get_future_date(run_date, hours=pause_hours)
-                run_date_str = dt.current_dt_display_str(run_date)
+                run_date_str = dt.datetime_to_display_str(run_date)
 
                 if dt.is_holiday(run_date):
-                    run_date = next_run_date
-                    message = f"[{run_date_str} is holiday.]"
-                    output += message
+                    self.settings.save_task_execution_time(date_key, run_date)
+                    run_date = dt.get_future_date(run_date, hours=pause_hours)
+                    message = "It a is holiday."
+                    output.append(self.message_creator(run_date_str, message))
                     self.logger.log_info(message)
                     continue
 
                 if not dt.is_data_refreshed(run_date):
-                    run_date = next_run_date
-                    message = f"[{run_date_str} is not refreshed yet.]"
-                    output += message
+                    run_date = dt.get_future_date(run_date, hours=pause_hours)
+                    message = "Data is not refreshed yet."
+                    output.append(self.message_creator(run_date_str, message))
                     self.logger.log_info(message)
                     continue
 
                 result = self.load_equity_eod_data(run_date)
-                output += self.message_creator(f"{run_date_str}", result)
-
-                run_date = next_run_date
+                output.append(self.message_creator(run_date_str, result))
                 self.settings.save_task_execution_time(date_key, run_date)
+
+                run_date = dt.get_future_date(run_date, hours=pause_hours)
 
             return output

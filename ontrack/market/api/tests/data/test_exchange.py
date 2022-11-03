@@ -1,11 +1,8 @@
-from unittest.mock import MagicMock, patch
-
 import pytest
 from freezegun import freeze_time
 
-from ontrack.market.api.logic.lookup import MarketLookupData
-from ontrack.market.models.lookup import EquityIndex, Exchange
-from ontrack.utils.base.enum import AdminSettingKey, HolidayCategoryType
+from ontrack.market.models.lookup import Exchange
+from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
 
@@ -154,59 +151,3 @@ class TestExchangeData:
             date = dt.get_date_time(2022, 10, 20, 16, 15, 1)
             with freeze_time(date):
                 assert dt.is_market_close_for_the_day()
-
-    @pytest.mark.unittest
-    def test_execute_market_lookup_data_task(self):
-        obj = MarketLookupData("None")
-        obj.load_equity_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_index_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_equity_index_data = MagicMock(return_value=(None, (1, 0)))
-        obj.settings.save_task_execution_time = MagicMock()
-        obj.settings.can_execute_task = MagicMock(
-            return_value=(False, dt.current_date_time())
-        )
-
-        obj.execute_market_lookup_data_task()
-
-        obj.load_equity_data.assert_not_called()
-        obj.load_index_data.assert_not_called()
-        obj.load_equity_index_data.assert_not_called()
-
-        with patch.object(EquityIndex.backend, "delete_old_records", return_value=None):
-            obj.settings.can_execute_task = MagicMock(
-                return_value=(True, dt.current_date_time())
-            )
-
-            obj.execute_market_lookup_data_task()
-
-            obj.load_equity_data.assert_called()
-            obj.load_index_data.assert_called()
-            obj.load_equity_index_data.assert_called()
-            obj.settings.save_task_execution_time.assert_called_with(
-                AdminSettingKey.DATAPULL_EQUITY_LOOKUP_LAST_PULL_DATE
-            )
-
-    @pytest.mark.unittest
-    def test_execute_holidays_lookup_data_task(self):
-        obj = MarketLookupData("None")
-        obj.load_holidays_data = MagicMock(return_value=(None, (1, 0)))
-        obj.settings.save_task_execution_time = MagicMock()
-        obj.settings.can_execute_task = MagicMock(
-            return_value=(False, dt.current_date_time())
-        )
-
-        obj.execute_holidays_lookup_data_task()
-
-        obj.load_holidays_data.assert_not_called()
-
-        with patch.object(EquityIndex.backend, "delete_old_records", return_value=None):
-            obj.settings.can_execute_task = MagicMock(
-                return_value=(True, dt.current_date_time())
-            )
-
-            obj.execute_holidays_lookup_data_task()
-
-            obj.load_holidays_data.assert_called()
-            obj.settings.save_task_execution_time.assert_called_with(
-                AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
-            )

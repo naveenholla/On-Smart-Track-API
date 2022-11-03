@@ -17,6 +17,7 @@ from ontrack.utils.base.fixtures import FixtureData
 from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.logger import ApplicationLogger
+from ontrack.utils.numbers import NumberHelper as nh
 
 
 class MarketLookupData(BaseLogic):
@@ -103,7 +104,7 @@ class MarketLookupData(BaseLogic):
         return result, records_stats
 
     def execute_market_lookup_data_task(self):
-        output = ""
+        output = []
         with application_context(exchange_name=self.exchange_symbol):
             date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_LAST_PULL_DATE
             pause_hour_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
@@ -114,16 +115,16 @@ class MarketLookupData(BaseLogic):
                 return message
 
             result = self.load_equity_data()
-            output += self.message_creator("Equity", result)
+            output.append(self.message_creator("Equity", result))
 
             result = self.load_index_data()
-            output += self.message_creator("Index", result)
+            output.append(self.message_creator("Index", result))
 
             result = self.load_equity_index_data()
-            output += self.message_creator("Equity Index", result)
+            output.append(self.message_creator("Equity Index", result))
 
             key = AdminSettingKey.LOOKUP_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
-            days_count = self.settings.get_by_key(key)
+            days_count = nh.str_to_float(self.settings.get_by_key(key))
             EquityIndex.backend.delete_old_records(days_count)
 
             self.settings.save_task_execution_time(date_key)
@@ -131,7 +132,7 @@ class MarketLookupData(BaseLogic):
         return output
 
     def execute_holidays_lookup_data_task(self):
-        output = ""
+        output = []
         with application_context(exchange_name=self.exchange_symbol):
             date_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
             pause_hour_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
@@ -142,7 +143,7 @@ class MarketLookupData(BaseLogic):
                 return message
 
             result = self.load_holidays_data()
-            output += self.message_creator("Holidays", result)
+            output.append(self.message_creator("Holidays", result))
 
             self.settings.save_task_execution_time(date_key)
 

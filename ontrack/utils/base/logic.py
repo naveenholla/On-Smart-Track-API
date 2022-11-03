@@ -24,7 +24,15 @@ class BaseLogic:
         return True, None, next_run_date
 
     def message_creator(self, module_name, result):
-        return f"[{module_name} - {result[1][0]} created, {result[1][1]} updated.]"
+        output = {}
+        output["module"] = module_name
+        if result is not None:
+            if isinstance(result, str):
+                output["message"] = result
+            else:
+                output["created"] = result[1][0]
+                output["updated"] = result[1][1]
+        return output
 
     def execute_initial_lookup_data_task(self):
         with application_context():

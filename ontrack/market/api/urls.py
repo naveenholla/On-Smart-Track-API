@@ -1,6 +1,6 @@
 from django.urls import path
 
-from ontrack.market.api.views import endofday, lookup
+from ontrack.market.api.views import endofday, equity, lookup
 
 app_name = "api_market"
 urlpatterns = [
@@ -13,6 +13,16 @@ urlpatterns = [
         "exchange/<str:pk>/",
         view=lookup.ExchangeDetailAPIView.as_view(),
         name="exchange-detail",
+    ),
+    path(
+        "equity/",
+        view=equity.EquityListCreateAPIView.as_view(),
+        name="equity-list",
+    ),
+    path(
+        "equity/<str:slug__iexact>/",
+        view=equity.EquityDetailAPIView.as_view(),
+        name="equity-detail",
     ),
     path(
         "task/eod/equity/",

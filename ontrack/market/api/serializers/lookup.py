@@ -3,6 +3,7 @@ from collections import OrderedDict
 from rest_framework import serializers
 
 from ontrack.market.models.lookup import (
+    Equity,
     Exchange,
     MarketDay,
     MarketDayCategory,
@@ -89,3 +90,20 @@ class ExchangeDetailsSerializer(NonNullModelSerializer):
 
     def get_timezone(self, obj: Exchange):
         return obj.timezone_name
+
+
+class EquityListCreateSerializer(NonNullModelSerializer):
+    class Meta:
+        model = Equity
+        fields = [
+            "id",
+            "name",
+            "symbol",
+            "chart_symbol",
+            "slug",
+            "lot_size",
+            "date",
+            "isin_number",
+            "industry",
+            "exchange",
+        ]

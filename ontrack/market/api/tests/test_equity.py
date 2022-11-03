@@ -1,10 +1,8 @@
-from unittest.mock import MagicMock, patch
-
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.livedata import LiveData
-from ontrack.market.api.logic.lookup import InitializeData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.tests.test_base import (
     assert_record_creation,
     assert_record_updation,
@@ -18,9 +16,7 @@ from ontrack.market.models.equity import (
     EquityLiveOpenInterest,
     EquityLiveOptionChain,
 )
-from ontrack.market.models.lookup import Equity, EquityIndex, Exchange
-from ontrack.utils.base.enum import AdminSettingKey
-from ontrack.utils.datetime import DateTimeHelper as dt
+from ontrack.market.models.lookup import Equity, Exchange
 
 
 class TestPullEquityData:
@@ -40,9 +36,9 @@ class TestPullEquityData:
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
-        self.initializeData = InitializeData(exchange_fixture.symbol)
+        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
 
-        self.initializeData.load_equity_data()
+        self.marketlookupdata.load_equity_data()
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
         self.livedata = LiveData(exchange_fixture.symbol)
 
@@ -52,7 +48,7 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.initializeData.load_equity_data(True)
+        result = self.marketlookupdata.load_equity_data(True)
         assert result is not None
         records = result[0]
         assert len(records) > 0
@@ -70,7 +66,7 @@ class TestPullEquityData:
         assert stock2["id"] == equity_fixture.id
 
         # check update logic
-        result = self.initializeData.load_equity_data(True)
+        result = self.marketlookupdata.load_equity_data(True)
         assert_record_updation(result)
 
     @pytest.mark.integration
@@ -154,34 +150,3 @@ class TestPullEquityData:
         # check update logic
         result = self.livedata.load_equity_live_option_chain_data(True)
         assert_record_updation(result)
-
-    @pytest.mark.unittest
-    def test_execute_equity_lookup_data_task(self):
-        obj = InitializeData("None")
-        obj.load_equity_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_index_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_equity_index_data = MagicMock(return_value=(None, (1, 0)))
-        obj.settings.save_task_execution_time = MagicMock()
-        obj.settings.can_execute_task = MagicMock(
-            return_value=(False, dt.current_date_time())
-        )
-
-        obj.execute_market_lookup_data_task()
-
-        obj.load_equity_data.assert_not_called()
-        obj.load_index_data.assert_not_called()
-        obj.load_equity_index_data.assert_not_called()
-
-        with patch.object(EquityIndex.backend, "delete_old_records", return_value=None):
-            obj.settings.can_execute_task = MagicMock(
-                return_value=(True, dt.current_date_time())
-            )
-
-            obj.execute_market_lookup_data_task()
-
-            obj.load_equity_data.assert_called()
-            obj.load_index_data.assert_called()
-            obj.load_equity_index_data.assert_called()
-            obj.settings.save_task_execution_time.assert_called_with(
-                AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
-            )

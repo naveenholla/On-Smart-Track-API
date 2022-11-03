@@ -2,7 +2,7 @@ import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.livedata import LiveData
-from ontrack.market.api.logic.lookup import InitializeData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.tests.test_base import (
     assert_record_creation,
     assert_record_updation,
@@ -34,9 +34,9 @@ class TestPullIndexData:
     @pytest.fixture(autouse=True)
     def index_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
-        self.initializeData = InitializeData(exchange_fixture.symbol)
+        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
 
-        self.initializeData.load_index_data()
+        self.marketlookupdata.load_index_data()
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
         self.livedata = LiveData(exchange_fixture.symbol)
 
@@ -46,7 +46,7 @@ class TestPullIndexData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.initializeData.load_index_data(True)
+        result = self.marketlookupdata.load_index_data(True)
         assert result is not None
         records = result[0]
         assert len(records) > 0
@@ -67,7 +67,7 @@ class TestPullIndexData:
         assert stock2["id"] == index_fixture.id
 
         # check update logic
-        result = self.initializeData.load_index_data(True)
+        result = self.marketlookupdata.load_index_data(True)
         assert_record_updation(result)
 
     @pytest.mark.integration

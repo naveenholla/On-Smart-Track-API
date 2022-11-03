@@ -1,6 +1,6 @@
 from django.db import models
 
-from ontrack.utils.base.enum import AdminSettingKey
+from ontrack.utils.base.enum import AdminSettingKey, SettingKeyType
 from ontrack.utils.base.model import BaseModel
 
 from .manager import SettingBackendManager
@@ -21,6 +21,9 @@ class Currency(BaseModel):
 class Setting(BaseModel):
     key = models.CharField(max_length=50, choices=AdminSettingKey.choices, unique=True)
     value = models.CharField(max_length=200)
+    key_type = models.CharField(
+        max_length=50, choices=SettingKeyType.choices, blank=True, null=True
+    )
 
     backend = SettingBackendManager()
 

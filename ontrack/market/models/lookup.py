@@ -62,7 +62,7 @@ class Exchange(BaseModel):
         verbose_name_plural = "Exchanges"
 
     def __str__(self):
-        return self.name
+        return self.symbol.upper()
 
 
 class MarketDayType(BaseModel):
@@ -77,7 +77,7 @@ class MarketDayType(BaseModel):
         verbose_name_plural = "Market Day Types"
 
     def __str__(self):
-        return f"{self.exchange} - {self.name}"
+        return f"{self.name}"
 
 
 class MarketDayCategory(BaseModel):
@@ -100,7 +100,7 @@ class MarketDayCategory(BaseModel):
         verbose_name_plural = "Market Day Categories"
 
     def __str__(self):
-        return f"{self.display_name} ({self.code})"
+        return f"{self.exchange} - {self.display_name} ({self.code})"
 
 
 class MarketDay(BaseModel):
@@ -128,7 +128,7 @@ class MarketDay(BaseModel):
         verbose_name_plural = "Market Days"
 
     def __str__(self):
-        name = f"{self.category} - "
+        name = f"{self.category} - {self.daytype} - "
         if self.date is not None:
             name += f"{name}{self.date.strftime('%d/%m/%Y %H:%M:%S')}"
         else:
@@ -231,6 +231,9 @@ class Equity(MarketEntity):
         verbose_name = "Equity"
         verbose_name_plural = "Equities"
 
+    def __str__(self):
+        return self.symbol.upper()
+
 
 class Index(MarketEntity):
     exchange = models.ForeignKey(
@@ -245,6 +248,9 @@ class Index(MarketEntity):
     class Meta(BaseModel.Meta):
         verbose_name = "Index"
         verbose_name_plural = "Indices"
+
+    def __str__(self):
+        return self.symbol.upper()
 
 
 class EquityIndex(BaseModel):

@@ -1,6 +1,6 @@
 import pytest
 
-from ontrack.market.api.logic.lookup import InitializeData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.tests.factories import ExchangeFactory
 from ontrack.market.models.lookup import Exchange
 
@@ -8,7 +8,7 @@ from ontrack.market.models.lookup import Exchange
 @pytest.fixture(scope="session")
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        obj = InitializeData("nse")
+        obj = MarketLookupData("nse")
         obj.load_fixtures_data()
 
 

@@ -1,14 +1,9 @@
 from django.db import transaction
 
 from ontrack.lookup.models import Setting as AdminSetting
-from ontrack.utils.base.enum import (
-    AdminSettingKey,
-    ExchangeType,
-    HolidayCategoryType,
-    MarketDayTypeEnum,
-)
+from ontrack.utils.base.enum import AdminSettingKey, ExchangeType, HolidayCategoryType
 from ontrack.utils.config import Configurations
-from ontrack.utils.context import application_context, get_correlation_id
+from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper
 from ontrack.utils.exception import Error_While_Data_Pull
 from ontrack.utils.logger import ApplicationLogger
@@ -24,7 +19,7 @@ class IndicesDataPullLogic:
         self.logger = ApplicationLogger()
 
     def get_pull_indices_eod_data_task(self):
-        date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
+        date_key = AdminSettingKey.DATAPULL_INDICES_EOD_LAST_PULL_DATE
         last_pull_date = AdminSetting.backend.get_setting(date_key)
 
         if last_pull_date is None:
@@ -37,7 +32,7 @@ class IndicesDataPullLogic:
         return DateTimeHelper.str_to_datetime(last_pull_date)
 
     def save_pull_indices_eod_data_task_time(self, date):
-        date_key = AdminSettingKey.DATAPULL_INDICES_EOD_DATA_DATE
+        date_key = AdminSettingKey.DATAPULL_INDICES_EOD_LAST_PULL_DATE
         AdminSetting.backend.save_setting(
             date_key, DateTimeHelper.datetime_to_str(date)
         )
@@ -205,12 +200,9 @@ class IndicesDataPullLogic:
     def execute_pull_indices_eod_data_task(self):
         try:
             output = ""
-            correlationid = get_correlation_id()
             with application_context(
-                correlationid=correlationid,
                 exchange_name=ExchangeType.NSE,
                 holiday_category_name=HolidayCategoryType.EQUITIES,
-                holiday_day_type=MarketDayTypeEnum.TRADING_HOLIDAYS,
             ):
                 self.logger.log_info("Started execute_pull_indices_eod_data_task task.")
 

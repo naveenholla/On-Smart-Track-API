@@ -2,7 +2,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ontrack.market.api.logic.lookup import InitializeData
+from ontrack.lookup.api.logic.lookup import InitializeData as lookup_initilization
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.serializers import lookup
 from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.mixins import (
@@ -24,17 +25,23 @@ class ExchangeDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView
 
 class InitialDataTaskAPIView(SuperAdminPermissionMixin, APIView):
     def put(self, request, *args, **kwargs):
-        obj = InitializeData("")
+        obj = lookup_initilization()
+        result2 = obj.execute_initial_lookup_data_task()
+
+        obj = MarketLookupData("")
         result = obj.execute_initial_lookup_data_task()
         return Response(
-            data={"datetime": dt.current_dt_display_str(), "result": result}
+            data={
+                "datetime": dt.current_dt_display_str(),
+                "result": f"{result} {result2}",
+            }
         )
 
 
 class HolidaysLookupDataTaskAPIView(SuperAdminPermissionMixin, APIView):
     def put(self, request, *args, **kwargs):
         exchange = request.data.get("exchange")
-        obj = InitializeData(exchange)
+        obj = MarketLookupData(exchange)
         result = obj.execute_holidays_lookup_data_task()
         return Response(
             data={
@@ -48,7 +55,7 @@ class HolidaysLookupDataTaskAPIView(SuperAdminPermissionMixin, APIView):
 class MarketLookupDataTaskAPIView(SuperAdminPermissionMixin, APIView):
     def put(self, request, *args, **kwargs):
         exchange = request.data.get("exchange")
-        obj = InitializeData(exchange)
+        obj = MarketLookupData(exchange)
         result = obj.execute_market_lookup_data_task()
         return Response(
             data={

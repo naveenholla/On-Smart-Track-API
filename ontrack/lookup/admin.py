@@ -11,8 +11,10 @@ class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "key",
         "value",
+        "key_type",
     )
     search_fields = (
         "key__icontains",
         "value__icontains",
     )
+    list_filter = ("key_type",)

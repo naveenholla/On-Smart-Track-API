@@ -1,7 +1,7 @@
 from ontrack.lookup.api.logic.lookup import InitializeData as lookup_initialization
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.livedata import LiveData
-from ontrack.market.api.logic.lookup import InitializeData as market_initialization
+from ontrack.market.api.logic.lookup import MarketLookupData as market_initialization
 from ontrack.utils.datetime import DateTimeHelper
 
 

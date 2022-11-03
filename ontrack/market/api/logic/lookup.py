@@ -14,20 +14,16 @@ from ontrack.market.models.lookup import (
 )
 from ontrack.utils.base.enum import AdminSettingKey
 from ontrack.utils.base.fixtures import FixtureData
-from ontrack.utils.base.manager import CommonLogic
-from ontrack.utils.config import Configurations
-from ontrack.utils.context import application_context, get_correlation_id
-from ontrack.utils.datetime import DateTimeHelper as dt
-from ontrack.utils.exception import Error_While_Data_Pull
+from ontrack.utils.base.logic import BaseLogic
+from ontrack.utils.context import application_context
 from ontrack.utils.logger import ApplicationLogger
 
 
-class InitializeData:
+class MarketLookupData(BaseLogic):
     def __init__(self, exchange_symbol):
         self.logger = ApplicationLogger()
-        self.commonobj = CommonLogic()
-        self.fixtureData = FixtureData()
         self.settings = SettingLogic()
+        self.fixtureData = FixtureData()
 
         self.exchange_symbol = exchange_symbol
 
@@ -71,7 +67,7 @@ class InitializeData:
 
         result = pull_equity_obj.pull_and_parse_lookup_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, Equity)
+            records_stats = self.create_or_update(result, Equity)
 
         return result, records_stats
 
@@ -83,7 +79,7 @@ class InitializeData:
         )
         result = pull_index_obj.pull_and_parse_lookup_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, Index)
+            records_stats = self.create_or_update(result, Index)
 
         return result, records_stats
 
@@ -93,7 +89,7 @@ class InitializeData:
         )
         result = pull_equity_index_obj.pull_and_parse_market_cap()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, EquityIndex)
+            records_stats = self.create_or_update(result, EquityIndex)
 
         return result, records_stats
 
@@ -103,110 +99,51 @@ class InitializeData:
         )
         result = holiday_obj.pull_parse_exchange_holidays()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, MarketDay)
+            records_stats = self.create_or_update(result, MarketDay)
         return result, records_stats
 
-    def load_initial_data(self):
-        self.load_fixtures_all_data()
-
-    def execute_initial_lookup_data_task(self):
-        try:
-            self.logger.log_info("Started execute initial lookup task.")
-
-            output = ""
-            correlationid = get_correlation_id()
-            with application_context(
-                correlationid=correlationid, exchange_name=self.exchange_symbol
-            ):
-                self.load_fixtures_all_data()
-
-            self.logger.log_info(f"Completed. {output}")
-            return output
-
-        except Exception as e:
-            message = f"Exception - `{format(e)}`."
-            self.logger.log_critical(message=message)
-            raise Error_While_Data_Pull() from e
-
     def execute_market_lookup_data_task(self):
-        try:
-            self.logger.log_info("Started execute equity lookup task.")
+        output = ""
+        with application_context(exchange_name=self.exchange_symbol):
+            date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_LAST_PULL_DATE
+            pause_hour_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
+            cet = self.can_execute_task(date_key, pause_hour_key)
+            if not cet[0]:
+                message = cet[1]
+                self.logger.log_info(message)
+                return message
 
-            output = ""
-            correlationid = get_correlation_id()
-            with application_context(
-                correlationid=correlationid, exchange_name=self.exchange_symbol
-            ):
-                date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_DATE
-                pause_hour_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
+            result = self.load_equity_data()
+            output += self.message_creator("Equity", result)
 
-                can_excute_task = self.settings.can_execute_task(
-                    date_key, pause_hour_key
-                )
-                next_run_date_str = dt.datetime_to_display_str(can_excute_task[1])
-                if not can_excute_task[0]:
-                    message = f"Task is paused for time being till {next_run_date_str}."
-                    self.logger.log_info(message)
-                    return message
+            result = self.load_index_data()
+            output += self.message_creator("Index", result)
 
-                result = self.load_equity_data()
-                output += f"[Equity - {result[1][0]} created, {result[1][1]} updated.]"
+            result = self.load_equity_index_data()
+            output += self.message_creator("Equity Index", result)
 
-                result = self.load_index_data()
-                output += f"[Index - {result[1][0]} created, {result[1][1]} updated.]"
+            key = AdminSettingKey.LOOKUP_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
+            days_count = self.settings.get_by_key(key)
+            EquityIndex.backend.delete_old_records(days_count)
 
-                result = self.load_equity_index_data()
-                output += (
-                    f"[Equity Index - {result[1][0]} created, {result[1][1]} updated.]"
-                )
+            self.settings.save_task_execution_time(date_key)
 
-                days_count = Configurations.get_default_value_by_key(
-                    AdminSettingKey.LOOKUP_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
-                )
-                EquityIndex.backend.delete_old_records(days_count)
-
-                self.settings.save_task_execution_time(date_key)
-
-            self.logger.log_info(f"Completed. {output}")
-            return output
-
-        except Exception as e:
-            message = f"Exception - `{format(e)}`."
-            self.logger.log_critical(message=message)
-            raise Error_While_Data_Pull() from e
+        return output
 
     def execute_holidays_lookup_data_task(self):
-        try:
-            self.logger.log_info("Started execute equity lookup task.")
+        output = ""
+        with application_context(exchange_name=self.exchange_symbol):
+            date_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
+            pause_hour_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
+            cet = self.can_execute_task(date_key, pause_hour_key)
+            if not cet[0]:
+                message = cet[1]
+                self.logger.log_info(message)
+                return message
 
-            output = ""
-            correlationid = get_correlation_id()
-            with application_context(
-                correlationid=correlationid, exchange_name=self.exchange_symbol
-            ):
-                date_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_DATE
-                pause_hour_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
+            result = self.load_holidays_data()
+            output += self.message_creator("Holidays", result)
 
-                can_excute_task = self.settings.can_execute_task(
-                    date_key, pause_hour_key
-                )
-                next_run_date_str = dt.datetime_to_display_str(can_excute_task[1])
-                if not can_excute_task[0]:
-                    message = f"Task is paused for time being till {next_run_date_str}."
-                    self.logger.log_info(message)
-                    return message
+            self.settings.save_task_execution_time(date_key)
 
-                result = self.load_holidays_data()
-                output += (
-                    f"[Holidays - {result[1][0]} created, {result[1][1]} updated.]"
-                )
-
-                self.settings.save_task_execution_time(date_key)
-
-            self.logger.log_info(f"Completed. {output}")
-            return output
-
-        except Exception as e:
-            message = f"Exception - `{format(e)}`."
-            self.logger.log_critical(message=message)
-            raise Error_While_Data_Pull() from e
+        return output

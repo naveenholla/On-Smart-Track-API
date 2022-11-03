@@ -14,7 +14,10 @@ def test_urls_config():
 @pytest.mark.unittest
 def test_get_default_values_config():
     get_default_values_config = Configurations.get_default_values_config()
-    assert "default_datapull_equity_lookup_pause" in get_default_values_config
+    assert "default_date_format" in get_default_values_config
+    assert "default_time_format" in get_default_values_config
+    assert "default_date_time_format" in get_default_values_config
+    assert "display_date_time_format" in get_default_values_config
 
 
 @pytest.mark.unittest

@@ -1,4 +1,5 @@
 from ontrack.utils.base.fixtures import FixtureData
+from ontrack.utils.context import application_context
 from ontrack.utils.logger import ApplicationLogger
 
 
@@ -14,5 +15,6 @@ class InitializeData:
 
         self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
 
-    def load_initial_data(self):
-        self.load_fixtures_all_data()
+    def execute_initial_lookup_data_task(self):
+        with application_context():
+            self.load_fixtures_all_data()

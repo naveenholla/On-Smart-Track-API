@@ -28,6 +28,8 @@ application_context_handler = ApplicationContextHandler()
 
 @contextmanager
 def application_context(**kwargs):
+    correlationid = get_correlation_id()
+    application_context_handler.add(correlationid=correlationid)
     application_context_handler.add(**kwargs)
 
     yield

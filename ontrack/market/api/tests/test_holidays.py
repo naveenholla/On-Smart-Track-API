@@ -1,7 +1,7 @@
 import pytest
 
 from ontrack.market.api.data.holidays import HolidayData
-from ontrack.market.api.logic.lookup import InitializeData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.lookup import (
     Exchange,
     MarketDay,
@@ -18,12 +18,12 @@ class TestPullHolidayData:
         self.category_qs = MarketDayCategory.backend.get_queryset()
         self.day_qs = MarketDay.backend.get_queryset()
 
-        self.initializeData = InitializeData(exchange_fixture.symbol)
+        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
 
     @pytest.mark.lookup_data
     @pytest.mark.integration
     def test_pull_parse_exchange_holidays(self):
-        self.initializeData.load_holidays_data()
+        self.marketlookupdata.load_holidays_data()
         holiday_obj = HolidayData(
             self.exchange_qs, self.daytype_qs, self.category_qs, self.day_qs
         )

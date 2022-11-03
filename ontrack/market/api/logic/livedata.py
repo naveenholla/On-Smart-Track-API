@@ -13,14 +13,13 @@ from ontrack.market.models.index import (
     IndexLiveOptionChain,
 )
 from ontrack.market.models.lookup import Equity, Exchange, Index
-from ontrack.utils.base.manager import CommonLogic
+from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.logger import ApplicationLogger
 
 
-class LiveData:
+class LiveData(BaseLogic):
     def __init__(self, exchange_symbol):
         self.logger = ApplicationLogger()
-        self.commonobj = CommonLogic()
         self.exchange_symbol = exchange_symbol
 
         self.exchange_qs = Exchange.backend.get_queryset()
@@ -51,7 +50,7 @@ class LiveData:
 
         result = pull_equity_obj.pull_parse_live_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, EquityLiveData)
+            records_stats = self.create_or_update(result, EquityLiveData)
 
         return result, records_stats
 
@@ -65,7 +64,7 @@ class LiveData:
 
         result = pull_index_obj.pull_parse_live_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(result, IndexLiveData)
+            records_stats = self.create_or_update(result, IndexLiveData)
 
         return result, records_stats
 
@@ -79,9 +78,7 @@ class LiveData:
 
         result = pull_equity_obj.pull_parse_live_open_interest_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, EquityLiveOpenInterest
-            )
+            records_stats = self.create_or_update(result, EquityLiveOpenInterest)
 
         return result, records_stats
 
@@ -95,9 +92,7 @@ class LiveData:
 
         result = pull_index_obj.pull_parse_live_open_interest_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, IndexLiveOpenInterest
-            )
+            records_stats = self.create_or_update(result, IndexLiveOpenInterest)
 
         return result, records_stats
 
@@ -111,9 +106,7 @@ class LiveData:
 
         result = pull_index_obj.pull_parse_live_derivative_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, IndexLiveDerivativeData
-            )
+            records_stats = self.create_or_update(result, IndexLiveDerivativeData)
 
         return result, records_stats
 
@@ -127,9 +120,7 @@ class LiveData:
 
         result = pull_equity_obj.pull_parse_live_derivative_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, EquityLiveDerivativeData
-            )
+            records_stats = self.create_or_update(result, EquityLiveDerivativeData)
 
         return result, records_stats
 
@@ -143,9 +134,7 @@ class LiveData:
 
         result = pull_index_obj.pull_parse_live_option_chain_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, IndexLiveOptionChain
-            )
+            records_stats = self.create_or_update(result, IndexLiveOptionChain)
 
         return result, records_stats
 
@@ -159,9 +148,7 @@ class LiveData:
 
         result = pull_equity_obj.pull_parse_live_option_chain_data()
         if save_data:
-            records_stats = self.commonobj.create_or_update(
-                result, EquityLiveOptionChain
-            )
+            records_stats = self.create_or_update(result, EquityLiveOptionChain)
 
         return result, records_stats
 

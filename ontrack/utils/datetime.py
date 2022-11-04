@@ -158,7 +158,7 @@ class DateTimeHelper:
         t = tz.gettz(time_zone)
         d = datetime.strptime(datetimeStr, f)
 
-        if f.lower().__contains__("%z"):
+        if not f.lower().__contains__("%z"):
             d = d.replace(tzinfo=t)
         else:
             d = d.astimezone(t)

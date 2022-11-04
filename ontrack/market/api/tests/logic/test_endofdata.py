@@ -5,6 +5,7 @@ from freezegun import freeze_time
 
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import ExchangeType
@@ -17,8 +18,11 @@ class TestLogicLookup:
         self.exchange_qs = Exchange.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def exchange_data_fixture(self, exchange_fixture):
+    def equity_index_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
+        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
+        self.marketlookupdata.load_equity_data()
+        self.marketlookupdata.load_index_data()
         self.settings = SettingLogic()
 
     @pytest.mark.unittest

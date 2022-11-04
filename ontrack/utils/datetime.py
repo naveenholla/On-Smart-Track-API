@@ -18,23 +18,31 @@ class DateTimeHelper:
     logger = ApplicationLogger()
 
     @staticmethod
-    def current_date_time() -> datetime:
-        return timezone.now()
+    def current_date_time(time_zone=None) -> datetime:
+        if time_zone is None:
+            exchangeObj = DateTimeHelper.get_exchange_object()
+            if exchangeObj:
+                time_zone = exchangeObj.timezone_name
+            else:
+                time_zone = "Asia/Kolkata"
+
+        t = tz.gettz(time_zone)
+        return timezone.now().astimezone(t)
 
     @staticmethod
-    def current_dt_display_str() -> str:
-        cdt = DateTimeHelper.current_date_time()
+    def current_dt_display_str(time_zone=None) -> str:
+        cdt = DateTimeHelper.current_date_time(time_zone)
         return DateTimeHelper.datetime_to_display_str(cdt)
 
     @staticmethod
-    def current_date() -> datetime:
-        return DateTimeHelper.current_date_time().replace(
+    def current_date(time_zone=None) -> datetime:
+        return DateTimeHelper.current_date_time(time_zone).replace(
             hour=0, minute=0, second=0, microsecond=0
         )
 
     @staticmethod
-    def current_time():
-        return DateTimeHelper.current_date_time().timetz()
+    def current_time(time_zone=None):
+        return DateTimeHelper.current_date_time(time_zone).timetz()
 
     @staticmethod
     def get_date_time(year, month, day, hour=0, minute=0, second=0, time_zone=None):
@@ -56,9 +64,10 @@ class DateTimeHelper:
         seconds=0,
         milliseconds=0,
         microseconds=0,
+        time_zone=None,
     ) -> datetime:
         if date is None:
-            date = DateTimeHelper.current_date_time()
+            date = DateTimeHelper.current_date_time(time_zone)
 
         time_threshold = date + timedelta(
             weeks=weeks,
@@ -81,9 +90,10 @@ class DateTimeHelper:
         seconds=0,
         milliseconds=0,
         microseconds=0,
+        time_zone=None,
     ) -> datetime:
         if date is None:
-            date = DateTimeHelper.current_date_time()
+            date = DateTimeHelper.current_date_time(time_zone)
 
         time_threshold = date - timedelta(
             weeks=weeks,
@@ -99,7 +109,7 @@ class DateTimeHelper:
     @staticmethod
     def set_time_to_date(hours, minutes, seconds, time_zone, dateTimeObj=None):
         if dateTimeObj is None:
-            dateTimeObj = DateTimeHelper.current_date_time()
+            dateTimeObj = DateTimeHelper.current_date_time(time_zone)
         from_zone = dateTimeObj.tzinfo
         to_zone = tz.gettz(time_zone)
         dateTimeObj = dateTimeObj.replace(tzinfo=to_zone)
@@ -109,9 +119,8 @@ class DateTimeHelper:
 
     @staticmethod
     def set_time_to_current_date(hours, minutes, seconds, time_zone):
-        return DateTimeHelper.set_time_to_date(
-            hours, minutes, seconds, time_zone, DateTimeHelper.current_date_time()
-        )
+        cdt = DateTimeHelper.current_date_time(time_zone)
+        return DateTimeHelper.set_time_to_date(hours, minutes, seconds, time_zone, cdt)
 
     @staticmethod
     def datetime_to_str(dateTimeObj: datetime, dateFormat: str = None) -> str:
@@ -149,7 +158,7 @@ class DateTimeHelper:
         t = tz.gettz(time_zone)
         d = datetime.strptime(datetimeStr, f)
 
-        if not datetimeStr.__contains__("+"):
+        if f.lower().__contains__("%z"):
             d = d.replace(tzinfo=t)
         else:
             d = d.astimezone(t)
@@ -343,16 +352,19 @@ class DateTimeHelper:
         )
 
     @staticmethod
-    def is_data_refreshed(dateTimeObj=None):
+    def is_data_refreshed(dateTimeObj=None, end_date=None):
         if dateTimeObj is None:
             dateTimeObj = DateTimeHelper.current_date_time()
 
         market_refresh_time = DateTimeHelper.get_market_refresh_time(dateTimeObj)
         now = DateTimeHelper.current_date_time()
+        if not end_date:
+            end_date = now
+
         DateTimeHelper.logger.log_debug(
-            f"market_refresh_time:{market_refresh_time}, dateTimeObj:{dateTimeObj}, cuurent_time: {now}"
+            f"refresh:{market_refresh_time}, date:{dateTimeObj}, end_dt: {end_date}, current_dt: {now}"
         )
-        return DateTimeHelper.compare_date_time(now, market_refresh_time, "gte")
+        return DateTimeHelper.compare_date_time(end_date, market_refresh_time, "gte")
 
     @staticmethod
     def is_market_open() -> bool:

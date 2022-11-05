@@ -174,6 +174,7 @@ class EquityListCreateSerializer(NonNullModelSerializer):
             "industry",
             "exchange",
             "details_url",
+            "average_delivery_quantity",
         ]
 
     def get_details_url(self, obj):

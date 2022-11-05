@@ -1,10 +1,5 @@
 import pandas as pd
 
-from ontrack.market.querysets.lookup import ExchangeQuerySet
-from ontrack.market.querysets.participant import (
-    ParticipantActivityQuerySet,
-    ParticipantStatsActivityQuerySet,
-)
 from ontrack.utils.base.enum import ClientType, InstrumentType, OptionType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
@@ -15,20 +10,9 @@ from ontrack.utils.string import StringHelper
 
 
 class PullParticipantData:
-    def __init__(
-        self,
-        exchange_symbol: str,
-        exchange_qs: ExchangeQuerySet = None,
-        participant_qs: ParticipantActivityQuerySet = None,
-        participant_stats_qs: ParticipantStatsActivityQuerySet = None,
-    ):
+    def __init__(self, exchange):
         self.logger = ApplicationLogger()
-        self.exchange_qs = exchange_qs
-        self.participant_qs = participant_qs
-        self.participant_stats_qs = participant_stats_qs
-        self.exchange_symbol = exchange_symbol
-
-        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        self.exchange = exchange
         self.urls = Configurations.get_urls_config()
 
         self.client_type = {
@@ -45,24 +29,12 @@ class PullParticipantData:
     def __parse_eod_record(
         self, date, client_type, instrument, option_type, long_value, short_value
     ):
-        filter = {
-            "date": date,
-            "client_type": client_type,
-            "instrument": instrument,
-            "option_type": option_type,
-        }
-
-        pk = None
-        existing_entity = self.participant_qs.unique_search(**filter).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
-
         buy_amount = nh.str_to_float(long_value)
         sell_amount = nh.str_to_float(short_value)
         net_amount = buy_amount - sell_amount
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["client_type"] = client_type
         entity["instrument"] = instrument
         entity["option_type"] = option_type
@@ -79,19 +51,9 @@ class PullParticipantData:
     def __parse_eod_stats_record(self, date, record):
         client_type = ClientType.FII
         instrument = self.instrument_mapping[record["instrument"]]
-        filter = {
-            "date": date,
-            "client_type": client_type,
-            "instrument": instrument,
-        }
-
-        pk = None
-        existing_entity = self.participant_stats_qs.unique_search(**filter).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["client_type"] = client_type
         entity["instrument"] = instrument
         entity["no_of_contracts_bought"] = nh.str_to_float(
@@ -235,7 +197,7 @@ class PullParticipantData:
         self.logger.log_debug(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.logger.log_warning("Exchange doesn't exists")
             return None
 
         # pull csv containing all the listed equities from web
@@ -260,7 +222,7 @@ class PullParticipantData:
         self.logger.log_debug(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.logger.log_warning("Exchange doesn't exists")
             return None
 
         data = pd.read_excel(url, header=2)

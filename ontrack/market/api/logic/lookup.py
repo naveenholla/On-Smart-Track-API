@@ -1,3 +1,5 @@
+from django.db import transaction
+
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.holidays import HolidayData
@@ -26,15 +28,33 @@ class MarketLookupData(BaseLogic):
         self.settings = SettingLogic()
         self.fixtureData = FixtureData()
 
-        self.exchange_symbol = exchange_symbol
+        exchange_qs = Exchange.backend.get_queryset()
+        self.exchange = exchange_qs.unique_search(exchange_symbol).first()
 
-        self.exchange_qs = Exchange.backend.get_queryset()
-        self.equity_qs = Equity.backend.get_queryset()
-        self.index_qs = Index.backend.get_queryset()
-        self.equityindex_qs = EquityIndex.backend.get_queryset()
+        if not self.exchange:
+            return
+
+        equity_qs = Equity.backend.get_queryset()
+        self.equity_dict = self.create_dict(equity_qs)
+
+        index_qs = Index.backend.get_queryset()
+        self.index_dict = self.create_dict(index_qs, "name")
+
+        equityindex_qs = EquityIndex.backend.get_queryset()
+        self.equityindex_dict = self.create_dict(equityindex_qs, "equity_index")
+
+        self.pull_equity_obj = PullEquityData(self.exchange, self.equity_dict)
+        self.pull_index_obj = PullIndexData(self.exchange, self.index_dict)
+        self.pull_equity_index_obj = PullEquityIndexData(
+            self.exchange, self.equity_dict, self.index_dict, self.equityindex_dict
+        )
+
         self.daytype_qs = MarketDayType.backend.get_queryset()
         self.category_qs = MarketDayCategory.backend.get_queryset()
         self.day_qs = MarketDay.backend.get_queryset()
+        self.holiday_obj = HolidayData(
+            self.exchange, self.daytype_qs, self.category_qs, self.day_qs
+        )
 
     def load_fixtures_all_data(self, temp_folder_path=None):
         fixtures = [
@@ -59,53 +79,27 @@ class MarketLookupData(BaseLogic):
 
         self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
 
-    def load_equity_data(self, save_data=True):
-        pull_equity_obj = PullEquityData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.equity_qs,
-        )
+    def load_equity_data(self):
+        return self.pull_equity_obj.pull_and_parse_lookup_data()
 
-        result = pull_equity_obj.pull_and_parse_lookup_data()
-        if save_data:
-            records_stats = self.create_or_update(result, Equity)
+    def load_index_data(self):
+        return self.pull_index_obj.pull_and_parse_lookup_data()
 
-        return result, records_stats
+    def pull_indices_market_cap(self, record):
+        return self.pull_equity_index_obj.pull_indices_market_cap(record)
 
-    def load_index_data(self, save_data=True):
-        pull_index_obj = PullIndexData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.index_qs,
-        )
-        result = pull_index_obj.pull_and_parse_lookup_data()
-        if save_data:
-            records_stats = self.create_or_update(result, Index)
+    def parse_indices_market_cap(self, index_name, record):
+        return self.pull_equity_index_obj.parse_indices_market_cap(index_name, record)
 
-        return result, records_stats
+    def load_equity_index_data(self):
+        return self.pull_equity_index_obj.pull_and_parse_market_cap()
 
-    def load_equity_index_data(self, save_data=True):
-        pull_equity_index_obj = PullEquityIndexData(
-            self.exchange_qs, self.index_qs, self.equity_qs, self.equityindex_qs
-        )
-        result = pull_equity_index_obj.pull_and_parse_market_cap()
-        if save_data:
-            records_stats = self.create_or_update(result, EquityIndex)
-
-        return result, records_stats
-
-    def load_holidays_data(self, save_data=True):
-        holiday_obj = HolidayData(
-            self.exchange_qs, self.daytype_qs, self.category_qs, self.day_qs
-        )
-        result = holiday_obj.pull_parse_exchange_holidays()
-        if save_data:
-            records_stats = self.create_or_update(result, MarketDay)
-        return result, records_stats
+    def load_holidays_data(self):
+        return self.holiday_obj.pull_parse_exchange_holidays()
 
     def execute_market_lookup_data_task(self):
         output = []
-        with application_context(exchange_name=self.exchange_symbol):
+        with application_context(exchange=self.exchange):
             date_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_LAST_PULL_DATE
             pause_hour_key = AdminSettingKey.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
             cet = self.can_execute_task(date_key, pause_hour_key)
@@ -114,14 +108,25 @@ class MarketLookupData(BaseLogic):
                 self.logger.log_info(message)
                 return message
 
-            result = self.load_equity_data()
-            output.append(self.message_creator("Equity", result))
+            try:
+                result_equity = self.load_equity_data()
+                result_index = self.load_index_data()
+                result_equity_index = self.load_equity_index_data()
+                with transaction.atomic():
+                    records_stats = self.create_or_update(result_equity, Equity)
+                    output.append(self.message_creator("Equity", records_stats))
 
-            result = self.load_index_data()
-            output.append(self.message_creator("Index", result))
+                    records_stats = self.create_or_update(result_index, Index)
+                    output.append(self.message_creator("Index", records_stats))
 
-            result = self.load_equity_index_data()
-            output.append(self.message_creator("Equity Index", result))
+                    records_stats = self.create_or_update(
+                        result_equity_index, EquityIndex
+                    )
+                    output.append(self.message_creator("Equity Index", records_stats))
+            except Exception as e:
+                message = f"Exception - `{format(e)}`."
+                self.logger.log_critical(message=message)
+                output.append(self.message_creator("Lookup Data", message))
 
             key = AdminSettingKey.LOOKUP_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
             days_count = nh.str_to_float(self.settings.get_by_key(key))
@@ -133,7 +138,7 @@ class MarketLookupData(BaseLogic):
 
     def execute_holidays_lookup_data_task(self):
         output = []
-        with application_context(exchange_name=self.exchange_symbol):
+        with application_context(exchange=self.exchange):
             date_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
             pause_hour_key = AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
             cet = self.can_execute_task(date_key, pause_hour_key)
@@ -143,7 +148,8 @@ class MarketLookupData(BaseLogic):
                 return message
 
             result = self.load_holidays_data()
-            output.append(self.message_creator("Holidays", result))
+            records_stats = self.create_or_update(result, MarketDay)
+            output.append(self.message_creator("Holidays", records_stats))
 
             self.settings.save_task_execution_time(date_key)
 

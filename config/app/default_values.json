@@ -7,10 +7,6 @@
     "lookup_data_older_than_days_can_be_deleted": 5,
     "days_for_delete_equity_eod_data": 750,
     "days_for_delete_indices_eod_data": 750,
-    "default_start_date_equity_data_pull": "2022-09-20 00:00:00.000000 +00:00",
-    "default_end_date_equity_data_pull": null,
-    "default_start_date_indices_data_pull": "2022-09-20 00:00:00.000000 +00:00",
-    "default_end_date_indices_data_pull": null,
     "average_days_count": 90,
     "option_chain_strick_price_count": 20
 }

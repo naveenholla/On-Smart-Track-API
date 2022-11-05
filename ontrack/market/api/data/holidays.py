@@ -1,5 +1,5 @@
+from ontrack.market.models.lookup import Exchange
 from ontrack.market.querysets.lookup import (
-    ExchangeQuerySet,
     MarketDayCategoryQuerySet,
     MarketDayQuerySet,
     MarketDayTypeQuerySet,
@@ -13,13 +13,13 @@ from ontrack.utils.logic import LogicHelper
 class HolidayData:
     def __init__(
         self,
-        exchange_qs: ExchangeQuerySet,
+        exchange: Exchange,
         daytype_qs: MarketDayTypeQuerySet,
         category_qs: MarketDayCategoryQuerySet,
         day_qs: MarketDayQuerySet,
     ):
         self.logger = ApplicationLogger()
-        self.exchange_qs = exchange_qs
+        self.exchange = exchange
         self.daytype_qs = daytype_qs
         self.category_qs = category_qs
         self.day_qs = day_qs
@@ -62,23 +62,22 @@ class HolidayData:
         exchange_symbol = type_record["exchange_symbol"]
         day_type_name = type_record["type"]
 
-        exchange = self.exchange_qs.unique_search(exchange_symbol).first()
         day_type = self.daytype_qs.unique_search(day_type_name).first()
 
-        if exchange is None or day_type is None:
+        if self.exchange is None or day_type is None:
             self.logger.log_info(
                 f"Exchange '{exchange_symbol}' of Holiday types '{day_type_name}' not exists."
             )
             return None
 
-        self.logger.log_debug(f"Starting with {exchange.symbol}.")
-        self.timezone = exchange.timezone_name
+        self.logger.log_debug(f"Starting with {self.exchange.symbol}.")
+        self.timezone = self.exchange.timezone_name
 
         headers = Configurations.get_header_values_config()
         holidays = LogicHelper.pull_data_from_external_api(type_record, headers)
 
         entities = []
-        for category in list(exchange.holiday_categories.all()):
+        for category in list(self.exchange.holiday_categories.all()):
             if category.code not in holidays:
                 self.logger.log_debug("Category not enabled or exists.")
                 continue

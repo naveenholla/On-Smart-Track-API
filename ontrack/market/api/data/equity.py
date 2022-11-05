@@ -1,12 +1,13 @@
 from django.utils.text import slugify
 
-from ontrack.market.querysets.equity import (
-    EquityDerivativeQuerySet,
-    EquityEndOfDayQuerySet,
-    EquityLiveDataQuerySet,
-    EquityLiveOpenInterestQuerySet,
+from ontrack.lookup.api.logic.settings import SettingLogic
+from ontrack.market.models.equity import (
+    EquityLiveData,
+    EquityLiveDerivativeData,
+    EquityLiveOpenInterest,
+    EquityLiveOptionChain,
 )
-from ontrack.market.querysets.lookup import EquityQuerySet, ExchangeQuerySet
+from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
@@ -20,33 +21,18 @@ from .common import CommonData
 
 
 class PullEquityData:
-    def __init__(
-        self,
-        exchange_symbol: str,
-        exchange_qs: ExchangeQuerySet = None,
-        equity_qs: EquityQuerySet = None,
-        equity_eod_qs: EquityEndOfDayQuerySet = None,
-        equity_derivative_eod_qs: EquityDerivativeQuerySet = None,
-        equity_live_qs: EquityLiveDataQuerySet = None,
-        equity_live_open_interest_qs: EquityLiveOpenInterestQuerySet = None,
-        equity_live_derivative_qs: EquityDerivativeQuerySet = None,
-        equity_live_option_chain_qs: EquityDerivativeQuerySet = None,
-    ):
+    def __init__(self, exchange: Exchange = None, equity_dict: dict = None):
         self.logger = ApplicationLogger()
-        self.exchange_qs = exchange_qs
-        self.equity_qs = equity_qs
-        self.equity_eod_qs = equity_eod_qs
-        self.equity_derivative_eod_qs = equity_derivative_eod_qs
-        self.equity_live_qs = equity_live_qs
-        self.equity_live_open_interest_qs = equity_live_open_interest_qs
-        self.equity_live_derivative_qs = equity_live_derivative_qs
-        self.equity_live_option_chain_qs = equity_live_option_chain_qs
-
-        self.exchange_symbol = exchange_symbol
-
-        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
-        self.timezone = self.exchange.timezone_name
         self.urls = Configurations.get_urls_config()
+        self.settings = SettingLogic()
+
+        self.equity_dict = equity_dict
+
+        self.exchange = exchange
+
+        if exchange:
+            self.exchange_symbol = exchange.symbol
+            self.timezone = exchange.timezone_name
 
     def __parse_lookup_data(self, record):
         # remove extra spaces in the dictionaty keys
@@ -58,7 +44,9 @@ class PullEquityData:
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
-        existing_entity = self.equity_qs.unique_search(symbol).first()
+        existing_entity = (
+            self.equity_dict[symbol] if symbol in self.equity_dict else None
+        )
         if existing_entity is not None:
             pk = existing_entity.id
 
@@ -95,16 +83,9 @@ class PullEquityData:
         if series != "eq":
             return None
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
-
-        pk = None
-        existing_entity = self.equity_eod_qs.unique_search(
-            date, entity_id=equity.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["OPEN_PRICE"])
         high_price = nh.str_to_float(record["HIGH_PRICE"])
@@ -124,7 +105,7 @@ class PullEquityData:
         delivery_percentage = nh.str_to_float(record["DELIV_PER"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -160,19 +141,9 @@ class PullEquityData:
         if instrument != InstrumentType.FUTSTK.lower():
             return None
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
-
-        pk = None
-        existing_entity = self.equity_derivative_eod_qs.unique_search(
-            date,
-            instrument=InstrumentType.FUTSTK,
-            expiry_date=expiry_date,
-            entity_id=equity.id,
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["OPEN"])
         high_price = nh.str_to_float(record["HIGH"])
@@ -191,7 +162,7 @@ class PullEquityData:
         change_in_open_interest = nh.str_to_float(record["CHG_IN_OI"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -225,7 +196,7 @@ class PullEquityData:
         if series != "eq":
             return None
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
 
@@ -237,13 +208,6 @@ class PullEquityData:
                 equity.isin_number = isin_number
                 equity.industry = industry
                 equity.save()
-
-        pk = None
-        existing_entity = self.equity_live_qs.unique_search(
-            date, entity_id=equity.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["open"])
         high_price = nh.str_to_float(record["dayHigh"])
@@ -275,7 +239,7 @@ class PullEquityData:
         )
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -315,16 +279,9 @@ class PullEquityData:
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
-
-        pk = None
-        existing_entity = self.equity_live_derivative_qs.unique_search(
-            date, instrument=instrument, expiry_date=expiry_date, entity_id=equity.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         contract = record["contract"]
         identifier = record["identifier"]
@@ -340,7 +297,7 @@ class PullEquityData:
         no_of_trades = nh.str_to_float(record["noOfTrades"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["instrument"] = instrument
         entity["contract"] = contract
@@ -371,21 +328,9 @@ class PullEquityData:
         strike_price = nh.str_to_float(record["strikePrice"])
         instrument = InstrumentType.OPTSTK
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
-
-        pk = None
-        existing_entity = self.equity_live_option_chain_qs.unique_search(
-            date,
-            instrument=instrument,
-            expiry_date=expiry_date,
-            entity_id=equity.id,
-            strike_price=strike_price,
-            option_type=option_type,
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_interest = nh.str_to_float(record["openInterest"])
         change_in_open_interest = nh.str_to_float(record["changeinOpenInterest"])
@@ -403,7 +348,7 @@ class PullEquityData:
         ask_price = nh.str_to_float(record["askPrice"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["strike_price"] = strike_price
         entity["instrument"] = instrument
@@ -451,16 +396,9 @@ class PullEquityData:
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
-        equity = self.equity_qs.unique_search(symbol).first()
+        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
         if equity is None:
             return None
-
-        pk = None
-        existing_entity = self.equity_live_open_interest_qs.unique_search(
-            date, entity_id=equity.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         lastest_open_interest = nh.str_to_float(record["latestOI"])
         previous_open_interest = nh.str_to_float(record["prevOI"])
@@ -473,7 +411,7 @@ class PullEquityData:
         underlying_value = nh.str_to_float(record["underlyingValue"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = equity
         entity["lastest_open_interest"] = lastest_open_interest
         entity["previous_open_interest"] = previous_open_interest
@@ -536,6 +474,21 @@ class PullEquityData:
 
         return entities
 
+    # def calculated_eod_data(self, date):
+    #     equities = self.equity_qs.all()
+    #     days_count = nh.str_to_float(self.settings.get_by_key(sk.NO_OF_DAYS_AVG))
+    #     start_date = dt.get_past_date(date, days=days_count)
+
+    #     for equity in equities:
+
+    #         lookups = (
+    #             Q(date__gte=start_date)
+    #             & Q(date__lt=date)
+    #             & Q(entity=equity)
+    #         )
+
+    #         eod_data = self.equity_eod_qs.filter(lookups)
+
     def pull_parse_derivative_eod_data(self, date):
         url_record = self.urls["fo_bhavcopy"]
         url = StringHelper.format_url(url_record, date)
@@ -571,7 +524,7 @@ class PullEquityData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
         headers = Configurations.get_header_values_config()
@@ -580,10 +533,15 @@ class PullEquityData:
         )
 
         if data is None:
-            return None
+            return "No Data Available."
 
         entities = []
         date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
+
+        already_processed = EquityLiveData.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
+
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
 
@@ -599,7 +557,7 @@ class PullEquityData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
         headers = Configurations.get_header_values_config()
@@ -608,10 +566,15 @@ class PullEquityData:
         )
 
         if data is None:
-            return None
+            return "No Data Available."
 
         entities = []
         date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
+
+        already_processed = EquityLiveOpenInterest.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
+
         for record in data["data"]:
             entity = self.__parse_live_open_interest(record, date)
 
@@ -625,7 +588,7 @@ class PullEquityData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
 
@@ -641,11 +604,18 @@ class PullEquityData:
             )
 
             if data is None:
-                return None
+                continue
 
             date = dt.str_to_datetime(
                 data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
+
+            already_processed = EquityLiveDerivativeData.backend.filter(
+                date=date, list_type__iexact=list_name
+            ).count()
+            if already_processed > 0:
+                continue
+
             for record in data["data"]:
                 entity = self.__parse_live_derivative_data(record, date, list_name)
 
@@ -674,13 +644,19 @@ class PullEquityData:
             )
 
             if data is None:
-                return None
+                continue
 
             records = data["records"]
 
             date = dt.str_to_datetime(
                 records["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
+
+            already_processed = EquityLiveOptionChain.backend.filter(
+                date=date, entity__symbol__iexact=arg
+            ).count()
+            if already_processed > 0:
+                continue
 
             strick_limit = Configurations.get_default_value_by_key(
                 "option_chain_strick_price_count"

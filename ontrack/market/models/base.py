@@ -49,10 +49,10 @@ class MarketEntity(BaseModel):
         return reverse(self.details_view_name, kwargs={"slug__iexact": self.slug})
 
     @property
-    def average_lot_size(self):
-        if hasattr(self, "_average_lot_size"):
-            return self._average_lot_size
-        return self.reviews.aggregate(Avg("lot_size"))
+    def average_delivery_quantity(self):
+        if hasattr(self, "_average_delivery_quantity"):
+            return self._average_delivery_quantity
+        return self.eod_data.aggregate(Avg("delivery_quantity"))
 
     class Meta:
         abstract = True

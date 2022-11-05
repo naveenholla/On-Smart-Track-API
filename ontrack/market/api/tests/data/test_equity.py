@@ -16,29 +16,23 @@ from ontrack.market.models.equity import (
     EquityLiveOpenInterest,
     EquityLiveOptionChain,
 )
-from ontrack.market.models.lookup import Equity, Exchange
+from ontrack.market.models.lookup import Equity
 
 
 class TestPullEquityData:
     @pytest.fixture(autouse=True)
     def injector(self):
-        self.exchange_qs = Exchange.backend.get_queryset()
         self.equity_qs = Equity.backend.get_queryset()
-        self.equity_eod_qs = EquityEndOfDay.backend.get_queryset()
-        self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.get_queryset()
-        self.equity_live_data_qs = EquityLiveData.backend.get_queryset()
-        self.equity_live_open_interest_qs = (
-            EquityLiveOpenInterest.backend.get_queryset()
-        )
-        self.equity_live_derivative_qs = EquityLiveDerivativeData.backend.get_queryset()
-        self.equity_live_option_chain_qs = EquityLiveOptionChain.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
     def equity_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
         self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
 
-        self.marketlookupdata.load_equity_data()
+        records = self.marketlookupdata.load_equity_data()
+        self.marketlookupdata.create_or_update(records, Equity)
+        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
+
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
         self.livedata = LiveData(exchange_fixture.symbol)
 
@@ -48,9 +42,8 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.marketlookupdata.load_equity_data(True)
-        assert result is not None
-        records = result[0]
+        records = self.marketlookupdata.load_equity_data()
+        self.endofdaydata.create_or_update(records, Equity)
         assert len(records) > 0
 
         stocks_with_lot_size = [x for x in records if x["lot_size"] > 0]
@@ -66,8 +59,9 @@ class TestPullEquityData:
         assert stock2["id"] == equity_fixture.id
 
         # check update logic
-        result = self.marketlookupdata.load_equity_data(True)
-        assert_record_updation(result)
+        result = self.marketlookupdata.load_equity_data()
+        record_stats = self.endofdaydata.create_or_update(records, Equity)
+        assert_record_updation((result, record_stats))
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -76,13 +70,14 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         date = test_date
-        result = self.endofdaydata.load_equity_eod_data(date, True)
-        assert_record_creation(result)
+        result = self.endofdaydata.load_equity_eod_data(date)
+        records_stats = self.endofdaydata.create_or_update(result, EquityEndOfDay)
+        assert_record_creation((result, records_stats))
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_equity_eod_data(date, True)
-        assert_record_updation(result)
+        result = self.endofdaydata.load_equity_eod_data(date)
+        assert isinstance(result, str)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -91,13 +86,16 @@ class TestPullEquityData:
         assert self.exchange_fixture.symbol is not None
 
         date = test_date
-        result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
-        assert_record_creation(result)
+        result = self.endofdaydata.load_equity_derivative_eod_data(date)
+        records_stats = self.endofdaydata.create_or_update(
+            result, EquityDerivativeEndOfDay
+        )
+        assert_record_creation((result, records_stats))
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_equity_derivative_eod_data(date, True)
-        assert_record_updation(result)
+        result = self.endofdaydata.load_equity_derivative_eod_data(date)
+        assert isinstance(result, str)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -105,12 +103,13 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.livedata.load_equity_live_data(True)
-        assert_record_creation(result)
+        result = self.livedata.load_equity_live_data()
+        records_stats = self.livedata.create_or_update(result, EquityLiveData)
+        assert_record_creation((result, records_stats))
 
         # check update logic
-        result = self.livedata.load_equity_live_data(True)
-        assert_record_updation(result)
+        result = self.livedata.load_equity_live_data()
+        assert isinstance(result, str)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -118,12 +117,13 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.livedata.load_equity_live_open_interest_data(True)
-        assert_record_creation(result)
+        result = self.livedata.load_equity_live_open_interest_data()
+        records_stats = self.livedata.create_or_update(result, EquityLiveOpenInterest)
+        assert_record_creation((result, records_stats))
 
         # check update logic
-        result = self.livedata.load_equity_live_open_interest_data(True)
-        assert_record_updation(result)
+        result = self.livedata.load_equity_live_open_interest_data()
+        assert isinstance(result, str)
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -131,12 +131,13 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.livedata.load_equity_live_derivative_data(True)
-        assert_record_creation(result)
+        result = self.livedata.load_equity_live_derivative_data()
+        records_stats = self.livedata.create_or_update(result, EquityLiveDerivativeData)
+        assert_record_creation((result, records_stats))
 
         # check update logic
-        result = self.livedata.load_equity_live_derivative_data(True)
-        assert_record_updation(result)
+        result = self.livedata.load_equity_live_derivative_data()
+        assert len(result) == 0
 
     @pytest.mark.integration
     @pytest.mark.live_data_pull
@@ -144,9 +145,10 @@ class TestPullEquityData:
         assert self.exchange_fixture is not None
         assert self.exchange_fixture.symbol is not None
 
-        result = self.livedata.load_equity_live_option_chain_data(True)
-        assert_record_creation(result)
+        result = self.livedata.load_equity_live_option_chain_data()
+        records_stats = self.livedata.create_or_update(result, EquityLiveOptionChain)
+        assert_record_creation((result, records_stats))
 
         # check update logic
-        result = self.livedata.load_equity_live_option_chain_data(True)
-        assert_record_updation(result)
+        result = self.livedata.load_equity_live_option_chain_data()
+        assert len(result) == 0

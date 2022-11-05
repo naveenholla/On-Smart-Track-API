@@ -4,12 +4,8 @@ from urllib.request import urlopen
 
 import yaml
 
-from ontrack.market.querysets.lookup import (
-    EquityIndexQuerySet,
-    EquityQuerySet,
-    ExchangeQuerySet,
-    IndexQuerySet,
-)
+from ontrack.lookup.api.logic.settings import SettingLogic
+from ontrack.market.models.lookup import Exchange
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.filesystem import FileSystemHelper
@@ -19,16 +15,22 @@ from ontrack.utils.logger import ApplicationLogger
 class PullEquityIndexData:
     def __init__(
         self,
-        exchange_qs: ExchangeQuerySet = None,
-        index_qs: IndexQuerySet = None,
-        equity_qs: EquityQuerySet = None,
-        equityindex_qs: EquityIndexQuerySet = None,
+        exchange: Exchange = None,
+        equity_dict: dict = None,
+        index_dict: dict = None,
+        equityindex_dict: dict = None,
     ):
         self.logger = ApplicationLogger()
-        self.exchange_qs = exchange_qs
-        self.index_qs = index_qs
-        self.equity_qs = equity_qs
-        self.equityindex_qs = equityindex_qs
+
+        self.exchange = exchange
+        self.exchange_symbol = exchange.symbol
+        self.timezone = exchange.timezone_name
+        self.urls = Configurations.get_urls_config()
+        self.settings = SettingLogic()
+
+        self.index_dict = index_dict
+        self.equity_dict = equity_dict
+        self.equityindex_dict = equityindex_dict
 
     def __get_name_from_label(self, label: str) -> str:
         # remove only the last instance of space
@@ -42,20 +44,29 @@ class PullEquityIndexData:
         equity_symbol = self.__get_name_from_label(record["label"])
         weight = record["weight"]
 
-        index = self.index_qs.unique_search(index_symbol).first()
+        index = (
+            self.index_dict[index_symbol.lower()]
+            if index_symbol.lower() in self.index_dict
+            else None
+        )
         if index is None:
             self.logger.log_warning(f"Index '{index_symbol}' doesn't exists")
             return None
 
-        equity = self.equity_qs.unique_search(equity_symbol).first()
+        equity = (
+            self.equity_dict[equity_symbol.lower()]
+            if equity_symbol.lower() in self.equity_dict
+            else None
+        )
         if equity is None:
             self.logger.log_warning(f"Equity '{equity_symbol}' doesn't exists")
             return None
 
         pk = None
-        existing_entity = self.equityindex_qs.unique_search(
-            index_symbol, equity_symbol
-        ).first()
+        key = f"{index_symbol.lower()}-{equity_symbol.lower()}"
+        existing_entity = (
+            self.equityindex_dict[key] if key in self.equityindex_dict else None
+        )
         if existing_entity is not None:
             pk = existing_entity.id
 

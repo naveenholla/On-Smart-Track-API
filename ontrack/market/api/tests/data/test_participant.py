@@ -1,11 +1,7 @@
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
-from ontrack.market.api.tests.test_base import (
-    assert_record_creation,
-    assert_record_updation,
-    test_date,
-)
+from ontrack.market.api.tests.test_base import assert_record_creation, test_date
 from ontrack.market.models.lookup import Exchange
 from ontrack.market.models.participant import (
     ParticipantActivity,
@@ -32,13 +28,14 @@ class TestPullParticipantData:
         assert self.exchange_fixture.symbol is not None
 
         date = test_date
-        result = self.endofdaydata.load_participant_eod_data(date, True)
-        assert_record_creation(result)
+        result = self.endofdaydata.load_participant_eod_data(date)
+        records_stats = self.endofdaydata.create_or_update(result, ParticipantActivity)
+        assert_record_creation((result, records_stats))
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_participant_eod_data(date, True)
-        assert_record_updation(result)
+        result = self.endofdaydata.load_participant_eod_data(date)
+        assert isinstance(result, str)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
@@ -47,10 +44,13 @@ class TestPullParticipantData:
         assert self.exchange_fixture.symbol is not None
 
         date = test_date
-        result = self.endofdaydata.load_participant_stats_eod_data(date, True)
-        assert_record_creation(result)
+        result = self.endofdaydata.load_participant_stats_eod_data(date)
+        records_stats = self.endofdaydata.create_or_update(
+            result, ParticipantStatsActivity
+        )
+        assert_record_creation((result, records_stats))
 
         # check update logic
         date = test_date
-        result = self.endofdaydata.load_participant_stats_eod_data(date, True)
-        assert_record_updation(result)
+        result = self.endofdaydata.load_participant_stats_eod_data(date)
+        assert isinstance(result, str)

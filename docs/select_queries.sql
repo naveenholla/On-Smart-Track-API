@@ -17,6 +17,7 @@ SELECT * FROM public.market_equityindex ORDER BY sector, equity_id, index_id;
 SELECT index_id, sum(equity_weightage) FROM public.market_equityindex group by index_id
 
 SELECT * FROM public.market_equityendofday
+SELECT date, COUNT(1) FROM public.market_equityendofday GROUP BY date ORDER BY date
 SELECT * FROM public.market_equityendofdaycalcutated
 SELECT * FROM public.market_equityderivativeendofday
 

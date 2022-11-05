@@ -1,12 +1,13 @@
 from django.utils.text import slugify
 
-from ontrack.market.querysets.index import (
-    IndexDerivativeQuerySet,
-    IndexEndOfDayQuerySet,
-    IndexLiveDataQuerySet,
-    IndexLiveOpenInterestQuerySet,
+from ontrack.lookup.api.logic.settings import SettingLogic
+from ontrack.market.models.index import (
+    IndexLiveData,
+    IndexLiveDerivativeData,
+    IndexLiveOpenInterest,
+    IndexLiveOptionChain,
 )
-from ontrack.market.querysets.lookup import ExchangeQuerySet, IndexQuerySet
+from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
@@ -20,33 +21,18 @@ from .common import CommonData
 
 
 class PullIndexData:
-    def __init__(
-        self,
-        exchange_symbol: str,
-        exchange_qs: ExchangeQuerySet = None,
-        index_qs: IndexQuerySet = None,
-        index_eod_qs: IndexEndOfDayQuerySet = None,
-        index_derivative_eod_qs: IndexDerivativeQuerySet = None,
-        index_live_qs: IndexLiveDataQuerySet = None,
-        index_live_open_interest_qs: IndexLiveOpenInterestQuerySet = None,
-        index_live_derivative_qs: IndexDerivativeQuerySet = None,
-        index_live_option_chain_qs: IndexDerivativeQuerySet = None,
-    ):
+    def __init__(self, exchange: Exchange = None, index_dict: dict = None):
         self.logger = ApplicationLogger()
-        self.exchange_qs = exchange_qs
-        self.index_qs = index_qs
-        self.index_eod_qs = index_eod_qs
-        self.index_derivative_eod_qs = index_derivative_eod_qs
-        self.index_live_qs = index_live_qs
-        self.index_live_open_interest_qs = index_live_open_interest_qs
-        self.index_live_derivative_qs = index_live_derivative_qs
-        self.index_live_option_chain_qs = index_live_option_chain_qs
-
-        self.exchange_symbol = exchange_symbol
-
-        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
-        self.timezone = self.exchange.timezone_name
         self.urls = Configurations.get_urls_config()
+        self.settings = SettingLogic()
+
+        self.index_dict = index_dict
+
+        self.exchange = exchange
+
+        if exchange:
+            self.exchange_symbol = exchange.symbol
+            self.timezone = exchange.timezone_name
 
     def __parse_lookup_data(self, record):
         # remove extra spaces in the dictionaty keys
@@ -58,7 +44,7 @@ class PullIndexData:
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
-        existing_entity = self.index_qs.unique_search(symbol).first()
+        existing_entity = self.index_dict[symbol] if symbol in self.index_dict else None
         if existing_entity is not None:
             pk = existing_entity.id
 
@@ -95,16 +81,9 @@ class PullIndexData:
         index_name = record["Index Name"].strip().lower()
         date = dt.str_to_datetime(record["Index Date"], "%d-%m-%Y", self.timezone)
 
-        index = self.index_qs.unique_search(name=index_name).first()
+        index = self.index_dict[index_name] if index_name in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_eod_qs.unique_search(
-            date, entity_id=index.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["Open Index Value"])
         high_price = nh.str_to_float(record["High Index Value"])
@@ -125,7 +104,7 @@ class PullIndexData:
         index_div_yield = nh.str_to_float(record["Div Yield"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -163,19 +142,9 @@ class PullIndexData:
         if instrument != InstrumentType.FUTIDX.lower():
             return None
 
-        index = self.index_qs.unique_search(symbol).first()
+        index = self.index_dict[symbol] if symbol in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_derivative_eod_qs.unique_search(
-            date,
-            instrument=InstrumentType.FUTIDX,
-            expiry_date=expiry_date,
-            entity_id=index.id,
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["OPEN"])
         high_price = nh.str_to_float(record["HIGH"])
@@ -194,7 +163,7 @@ class PullIndexData:
         change_in_open_interest = nh.str_to_float(record["CHG_IN_OI"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -224,16 +193,9 @@ class PullIndexData:
     def __parse_live_data(self, record, date):
         index_name = record["index"].strip().lower()
 
-        index = self.index_qs.unique_search(name=index_name).first()
+        index = self.index_dict[index_name] if index_name in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_live_qs.unique_search(
-            date, entity_id=index.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_price = nh.str_to_float(record["open"])
         high_price = nh.str_to_float(record["high"])
@@ -264,7 +226,7 @@ class PullIndexData:
         )
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["prev_close"] = prev_close
         entity["open_price"] = open_price
@@ -303,16 +265,9 @@ class PullIndexData:
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
-        index = self.index_qs.unique_search(symbol).first()
+        index = self.index_dict[symbol] if symbol in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_live_derivative_qs.unique_search(
-            date, instrument=instrument, expiry_date=expiry_date, entity_id=index.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         contract = record["contract"]
         identifier = record["identifier"]
@@ -328,7 +283,7 @@ class PullIndexData:
         no_of_trades = nh.str_to_float(record["noOfTrades"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["instrument"] = instrument
         entity["contract"] = contract
@@ -359,21 +314,9 @@ class PullIndexData:
         strike_price = nh.str_to_float(record["strikePrice"])
         instrument = InstrumentType.OPTIDX
 
-        index = self.index_qs.unique_search(symbol).first()
+        index = self.index_dict[symbol] if symbol in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_live_option_chain_qs.unique_search(
-            date,
-            instrument=instrument,
-            expiry_date=expiry_date,
-            entity_id=index.id,
-            strike_price=strike_price,
-            option_type=option_type,
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         open_interest = nh.str_to_float(record["openInterest"])
         change_in_open_interest = nh.str_to_float(record["changeinOpenInterest"])
@@ -391,7 +334,7 @@ class PullIndexData:
         ask_price = nh.str_to_float(record["askPrice"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["strike_price"] = strike_price
         entity["instrument"] = instrument
@@ -439,16 +382,9 @@ class PullIndexData:
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
-        index = self.index_qs.unique_search(symbol).first()
+        index = self.index_dict[symbol] if symbol in self.index_dict else None
         if index is None:
             return None
-
-        pk = None
-        existing_entity = self.index_live_open_interest_qs.unique_search(
-            date, entity_id=index.id
-        ).first()
-        if existing_entity is not None:
-            pk = existing_entity.id
 
         lastest_open_interest = nh.str_to_float(record["latestOI"])
         previous_open_interest = nh.str_to_float(record["prevOI"])
@@ -458,7 +394,7 @@ class PullIndexData:
         underlying_value = nh.str_to_float(record["underlyingValue"])
 
         entity = {}
-        entity["id"] = pk
+        entity["id"] = None
         entity["entity"] = index
         entity["lastest_open_interest"] = lastest_open_interest
         entity["previous_open_interest"] = previous_open_interest
@@ -556,7 +492,7 @@ class PullIndexData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
         headers = Configurations.get_header_values_config()
@@ -565,10 +501,15 @@ class PullIndexData:
         )
 
         if data is None:
-            return None
+            return "No Data Available."
 
         entities = []
         date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
+
+        already_processed = IndexLiveData.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
+
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
 
@@ -584,7 +525,7 @@ class PullIndexData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
         headers = Configurations.get_header_values_config()
@@ -593,10 +534,15 @@ class PullIndexData:
         )
 
         if data is None:
-            return None
+            return "No Data Available."
 
         entities = []
         date = dt.str_to_datetime(data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone)
+
+        already_processed = IndexLiveOpenInterest.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
+
         for record in data["data"]:
             entity = self.__parse_live_open_interest(record, date)
 
@@ -610,7 +556,7 @@ class PullIndexData:
 
         if self.exchange is None:
             self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
 
@@ -626,11 +572,18 @@ class PullIndexData:
             )
 
             if data is None:
-                return None
+                continue
 
             date = dt.str_to_datetime(
                 data["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
+
+            already_processed = IndexLiveDerivativeData.backend.filter(
+                date=date, list_type__iexact=list_name
+            ).count()
+            if already_processed > 0:
+                continue
+
             for record in data["data"]:
                 entity = self.__parse_live_derivative_data(record, date, list_name)
 
@@ -659,13 +612,19 @@ class PullIndexData:
             )
 
             if data is None:
-                return None
+                continue
 
             records = data["records"]
 
             date = dt.str_to_datetime(
                 records["timestamp"], "%d-%b-%Y %H:%M:%S", self.timezone
             )
+
+            already_processed = IndexLiveOptionChain.backend.filter(
+                date=date, entity__symbol__iexact=arg
+            ).count()
+            if already_processed > 0:
+                continue
 
             strick_limit = Configurations.get_default_value_by_key(
                 "option_chain_strick_price_count"

@@ -40,7 +40,7 @@ test_date_obj = dt.get_date_time(
     time_zone=time_zone,
 )
 
-test_time = test_datetime.time()
+test_time = test_datetime.timetz()
 
 
 @pytest.mark.unittest
@@ -53,14 +53,14 @@ def test_current_date_freeze_time():
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date():
-    date_obj = dt.current_date()
+    date_obj = dt.current_date(time_zone=time_zone)
     assert date_obj == test_date_obj
 
 
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_time():
-    time_obj = dt.current_time()
+    time_obj = dt.current_time(time_zone=time_zone)
     assert time_obj == test_time
 
 

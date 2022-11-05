@@ -304,11 +304,11 @@ LOGGING = {
             "level": "INFO",
             "propagate": True,
         },
-        "django.db.backends": {
-            "handlers": ["console", "db_handler"],
-            "level": "DEBUG",
-            "propagate": True,
-        },
+        # "django.db.backends": {
+        #     "handlers": ["db_handler"],
+        #     "level": "DEBUG",
+        #     "propagate": True,
+        # },
         "ontrack": {
             "handlers": ["console", "ontrack", "mail_admins"],
             "level": "DEBUG",

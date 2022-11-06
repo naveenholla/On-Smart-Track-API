@@ -474,21 +474,6 @@ class PullEquityData:
 
         return entities
 
-    # def calculated_eod_data(self, date):
-    #     equities = self.equity_qs.all()
-    #     days_count = nh.str_to_float(self.settings.get_by_key(sk.NO_OF_DAYS_AVG))
-    #     start_date = dt.get_past_date(date, days=days_count)
-
-    #     for equity in equities:
-
-    #         lookups = (
-    #             Q(date__gte=start_date)
-    #             & Q(date__lt=date)
-    #             & Q(entity=equity)
-    #         )
-
-    #         eod_data = self.equity_eod_qs.filter(lookups)
-
     def pull_parse_derivative_eod_data(self, date):
         url_record = self.urls["fo_bhavcopy"]
         url = StringHelper.format_url(url_record, date)

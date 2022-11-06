@@ -3,13 +3,15 @@ import pytest
 from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.tests.factories import ExchangeFactory
 from ontrack.market.models.lookup import Exchange
+from ontrack.utils.base.enum import ExchangeType
 
 
 @pytest.fixture(scope="session")
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        obj = MarketLookupData("nse")
-        obj.load_fixtures_data()
+        obj = MarketLookupData(ExchangeType.NSE)
+        if not obj.exchange:
+            obj.load_fixtures_all_data()
 
 
 # # conftest.py
@@ -30,3 +32,8 @@ def django_db_setup(django_db_setup, django_db_blocker):
 @pytest.fixture(autouse=True)
 def exchange_fixture(db) -> Exchange:
     return ExchangeFactory()
+
+
+@pytest.fixture(autouse=True)
+def market_lookup_data_fixture(db) -> Exchange:
+    return MarketLookupData(ExchangeType.NSE)

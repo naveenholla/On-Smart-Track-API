@@ -25,13 +25,11 @@ class TestPullEquityData:
         self.equity_qs = Equity.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def equity_data_fixture(self, exchange_fixture):
+    def equity_data_fixture(
+        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
+    ):
         self.exchange_fixture = exchange_fixture
-        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
-
-        records = self.marketlookupdata.load_equity_data()
-        self.marketlookupdata.create_or_update(records, Equity)
-        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
+        self.marketlookupdata = market_lookup_data_fixture
 
         self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
         self.livedata = LiveData(exchange_fixture.symbol)
@@ -59,9 +57,9 @@ class TestPullEquityData:
         assert stock2["id"] == equity_fixture.id
 
         # check update logic
-        result = self.marketlookupdata.load_equity_data()
+        records = self.marketlookupdata.load_equity_data()
         record_stats = self.endofdaydata.create_or_update(records, Equity)
-        assert_record_updation((result, record_stats))
+        assert_record_updation((records, record_stats))
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull

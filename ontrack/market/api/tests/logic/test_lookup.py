@@ -4,7 +4,7 @@ import pytest
 
 from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.lookup import EquityIndex, Exchange
-from ontrack.utils.base.enum import AdminSettingKey, ExchangeType
+from ontrack.utils.base.enum import AdminSettingKey
 from ontrack.utils.datetime import DateTimeHelper as dt
 
 
@@ -14,8 +14,11 @@ class TestLogicLookup:
         self.exchange_qs = Exchange.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def exchange_data_fixture(self, exchange_fixture):
+    def exchange_data_fixture(
+        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
+    ):
         self.exchange_fixture = exchange_fixture
+        self.marketlookupdata = market_lookup_data_fixture
 
     @pytest.mark.unittest
     def test_execute_market_lookup_data_task(self):
@@ -50,7 +53,7 @@ class TestLogicLookup:
 
     @pytest.mark.unittest
     def test_execute_market_lookup_data_task_2(self):
-        obj = MarketLookupData(ExchangeType.NSE)
+        obj = self.marketlookupdata
         obj.load_equity_data = MagicMock(return_value=None)
         obj.load_index_data = MagicMock(return_value=None)
         obj.load_equity_index_data = MagicMock(return_value=None)
@@ -81,3 +84,8 @@ class TestLogicLookup:
             obj.settings.save_task_execution_time.assert_called_with(
                 AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
             )
+
+    @pytest.mark.unittest
+    def test_calculated_eod_data(self):
+        obj = self.marketlookupdata
+        obj.calculated_eod_data()

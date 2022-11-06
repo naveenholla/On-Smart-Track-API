@@ -1,0 +1,546 @@
+{
+    "candle_name": [
+        {
+            "code": "CDL2CROWS",
+            "name": "Two Crows"
+        },
+        {
+            "code": "CDL3BLACKCROWS",
+            "name": "Three Black Crows"
+        },
+        {
+            "code": "CDL3INSIDE",
+            "name": "Three Inside Up/Down"
+        },
+        {
+            "code": "CDL3LINESTRIKE",
+            "name": "Three-Line Strike"
+        },
+        {
+            "code": "CDL3OUTSIDE",
+            "name": "Three Outside Up/Down"
+        },
+        {
+            "code": "CDL3STARSINSOUTH",
+            "name": "Three Stars In The South"
+        },
+        {
+            "code": "CDL3WHITESOLDIERS",
+            "name": "Three Advancing White Soldiers"
+        },
+        {
+            "code": "CDLABANDONEDBABY",
+            "name": "Abandoned Baby"
+        },
+        {
+            "code": "CDLADVANCEBLOCK",
+            "name": "Advance Block"
+        },
+        {
+            "code": "CDLBELTHOLD",
+            "name": "Belt-hold"
+        },
+        {
+            "code": "CDLBREAKAWAY",
+            "name": "Breakaway"
+        },
+        {
+            "code": "CDLCLOSINGMARUBOZU",
+            "name": "Closing Marubozu"
+        },
+        {
+            "code": "CDLCONCEALBABYSWALL",
+            "name": "Concealing Baby Swallow"
+        },
+        {
+            "code": "CDLCOUNTERATTACK",
+            "name": "Counterattack"
+        },
+        {
+            "code": "CDLDARKCLOUDCOVER",
+            "name": "Dark Cloud Cover"
+        },
+        {
+            "code": "CDLDOJI",
+            "name": "Doji"
+        },
+        {
+            "code": "CDLDOJISTAR",
+            "name": "Doji Star"
+        },
+        {
+            "code": "CDLDRAGONFLYDOJI",
+            "name": "Dragonfly Doji"
+        },
+        {
+            "code": "CDLENGULFING",
+            "name": "Engulfing Pattern"
+        },
+        {
+            "code": "CDLEVENINGDOJISTAR",
+            "name": "Evening Doji Star"
+        },
+        {
+            "code": "CDLEVENINGSTAR",
+            "name": "Evening Star"
+        },
+        {
+            "code": "CDLGAPSIDESIDEWHITE",
+            "name": "Up/Down-gap side-by-side white lines"
+        },
+        {
+            "code": "CDLGRAVESTONEDOJI",
+            "name": "Gravestone Doji"
+        },
+        {
+            "code": "CDLHAMMER",
+            "name": "Hammer"
+        },
+        {
+            "code": "CDLHANGINGMAN",
+            "name": "Hanging Man"
+        },
+        {
+            "code": "CDLHARAMI",
+            "name": "Harami Pattern"
+        },
+        {
+            "code": "CDLHARAMICROSS",
+            "name": "Harami Cross Pattern"
+        },
+        {
+            "code": "CDLHIGHWAVE",
+            "name": "High-Wave Candle"
+        },
+        {
+            "code": "CDLHIKKAKE",
+            "name": "Hikkake Pattern"
+        },
+        {
+            "code": "CDLHIKKAKEMOD",
+            "name": "Modified Hikkake Pattern"
+        },
+        {
+            "code": "CDLHOMINGPIGEON",
+            "name": "Homing Pigeon"
+        },
+        {
+            "code": "CDLIDENTICAL3CROWS",
+            "name": "Identical Three Crows"
+        },
+        {
+            "code": "CDLINNECK",
+            "name": "In-Neck Pattern"
+        },
+        {
+            "code": "CDLINVERTEDHAMMER",
+            "name": "Inverted Hammer"
+        },
+        {
+            "code": "CDLKICKING",
+            "name": "Kicking"
+        },
+        {
+            "code": "CDLKICKINGBYLENGTH",
+            "name": "Kicking - bull/bear determined by the longer marubozu"
+        },
+        {
+            "code": "CDLLADDERBOTTOM",
+            "name": "Ladder Bottom"
+        },
+        {
+            "code": "CDLLONGLEGGEDDOJI",
+            "name": "Long Legged Doji"
+        },
+        {
+            "code": "CDLLONGLINE",
+            "name": "Long Line Candle"
+        },
+        {
+            "code": "CDLMARUBOZU",
+            "name": "Marubozu"
+        },
+        {
+            "code": "CDLMATCHINGLOW",
+            "name": "Matching Low"
+        },
+        {
+            "code": "CDLMATHOLD",
+            "name": "Mat Hold"
+        },
+        {
+            "code": "CDLMORNINGDOJISTAR",
+            "name": "Morning Doji Star"
+        },
+        {
+            "code": "CDLMORNINGSTAR",
+            "name": "Morning Star"
+        },
+        {
+            "code": "CDLONNECK",
+            "name": "On-Neck Pattern"
+        },
+        {
+            "code": "CDLPIERCING",
+            "name": "Piercing Pattern"
+        },
+        {
+            "code": "CDLRICKSHAWMAN",
+            "name": "Rickshaw Man"
+        },
+        {
+            "code": "CDLRISEFALL3METHODS",
+            "name": "Rising/Falling Three Methods"
+        },
+        {
+            "code": "CDLSEPARATINGLINES",
+            "name": "Separating Lines"
+        },
+        {
+            "code": "CDLSHOOTINGSTAR",
+            "name": "Shooting Star"
+        },
+        {
+            "code": "CDLSHORTLINE",
+            "name": "Short Line Candle"
+        },
+        {
+            "code": "CDLSPINNINGTOP",
+            "name": "Spinning Top"
+        },
+        {
+            "code": "CDLSTALLEDPATTERN",
+            "name": "Stalled Pattern"
+        },
+        {
+            "code": "CDLSTICKSANDWICH",
+            "name": "Stick Sandwich"
+        },
+        {
+            "code": "CDLTAKURI",
+            "name": "Takuri (Dragonfly Doji with very long lower shadow)"
+        },
+        {
+            "code": "CDLTASUKIGAP",
+            "name": "Tasuki Gap"
+        },
+        {
+            "code": "CDLTHRUSTING",
+            "name": "Thrusting Pattern"
+        },
+        {
+            "code": "CDLTRISTAR",
+            "name": "Tristar Pattern"
+        },
+        {
+            "code": "CDLUNIQUE3RIVER",
+            "name": "Unique 3 River"
+        },
+        {
+            "code": "CDLUPSIDEGAP2CROWS",
+            "name": "Upside Gap Two Crows"
+        },
+        {
+            "code": "CDLXSIDEGAP3METHODS",
+            "name": "Upside/Downside Gap Three Methods"
+        }
+    ],
+    "overlap_studies": [
+        {
+            "code": "BBANDS",
+            "name": "Bollinger Bands"
+        },
+        {
+            "code": "DEMA",
+            "name": "Double Exponential Moving Average"
+        },
+        {
+            "code": "EMA",
+            "name": "Exponential Moving Average"
+        },
+        {
+            "code": "HT_TRENDLINE",
+            "name": "Hilbert Transform - Instantaneous Trendline"
+        },
+        {
+            "code": "KAMA",
+            "name": "Kaufman Adaptive Moving Average"
+        },
+        {
+            "code": "MA",
+            "name": "Moving average"
+        },
+        {
+            "code": "MAMA",
+            "name": "MESA Adaptive Moving Average"
+        },
+        {
+            "code": "MAVP",
+            "name": "Moving average with variable period"
+        },
+        {
+            "code": "MIDPOINT",
+            "name": "MidPoint over period"
+        },
+        {
+            "code": "MIDPRICE",
+            "name": "Midpoint Price over period"
+        },
+        {
+            "code": "SAR",
+            "name": "Parabolic SAR"
+        },
+        {
+            "code": "SAREXT",
+            "name": "Parabolic SAR - Extended"
+        },
+        {
+            "code": "SMA",
+            "name": "Simple Moving Average"
+        },
+        {
+            "code": "T3",
+            "name": "Triple Exponential Moving Average (T3)"
+        },
+        {
+            "code": "TEMA",
+            "name": "Triple Exponential Moving Average"
+        },
+        {
+            "code": "TRIMA",
+            "name": "Triangular Moving Average"
+        },
+        {
+            "code": "WMA",
+            "name": "Weighted Moving Average"
+        }
+    ],
+    "momentum_indicators": [
+        {
+            "code": "ADX",
+            "name": "Average Directional Movement Index"
+        },
+        {
+            "code": "ADXR",
+            "name": "Average Directional Movement Index Rating"
+        },
+        {
+            "code": "APO",
+            "name": "Absolute Price Oscillator"
+        },
+        {
+            "code": "AROON",
+            "name": "Aroon"
+        },
+        {
+            "code": "AROONOSC",
+            "name": "Aroon Oscillator"
+        },
+        {
+            "code": "BOP",
+            "name": "Balance Of Power"
+        },
+        {
+            "code": "CCI",
+            "name": "Commodity Channel Index"
+        },
+        {
+            "code": "CMO",
+            "name": "Chande Momentum Oscillator"
+        },
+        {
+            "code": "DX",
+            "name": "Directional Movement Index"
+        },
+        {
+            "code": "MACD",
+            "name": "Moving Average Convergence/Divergence"
+        },
+        {
+            "code": "MACDEXT",
+            "name": "MACD with controllable MA type"
+        },
+        {
+            "code": "MACDFIX",
+            "name": "Moving Average Convergence/Divergence Fix 12/26"
+        },
+        {
+            "code": "MFI",
+            "name": "Money Flow Index"
+        },
+        {
+            "code": "MINUS_DI",
+            "name": "Minus Directional Indicator"
+        },
+        {
+            "code": "MINUS_DM",
+            "name": "Minus Directional Movement"
+        },
+        {
+            "code": "MOM",
+            "name": "Momentum"
+        },
+        {
+            "code": "PLUS_DI",
+            "name": "Plus Directional Indicator"
+        },
+        {
+            "code": "PLUS_DM",
+            "name": "Plus Directional Movement"
+        },
+        {
+            "code": "PPO",
+            "name": "Percentage Price Oscillator"
+        },
+        {
+            "code": "ROC",
+            "name": "Rate of change : ((price/prevPrice)-1)*100"
+        },
+        {
+            "code": "ROCP",
+            "name": "Rate of change Percentage: (price-prevPrice)/prevPri"
+        },
+        {
+            "code": "ROCR",
+            "name": "Rate of change ratio: (price/prevPrice)"
+        },
+        {
+            "code": "ROCR100",
+            "name": "Rate of change ratio 100 scale: (price/prevPrice)*10"
+        },
+        {
+            "code": "RSI",
+            "name": "Relative Strength Index"
+        },
+        {
+            "code": "STOCH",
+            "name": "Stochastic"
+        },
+        {
+            "code": "STOCHF",
+            "name": "Stochastic Fast"
+        },
+        {
+            "code": "STOCHRSI",
+            "name": "Stochastic Relative Strength Index"
+        },
+        {
+            "code": "TRIX",
+            "name": "1-day Rate-Of-Change (ROC) of a Triple Smooth EMA"
+        },
+        {
+            "code": "ULTOSC",
+            "name": "Ultimate Oscillator"
+        },
+        {
+            "code": "WILLR",
+            "name": "Williams %R"
+        }
+    ],
+    "volume_indicators": [
+        {
+            "code": "AD",
+            "name": "Chaikin A/D Line"
+        },
+        {
+            "code": "ADOSC",
+            "name": "Chaikin A/D Oscillator"
+        },
+        {
+            "code": "OBV",
+            "name": "On Balance Volume"
+        }
+    ],
+    "volatility_indicators": [
+        {
+            "code": "ATR",
+            "name": "Average True Range"
+        },
+        {
+            "code": "NATR",
+            "name": "Normalized Average True Range"
+        },
+        {
+            "code": "TRANGE",
+            "name": "True Range"
+        }
+    ],
+    "price_transform": [
+        {
+            "code": "AVGPRICE",
+            "name": "Average Price"
+        },
+        {
+            "code": "MEDPRICE",
+            "name": "Median Price"
+        },
+        {
+            "code": "TYPPRICE",
+            "name": "Typical Price"
+        },
+        {
+            "code": "WCLPRICE",
+            "name": "Weighted Close Price"
+        }
+    ],
+    "cycle_indicators": [
+        {
+            "code": "HT_DCPERIOD",
+            "name": "Hilbert Transform - Dominant Cycle Period"
+        },
+        {
+            "code": "HT_DCPHASE",
+            "name": "Hilbert Transform - Dominant Cycle Phase"
+        },
+        {
+            "code": "HT_PHASOR",
+            "name": "Hilbert Transform - Phasor Components"
+        },
+        {
+            "code": "HT_SINE",
+            "name": "Hilbert Transform - SineWave"
+        },
+        {
+            "code": "HT_TRENDMODE",
+            "name": "Hilbert Transform - Trend vs Cycle Mode"
+        }
+    ],
+    "statistic_functions": [
+        {
+            "code": "BETA",
+            "name": "Beta"
+        },
+        {
+            "code": "CORREL",
+            "name": "Pearson's Correlation Coefficient (r)"
+        },
+        {
+            "code": "LINEARREG",
+            "name": "Linear Regression"
+        },
+        {
+            "code": "LINEARREG_ANGLE",
+            "name": "Linear Regression Angle"
+        },
+        {
+            "code": "LINEARREG_INTERCEPT",
+            "name": "Linear Regression Intercept"
+        },
+        {
+            "code": "LINEARREG_SLOPE",
+            "name": "Linear Regression Slope"
+        },
+        {
+            "code": "STDDEV",
+            "name": "Standard Deviation"
+        },
+        {
+            "code": "TSF",
+            "name": "Time Series Forecast"
+        },
+        {
+            "code": "VAR",
+            "name": "Variance"
+        }
+    ]
+}

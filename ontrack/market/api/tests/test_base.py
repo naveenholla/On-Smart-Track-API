@@ -1,6 +1,6 @@
 from ontrack.utils.datetime import DateTimeHelper
 
-test_date = DateTimeHelper.get_date_time(2022, 10, 20)
+test_date = DateTimeHelper.get_date_time(2019, 10, 23)
 
 
 def assert_record_creation(result):

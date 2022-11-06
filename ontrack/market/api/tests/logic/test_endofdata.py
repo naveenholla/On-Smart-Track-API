@@ -6,8 +6,9 @@ from freezegun import freeze_time
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.lookup import MarketLookupData
-from ontrack.market.models.lookup import Exchange
-from ontrack.utils.base.enum import ExchangeType
+from ontrack.market.models.lookup import Equity, Exchange, Index
+from ontrack.utils.base.enum import AdminSettingKey as sk
+from ontrack.utils.base.enum import ExchangeType, SettingKeyType
 from ontrack.utils.datetime import DateTimeHelper as dt
 
 
@@ -20,8 +21,12 @@ class TestLogicLookup:
     def equity_index_data_fixture(self, exchange_fixture):
         self.exchange_fixture = exchange_fixture
         self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
-        self.marketlookupdata.load_equity_data()
-        self.marketlookupdata.load_index_data()
+        records = self.marketlookupdata.load_equity_data()
+        self.marketlookupdata.create_or_update(records, Equity)
+
+        records = self.marketlookupdata.load_index_data()
+        self.marketlookupdata.create_or_update(records, Index)
+
         self.settings = SettingLogic()
 
     @pytest.mark.unittest
@@ -46,6 +51,8 @@ class TestLogicLookup:
         current_date = dt.get_date_time(2022, 10, 27, 15, 30, 0)
         end_date = dt.get_date_time(2022, 10, 20, 15, 30, 0)
 
+        key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
+        self.settings.save_setting(key, None, SettingKeyType.EXECUTION_TIME)
         with freeze_time(current_date):
             obj = EndOfDayData(ExchangeType.NSE)
             obj.can_execute_task = MagicMock(

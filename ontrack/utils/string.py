@@ -23,10 +23,13 @@ class StringHelper:
     def whitespace_remover(dataframe):
         # iterating over the columns
         for i in dataframe.columns:
-            # checking datatype of each columns
-            if dataframe[i].dtype == "object":
-                # applying strip function on column
-                dataframe[i] = dataframe[i].map(str.strip)
-            else:
-                # if condn. is False then it will do nothing.
+            try:
+                # checking datatype of each columns
+                if dataframe[i].dtype == "object":
+                    # applying strip function on column
+                    dataframe[i] = dataframe[i].map(str.strip)
+                else:
+                    # if condn. is False then it will do nothing.
+                    pass
+            except Exception:
                 pass

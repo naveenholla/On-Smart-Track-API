@@ -14,17 +14,10 @@ class TestPullEquityIndexData:
         self.equityindex_qs = EquityIndex.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def equity_index_data_fixture(self, exchange_fixture):
-        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
-        self.marketlookupdata.load_equity_data()
-
-        records = self.marketlookupdata.load_index_data()
-        self.marketlookupdata.create_or_update(records, Index)
-
-        records = self.marketlookupdata.load_equity_data()
-        self.marketlookupdata.create_or_update(records, Equity)
-
-        self.marketlookupdata = MarketLookupData(exchange_fixture.symbol)
+    def equity_index_data_fixture(
+        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
+    ):
+        self.marketlookupdata = market_lookup_data_fixture
 
     def __pull_indices_market_cap(self, index_symbol):
         urls = Configurations.get_urls_config()

@@ -22,7 +22,7 @@ from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.numbers import NumberHelper as nh
-from ontrack.utils.ta.identify_candlestick import recognize_candlestick
+from ontrack.utils.ta.cdl_recognization import recognize_candlestick
 
 
 class MarketLookupData(BaseLogic):

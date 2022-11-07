@@ -6,7 +6,12 @@
         },
         {
             "code": "CDL3BLACKCROWS",
-            "name": "Three Black Crows"
+            "name": "Three Black Crows",
+            "forcast_trend": "Bearish",
+            "pattern_type": "Reversal",
+            "pattern_strength": "Strong",
+            "prevailing_trend": "Up",
+            "image": "threeblackcrows-minus.svg"
         },
         {
             "code": "CDL3INSIDE",
@@ -26,7 +31,12 @@
         },
         {
             "code": "CDL3WHITESOLDIERS",
-            "name": "Three Advancing White Soldiers"
+            "name": "Three Advancing White Soldiers",
+            "forcast_trend": "Bullish",
+            "pattern_type": "Reversal",
+            "pattern_strength": "Strong",
+            "prevailing_trend": "Down",
+            "image": "threewhitesoldiers-plus.svg"
         },
         {
             "code": "CDLABANDONEDBABY",

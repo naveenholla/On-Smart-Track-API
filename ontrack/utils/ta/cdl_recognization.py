@@ -3,7 +3,7 @@ from itertools import compress
 import numpy as np
 import talib
 
-from ontrack.utils.ta.candle_rankings import candle_rankings
+from ontrack.utils.ta.cdl_ranking import candle_rankings
 
 
 def recognize_candlestick(df):

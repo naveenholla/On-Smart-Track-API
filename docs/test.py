@@ -29,7 +29,7 @@ df = pd.DataFrame() # Empty DataFrame
 # Load data
 #df = pd.read_csv("path/to/symbol.csv", sep=",")
 # OR if you have yfinance installed
-df = df.ta.ticker("^NSEBANK", period="1d", interval="1m")
+df = df.ta.ticker("^NSEBANK", period="2d", interval="5m")
 
 # Take a peek
 df.tail()

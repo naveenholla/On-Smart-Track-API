@@ -257,7 +257,7 @@ class Index(MarketEntity):
 class EquityIndex(BaseModel):
     index = models.ForeignKey(
         Index,
-        related_name="indices",
+        related_name="equity_indices",
         on_delete=models.CASCADE,
         null=True,
         blank=True,

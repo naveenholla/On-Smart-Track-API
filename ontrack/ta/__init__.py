@@ -3,21 +3,23 @@ name = "ontrack.ta"
 .. moduleauthor:: Kevin Johnson
 """
 from importlib.util import find_spec
-from pathlib import Path
 
 from pkg_resources import DistributionNotFound, get_distribution
 
-_dist = get_distribution("ontrack.ta")
-try:
-    # Normalize case for Windows systems
-    here = Path(_dist.location) / __file__
-    if not here.exists():
-        # not installed, but there is another version that *is*
-        raise DistributionNotFound
-except DistributionNotFound:
-    __version__ = "Please install this project with setup.py"
+# from pathlib import Path
 
-version = __version__ = _dist.version
+
+# _dist = get_distribution("ontrack.ta")
+# try:
+#     # Normalize case for Windows systems
+#     here = Path(_dist.location) / __file__
+#     if not here.exists():
+#         # not installed, but there is another version that *is*
+#         raise DistributionNotFound
+# except DistributionNotFound:
+#     __version__ = "Please install this project with setup.py"
+
+version = __version__ = 1.0  # $_dist.version
 
 Imports = {
     "alphaVantage-api": find_spec("alphaVantageAPI") is not None,

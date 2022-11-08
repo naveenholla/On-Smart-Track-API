@@ -35,28 +35,23 @@ class EquityEndOfDayDataTaskAPIView(SuperAdminPermissionMixin, APIView):
 class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
     def get(self, request, *args, **kwargs):
         index_symbol = request.query_params.get("symbol")
-        if not index_symbol:
-            index_symbol = "CNX750"
-
         date = dt.str_to_datetime(request.query_params.get("date"), "%Y-%m-%d")
-        if not date:
-            date = dt.get_date_time(2022, 11, 4)
-
         days_count = nh.str_to_float(request.query_params.get("days_count"))
+
+        if not date:
+            date = dt.get_date_time(2022, 11, 7)
+
         if not days_count:
             days_count = 30
 
         past_date = dt.get_past_date(date, days=days_count)
 
-        equity_eod_data = EquityEndOfDay.backend.filter(
-            date__gte=past_date, date__lt=date
-        ).order_by("date")
         equity_eod_data_set = (
             EquityEndOfDay.backend.values("entity_id")
             .filter(date__gte=past_date, date__lt=date)
             .annotate(avg_qpt=Avg("quantity_per_trade") * 2)
         )
-        equity_eod_data_latest = EquityEndOfDay.backend.filter(date=date).filter(
+        eod_data_latest = EquityEndOfDay.backend.filter(date=date).filter(
             quantity_per_trade__gt=Subquery(
                 equity_eod_data_set.filter(entity_id=OuterRef("entity_id")).values(
                     "avg_qpt"
@@ -64,22 +59,31 @@ class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
             )
         )
 
-        equity_index = EquityIndex.backend.filter(index__symbol__iexact=index_symbol)
-        queryset = (
-            Equity.backend.filter(
-                id__in=Subquery(equity_eod_data_latest.values("entity_id"))
-            )
-            .filter(id__in=Subquery(equity_index.values("equity__id")))
-            .select_related("exchange")
-        )
-        queryset = queryset.prefetch_related(
-            Prefetch("eod_data", queryset=equity_eod_data, to_attr="eod")
+        queryset = Equity.backend.filter(
+            id__in=Subquery(eod_data_latest.values("entity_id"))
         )
 
-        result = []
+        if index_symbol:
+            equity_index = EquityIndex.backend.filter(
+                index__symbol__iexact=index_symbol
+            )
+            queryset = queryset.filter(
+                id__in=Subquery(equity_index.values("equity__id"))
+            )
+
+        queryset = queryset.select_related("exchange")
+
+        eod_data = EquityEndOfDay.backend.filter(
+            date__gte=past_date, date__lt=date
+        ).order_by("date")
+        queryset = queryset.prefetch_related(
+            Prefetch("eod_data", queryset=eod_data, to_attr="eod")
+        )
+
+        records = []
         for equity in queryset.all():
             eod_data = equity.eod
-            print(equity.symbol)
+
             js_array = []
             for eod in eod_data:
                 js_array.append(eod.__dict__)
@@ -124,16 +128,18 @@ class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
             df = recognize_candlestick(df)
 
             js = df.iloc[-1].to_json()
-
             record = json.loads(js)
             record["symbol"] = equity.symbol
             record["date1"] = date
-            result.append(record)
+            records.append(record)
 
-        result = sorted(result, key=itemgetter("candlestick_rank"), reverse=False)
-        # result = { "records": [d for d in result if d["candlestick_rank"]> 0 ]}
-        result = {"records": result}
-        result["symbols"] = [sub["symbol"] for sub in result["records"]]
+        records = sorted(records, key=itemgetter("candlestick_rank"), reverse=False)
+        records = [d for d in records if d["candlestick_rank"] > 0]
+        result = {
+            "count": len(records),
+            "symbols": [sub["symbol"] for sub in records],
+            "records": records,
+        }
         return Response(result)
 
         # df = pd.DataFrame() # Empty DataFrame

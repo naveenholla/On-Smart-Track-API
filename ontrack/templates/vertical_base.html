@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static i18n compress%}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block body_extra %}
+class="loading" data-layout-color="{% if dark %}dark{% else %}light{% endif %}" data-leftbar-theme="{% if leftSideBarTheme %}{{leftSideBarTheme}}{% else %}dark{% endif %}" data-layout-mode="fluid" data-rightbar-onstart="true"
+{% endblock %}
+
+{% block page_content %}
+{% block preloader %}
+{% endblock %}
+
+<!-- Begin page -->
+<div class="wrapper">
+    {% include 'partials/left-sidebar.html' %}
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+
+    <div class="content-page">
+        <div class="content">
+            {% include 'partials/topbar.html' %}
+
+            {% block content %}
+
+            {% endblock %}
+
+        </div>
+        <!-- content -->
+
+
+        {% include 'partials/footer.html' %}
+
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- End Page content -->
+    <!-- ============================================================== -->
+
+</div>
+<!-- END wrapper -->
+
+{% include 'partials/right-sidebar.html' %}
+
+{% endblock %}
+
+{% block extra_javascript %}{% endblock %}

@@ -1,11 +1,21 @@
 {% extends "account/base.html" %}
+{% load static i18n crispy_forms_tags %}
+{% load account %}
 
-{% load i18n %}
+{% block title %}
+    {% trans "Sign Up Closed" %}
+{% endblock title %}
 
-{% block head_title %}{% translate "Sign Up Closed" %}{% endblock %}
+{% block page_heading %}
+    {% trans "Sign Up Closed" %}
+{% endblock page_heading %}
 
-{% block inner %}
-<h1>{% translate "Sign Up Closed" %}</h1>
+{% block page_text %}
+    {% trans "We are sorry, but the sign up is currently closed." %}
+{% endblock page_text %}
 
-<p>{% translate "We are sorry, but the sign up is currently closed." %}</p>
-{% endblock %}
+{% block page_form %}
+{% endblock page_form %}
+
+{% block page_bottom_link %}
+{% endblock page_bottom_link %}

@@ -1,0 +1,27 @@
+{% extends "vertical_base.html" %}
+{% load static i18n compress%}
+
+{% block title %}{% trans "Dashboard" %}{% endblock title %}
+
+{% block extra_css %}
+
+<!-- third party css -->
+<link href="{% static 'css/vendor/' %}" rel="stylesheet" type="text/css" />
+<!-- third party css end -->
+
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block extra_javascript %}
+
+<!-- Third party js -->
+<script src="{% static 'js/vendor/' %}"></script>
+<!-- Third party js ends -->
+
+<!-- Init js -->
+<script src="{% static 'js/pages/demo.admin.js' %}"></script>
+<!-- Init js end -->
+
+{% endblock %}

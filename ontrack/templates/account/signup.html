@@ -1,22 +1,32 @@
 {% extends "account/base.html" %}
+{% load static i18n crispy_forms_tags %}
 
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% block title %}
+    {% trans "Register" %}
+{% endblock title %}
 
-{% block head_title %}{% translate "Signup" %}{% endblock %}
+{% block page_heading %}
+    {% trans "Free Sign Up" %}
+{% endblock page_heading %}
 
-{% block inner %}
-<h1>{% translate "Sign Up" %}</h1>
+{% block page_text %}
+    {% trans "Don't have an account? Create your account, it takes less than a minute." %}
+{% endblock page_text %}
 
-<p>{% blocktranslate %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktranslate %}</p>
+{% block page_form %}
+  <form id="signup_form" method="post" action="{% url 'account_signup' %}" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button class="btn btn-primary" type="submit">{% translate "Sign Up" %} &raquo;</button>
-</form>
+    <div class="mb-3 mt-3 text-center">
+      <button class="btn btn-primary" type="submit"> {% trans "Sign Up" %} </button>
+    </div>
+  </form>
+{% endblock page_form %}
 
-{% endblock %}
+{% block page_bottom_link %}
+  Already have account? <a href="{% url 'account_login' %}" class="text-muted ms-1"><b>Log In</b></a>
+{% endblock page_bottom_link %}

@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Avg
+from rest_framework.reverse import reverse
 
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.model import BaseModel
@@ -21,6 +23,37 @@ class MarketEntity(BaseModel):
     is_active = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now=True)
 
+    # average_central_pivot_range = models.DecimalField(**numeric_field_values)
+    # candle_type = models.CharField(max_length=100)
+    # relative_strength = models.DecimalField(**numeric_field_values)
+    # relative_strength_indicator = models.DecimalField(**numeric_field_values)
+
+    # sma_5 = models.DecimalField(**numeric_field_values)
+    # sma_20 = models.DecimalField(**numeric_field_values)
+    # sma_50 = models.DecimalField(**numeric_field_values)
+    # sma_100 = models.DecimalField(**numeric_field_values)
+    # sma_200 = models.DecimalField(**numeric_field_values)
+
+    # ema_5 = models.DecimalField(**numeric_field_values)
+    # ema_20 = models.DecimalField(**numeric_field_values)
+    # ema_50 = models.DecimalField(**numeric_field_values)
+    # ema_100 = models.DecimalField(**numeric_field_values)
+    # ema_200 = models.DecimalField(**numeric_field_values)
+
+    # standard_deviation = models.DecimalField(**numeric_field_values)
+
+    details_view_name = ""
+
+    @property
+    def get_absolute_url(self):
+        return reverse(self.details_view_name, kwargs={"slug__iexact": self.slug})
+
+    @property
+    def average_delivery_quantity(self):
+        if hasattr(self, "_average_delivery_quantity"):
+            return self._average_delivery_quantity
+        return self.eod_data.aggregate(Avg("delivery_quantity"))
+
     class Meta:
         abstract = True
 
@@ -35,6 +68,76 @@ class TradableEntity(BaseModel):
     avg_price = models.DecimalField(**numeric_field_values)
     point_changed = models.DecimalField(**numeric_field_values)
     percentage_changed = models.DecimalField(**numeric_field_values)
+
+    @property
+    def top_central_pivot(self):
+        if self.high_price and self.low_price:
+            return (self.high_price + self.low_price) / 2
+        return 0
+
+    @property
+    def pivot(self):
+        if self.high_price and self.low_price and self.close_price:
+            return (self.high_price + self.close_price + self.low_price) / 3
+        return 0
+
+    @property
+    def bottom_central_pivot(self):
+        return (self.pivot - self.top_central_pivot) + self.pivot
+
+    @property
+    def resistance_3(self):
+        if self.high_price and self.low_price:
+            return self.high_price + (2 * (self.pivot - self.low_price))
+        return 0
+
+    @property
+    def resistance_2(self):
+        if self.high_price and self.low_price:
+            return self.pivot + (self.high_price - self.low_price)
+        return 0
+
+    @property
+    def resistance_1(self):
+        if self.low_price:
+            return (2 * self.pivot) - self.low_price
+        return 0
+
+    @property
+    def support_1(self):
+        if self.high_price:
+            return (2 * self.pivot) - self.high_price
+        return 0
+
+    @property
+    def support_2(self):
+        if self.high_price and self.low_price:
+            return self.pivot - (self.high_price - self.low_price)
+        return 0
+
+    @property
+    def support_3(self):
+        if self.high_price and self.low_price:
+            return self.low_price - (2 * (self.high_price - self.pivot))
+        return 0
+
+    @property
+    def central_pivot_range(self):
+        if self.high_price and self.low_price:
+            return abs((((self.high_price + self.low_price) / 2) - self.pivot) * 2)
+        return 0
+
+    @property
+    def open_high(self):
+        if self.open_price and self.high_price:
+            return self.open_price == self.high_price
+        return False
+
+    @property
+    def open_low(self):
+        if self.open_price and self.low_price:
+            return self.open_price == self.low_price
+        return False
 
     class Meta:
         abstract = True

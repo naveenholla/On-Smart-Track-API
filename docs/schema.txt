@@ -1,0 +1,861 @@
+content_type
+    id
+    app_label
+    model
+
+auth_permission
+    id
+    name
+    content_type_id
+    codename
+auth_group
+    id
+    name
+auth_group_permissions
+    id
+    name
+    auth_permission_id
+
+users_user
+    id
+    username
+    password
+    email  
+    last login
+    first Name
+    middle Name
+    last name  
+    is active
+    is staff
+    is super user
+users_user_groups
+    id
+    user_id
+    group_id
+users_user_permissions
+    id
+    user_id
+    permission_id
+
+admin_lookup_currency
+    id
+    name
+        INR
+        USD
+    symbol
+admin_lookup_field_data_type
+    id
+    name
+        Number
+        String
+        DateTime
+        Numeric
+        Boolean
+        Path
+        Hierarchy
+        URL
+        Password
+admin_lookup_field_type_category
+    id
+    name
+        Account
+        Equity
+admin_lookup_field_type
+    id
+    field_type_category_id
+    field_data_type_id
+    name
+        ShortName
+        Description
+        PersonName
+        StartDate
+        CloseDate
+        MobileNumber
+        PrimaryAccountNumber
+        SecondAccountNumber
+        CustomerInformationFileNumber
+        Username
+        PasswordHint
+        PinNumberHint
+        BankSiteAddress
+        CardDetails
+        CardNumber
+        CardDescription
+        CardPersonName
+        CardValidFrom
+        CardValidTill
+        CardGridValue1
+        CardGridValue2
+        CardLimit
+        CardActiveStatus
+        CustomerId
+        BankAddress
+        IFSCCode
+        BranchCode
+        MICRCode
+        SwiftCode
+        PaymentSiteAddress
+        PolicyNumber
+        PremiumAmount
+        PremiumDueDate
+        SumAssuredBase
+        SumAssuredUnit
+        MaturityAmount
+        DetailsDocumentPath
+        IsReimbursementLimit
+        AmountInvested
+        TenorDays
+        RateOfInterest
+        BaseValue
+        CurrentValue
+        InvestmentUnits
+        Amount
+        PurchasedStatus
+        OccuranceDate
+        OpenDate(DuplicateReusable)
+        CloseDate(DuplicateReusable)
+        PremiumAmountBaseRate
+        SumAssuredExemptUnit
+        AdditionalDetails
+    display_name
+    parent_id
+    default_value
+    min_value
+    max_value
+    one_to_many
+    is_mandatory
+    is_editable
+    is_secure
+    is_relative
+    is_active
+    ordinal
+admin_lookup_account_type
+    id
+    name
+        Cash In Hand
+        Loans
+        Loyalty Points
+        Investments
+        Outing
+        Utilities
+        Company
+        PPF
+        Miscellaneous
+        Home Loan
+        Credit Cards
+        Car Loan
+        Personal Loan
+        General
+        Lease Account
+        Fixed Deposit
+        Recursive Deposit
+        Insurances
+        Health Insurance
+        Term Insurance
+        Life Insurance
+        Accident Cover
+        EPF
+        Saving Account
+        Current Account
+        Credit Card
+        Cash In Wallet
+        Policy Investment
+        Sukanya Samriddhi Account
+        Mutual Funds
+        NPS
+        Stocks
+        Gold
+        Trading Account
+        Demat Account
+    parent_id
+    is_financial
+    icon  
+    is_active
+    ordinal  
+admin_lookup_todo_category
+    id
+    name
+        Default
+        Daily
+        Weekly
+        Monthly
+        Quaterly
+        HalfYearly
+        Yearly
+    color
+admin_lookup_transaction_type
+	name
+		Not Specified
+		Account Transfer
+		ATM Withdraw
+		Cash Deposit
+		Medical
+		Credit Card
+		Entertainment
+		Automobile
+		Income
+		Points
+		Interest
+		Travel
+		Unknown
+		Daily Needs / Groceries
+		Reimbursement
+		Property
+		Household & Appliances
+		Insurance
+		Charity
+		CableTV
+		Clothing / Shoes
+		Education
+		Electricity
+		Fees & Charges
+		Food & Dining
+		Gas
+		Health & Fitness
+		Investments
+		Kids
+		Memberships
+		Personal
+		Pets
+		Rent
+		Water bills
+		Internet
+		Phone Bills
+		Maid Payment
+		Loan Repayment
+		Petrol / Diesel
+		Taxes
+		Miscellaneous Income
+		Gifts
+		Miscellaneous Expenses
+		Supplies
+		Books
+		Society Charges
+		Software
+		Adjustment
+		Loan Part Payment		
+	income / expense
+	exclude from report
+	icon url
+	parent id
+admin_lookup_market_exchange
+    id    
+    name
+admin_lookup_market_broker
+    id
+    name
+admin_lookup_market_holidays
+    id
+    date
+    description
+    is_clearing_holiday
+admin_lookup_market_sector
+    id
+    MacroEconomicSectorCode
+    MacroEconomicSectorName
+    SectorCode
+    SectorName
+    IndustryCode
+    IndustryName
+    BasicIndustryCode
+    BasicIndustryName
+    Defination
+admin_lookup_strategies
+    name                    # strategy name
+    enabled                 # Strategy will be run only when it is enabled
+    start_time              # When to start the strategy. Default is Market start time
+    max_entry_time          # This is not square off timestamp. This is the timestamp after which no new trades will be placed under this strategy but existing trades continue to be active.
+    square_off_time         # Square off time
+    product_type            # MIS/NRML/CNC etc
+    symbols                 # List of stocks to be traded under this strategy
+    stop_loss_percentage
+    target_percentage
+    max_trades_per_day      # Max number of trades per day under this strategy
+    is_fno
+    days_to_trade
+    is_expiry_day_trade
+    is_directional
+    is_intraday
+    can_run_parellel
+    segment  # equity | future | option
+    placeMarketOrder        # True means place the entry order with Market Order Type 
+admin_lookup_interest_rate
+    id
+    start_date
+    end_date
+    account_type_id
+    interest_rate
+admin_lookup_market_calender
+    id
+    Date
+    is_expiry
+    expiry_type
+    description
+    equity_trade_pull_date
+    indices_trade_pull_date
+    fo_bhav_pull_data
+    participant_wise_pull_date
+admin_lookup_market
+    id
+    key
+        no_of_days_for_average
+    value
+
+market_data_equity
+    id
+    symbol
+    company_name
+    industry
+    lot_size
+    stock_cap
+    stock_cap_bucket_start_index
+    is_top_50
+    last_update_date
+market_data_equity_fields
+    id
+    date
+    admin_lookup_field_type_id
+        series
+        date_of_listing
+        paid_up_value
+        isin_number
+        face_value
+        total_shares
+        total_promoter_holding
+        total_public_holding
+        total_encumbered_by_promoter
+        promotor_holding_percentage
+        Name
+        BseCode
+        NseCode
+        Industry
+        CurrentPrice
+        Sales
+        Opm
+        ProfitAfterTax
+        MarketCapitalization
+        SalesLatestQuarter
+        ProfitAfterTaxLatestQuarter
+        YoyQuarterlySalesGrowth
+        YoyQuarterlyProfitGrowth
+        PriceToEarning
+        DividendYield
+        PriceToBookValue
+        ReturnOnCapitalEmployed
+        ReturnOnAssets
+        DebtToEquity
+        ReturnOnEquity
+        Eps
+        Debt
+        PromoterHolding
+        ChangeInPromoterHolding
+        EarningsYield
+        PledgedPercentage
+        IndustryPe
+        SalesGrowth
+        ProfitGrowth
+        PriceToSales
+        PriceToFreeCashFlow
+        Evebitda
+        CurrentRatio
+        EnterpriseValue
+        InterestCoverageRatio
+        PegRatio
+        ReturnOver3Months
+        ReturnOver6Months
+        SalesGrowth3Years
+        SalesGrowth5Years
+        ProfitGrowth3Years
+        ProfitGrowth5Years
+        AverageReturnOnEquity5Years
+        AverageReturnOnEquity3Years
+        ReturnOver1Year
+        ReturnOver3Years
+        ReturnOver5Years
+        ReturnOver1Week
+        ReturnOver1Month
+        Dma50
+        Dma200
+        Volume1WeekAverage
+        Volume1MonthAverage
+        Volume
+        HighPrice
+        LowPrice
+        Reserves
+        BookValue
+        DebtorDays
+    market_data_equity_id
+    field_value
+market_data_equity_insider_trades
+    id
+    market_data_equity_id
+    category_of_person
+    no_of_shares
+    value_of_shares
+    mode_of_acquisition
+    date
+market_data_equity_pledged
+    id
+    market_data_equity_id
+    date
+    total_shares
+    total_promoter_holding
+    total_public_holding
+    total_encumbered_by_promoter
+market_data_equity_sast
+    id
+    market_data_equity_id
+    date
+    total_acquisition
+    total_sale
+    total_after_acquistion  
+market_data_equity_eod
+    id
+    symbol
+    date
+    prev_close
+    open_price
+    high_price
+    low_price
+    close_price
+    point_changed
+    percentage_changed
+    avg_price
+    traded_quantity
+    turn_overs_in_lacs
+    number_of_trades
+    delivery_quantity
+    delivery_percentage
+    quantity_per_trade
+    open_interest
+    promotor_holding_percentage
+    average_quantity_per_trade
+    average_volumn
+    average_delivery_percentage
+    average_open_interest
+market_data_equity_derivativ_eod
+    id
+    instrument
+        FUTSTK
+    symbol
+    expiry_date
+    strike_price
+    option_type
+        ce
+        pe
+    open_price
+    high_price
+    low_price
+    close_price
+    settle_price
+    no_of_contracts
+    value_of_contracts
+    open_interest
+    change_in_open_interest
+    date
+market_data_participant_activity
+    id
+    date
+    client_type
+    activity_type
+        futureIndex
+        futureStock
+        OptionIndexCall
+        OptionStockCall
+        OptionIndexPut
+        OptionStockPut
+    is_long
+    change_from_previous_day
+market_data_indices_eod
+    id
+    name
+    date
+    prev_close
+    open_price
+    high_price
+    low_price
+    close_price
+    point_changed
+    percentage_changed    
+    traded_quantity
+    index_pe
+    index_pb
+    index_div_yield
+market_data_participant_statistic
+    id
+    date
+    client_type
+    activity_type
+        Cash
+        option
+        future
+    no_of_contracts
+    amount
+    open_interest
+
+market_livedata_option_chain
+    id
+    symbol
+    date
+    pe_strike_price
+    pe_expiry_date
+    pe_open_interest
+    pe_change_in_open_interest
+    pe_total_traded_volume
+    pe_implied_volatility
+    pe_last_traded_price
+    pe_change
+    pe_total_buy_quantity
+    pe_total_sell_quantity
+    pe_bid_quantity
+    pe_bid_price
+    pe_ask_quantity
+    pe_ask_price
+    pe_underlying_value
+    ce_strike_price
+    ce_expiry_date
+    ce_open_interest
+    ce_change_in_open_interest
+    ce_total_traded_volume
+    ce_implied_volatility
+    ce_last_traded_price
+    ce_change
+    ce_total_buy_quantity
+    ce_total_sell_quantity
+    ce_bid_quantity
+    ce_bid_price
+    ce_ask_quantity
+    ce_ask_price
+    ce_underlying_value
+market_livedata_equities
+    id
+    symbol
+    date
+    series
+    open
+    day_high
+    day_low
+    last_price
+    previous_close
+    change_from_previous_day
+    percentage_changed
+    total_traded_volume
+    total_traded_value
+    year_high
+    year_low
+    near_week_high
+    near_week_low
+    ons_week_ago
+    one_month_ago
+    one_year_ago
+    declines
+    advances
+    unchanged
+    lastest_open_interest
+    previous_open_interest
+    change_in_open_interest
+    average_open_interest
+    volume_open_interest
+    underlying_value
+market_livedata_majorIndices
+    id
+    name
+    month
+    last
+    high
+    low
+    change
+    change_percentage
+    date
+    is_future
+market_livedata_indices_future
+    id
+    name
+    instrument
+    instrument_type
+    contract_name
+    expiry_date
+    option_type
+    strike_price
+    last_price
+    change
+    change_percentage
+    Volume
+    total_turn_over
+    value
+    premium_turn_over
+    underlying_value
+    open_interest
+    no_of_traded
+
+users_user_profile  
+    id
+    user_id
+    mobile_number
+    address
+    city
+    country
+    postal code
+    pin
+users_user_settings
+    id
+    user_id
+    default_theme
+    default_language
+    default_curreny_id
+    default_date_format
+    notification_enabled
+    top_record_count
+
+user_lookup_todo_folder
+    id
+    folder_name
+user_lookup_todo_task
+    id
+    folder_id
+    user_id    
+    subject
+    details
+    default_amount
+    due_date
+    reminder
+    priority
+user_lookup_person
+    id
+    name
+    user_id
+
+user_lookup_account
+    id
+    name
+    user_id    
+    parent_account_id
+    account_type_id
+    available_balance
+    ledger_balance
+    credit_limit
+    last_update_date
+    is_active
+    exclude_from_reports
+    ordinal
+    currency
+    clientId
+    institute
+    app_key
+    app_secret
+user_lookup_account_person
+    id
+    account_id
+    person_id
+user_lookup_account_interest_rate
+    id
+    account_id
+    emi_value
+    start_date
+    end_date
+user_lookup_account_fields
+    id
+    admin_lookup_field_type_id
+    account_id
+    field_value
+user_lookup_account_cheque
+    id
+    account_id
+    cheque_number
+    description
+    Date
+    Amount
+    IsBudget
+    is_cancelled
+    is_used
+    is_valid
+user_lookup_DematAccount
+    institute
+    client_id
+    app_key
+    app_secret
+    Funds
+    available_cash
+    margin
+
+account_session
+    account
+    login_initiated
+    login_at
+    access_token
+user_account_transaction
+    id
+    account_id
+    account_cheque_id
+    admin_lookup_transaction_type_id
+    description
+    amount
+    account_opening_balance
+    account_close_balance
+    principal_amount
+    interest_amount
+    occurance_date
+    is_budget
+    is_pursed
+    sequence_number
+    previous_transaction_id
+    notes
+    bill_path
+    exclude_from_reports
+user_account_transaction_linking
+    id
+    source_transaction_id
+    destination_transaction_id
+    amount
+
+user_event
+    id
+    name
+    start_date
+    end_date
+    icon
+user_todo_task_frequency
+    id
+    task_id
+    admin_lookup_todo_category_id (frequency)
+    frequency_count
+    frequency_start_date
+    frequency_end_date
+    time_zone
+    day_of_week
+    day_of_month
+    week_of_month
+    month_of_year
+    occurence_count
+    createon
+
+user_trading_transactions
+    id
+    user_id
+    account_id
+    date
+    symbol
+    type_of_trade
+        Equity Options
+    expiry_date
+    is_weekly_expiry
+    option_type
+        ce
+        pe
+    option_price
+    lot_size
+    price_per_unit
+    is_buy
+    close_date
+    close_price_per_unit
+    strategy
+    stop_loss
+    learning_notes
+user_trading_transaction_brokerage
+    id
+    user_trading_transactions_id
+    is_buy
+    brokerage
+    stt
+    transaction_charges
+    gst
+    sebi
+    clearing_charges
+    stamp_duty
+
+
+user_lookup_strategies
+    account    
+    strategy
+    capital                 # Capital to trade (This is the margin you allocate from your broker account for this strategy)
+    leverage                # 1x, 2x, 3x Etc
+    capital_per_set         # Applicable if isFnO is True (Set means 1CE/1PE or 2CE/2PE etc based on your strategy logic)
+    is_active
+    is_hedged
+    
+user_strategy_instance
+    session
+    user_strategy
+    initiated_time
+    is_active
+    state
+    exchange
+    symbol  
+    symbol_current_market_price 
+    exited_time
+    pnl
+    capital
+
+
+user_trade_order
+    strategy_instance
+    parent
+    order type      # primary | stop loss | target
+    optionType              # CE/PE. Applicable only if isOptions is True
+    qty
+    filled_Qty
+    pending_Qty
+    state
+    institute_order_Id
+    segment  # equity | future | option    
+        type_of_trade
+            Equity Options
+    entry_price
+    exit_price
+    initial_stoploss_price
+    trigger_Price
+    average_Price
+    current_market_price    
+    direction
+    productType 
+    order_execute_time
+    order_exit_time
+    last_order_check_time
+    exit_Reason
+    message_from_instititue
+    brokerage
+    stt
+    transaction_charges
+    gst
+    sebi
+    clearing_charges
+    stamp_duty    
+    expiry_date
+    is_weekly_expiry    
+    option_price
+    lot_size
+    learning_notes
+
+
+
+
+
+
+volume break out
+delivery % break out
+open interest break out
+quantity_per_trade break out
+candle
+Pivot
+TC
+BC
+R1,2,3
+S1,2,3
+CPR
+Narrow or wide
+OpenHigh
+OpenLow
+Position above or below CPR
+strategy
+    CPR reversal
+        =IF(AND([@[HIGH_PRICE]]>[@R1],[@[HIGH_PRICE]]<[@R2],[@[LOW_PRICE]]>[@S1],[@[CLOSE_PRICE]]<[@Pivot]),"CPR Bearish Reverser",IF(AND([@[LOW_PRICE]]>[@S2],[@[LOW_PRICE]]<[@[HIGH_PRICE]]<[@R1],[@[CLOSE_PRICE]]>[@Pivot]),"CPR Bullish"," - "))
+        =IF([@[OPEN_PRICE]]>[@R2],"Bearish Beakout",IF([@[OPEN_PRICE]]<[@S2],"Bullish Breakout"," - "))
+VWAP
+Moving Average
+
+
+
+
+
+
+

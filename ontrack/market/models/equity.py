@@ -32,7 +32,7 @@ class EquityEndOfDay(TradingInformation):
     backend = EquityEndOfDayBackendManager()
 
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = []
         unique_together = ("entity", "date")
 
     def __str__(self):

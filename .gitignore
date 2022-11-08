@@ -282,3 +282,6 @@ certs/*
 ontrack/logfiles/*.txt
 ontrack/logfiles/temp/**
 .cache_ggshield
+packages/pandas-ta/**
+packages/pandas-ta-main.zip
+packages/TA_Lib-0.4.24-cp310-cp310-win_amd64.whl

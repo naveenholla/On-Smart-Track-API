@@ -30,13 +30,32 @@ class BaseLogic:
             if isinstance(result, str):
                 output["message"] = result
             else:
-                output["created"] = result[1][0]
-                output["updated"] = result[1][1]
+                output["created"] = result[0]
+                output["updated"] = result[1]
         return output
 
     def execute_initial_lookup_data_task(self):
         with application_context():
             self.load_fixtures_all_data()
+
+    def create_dict(self, qs, key_str="symbol"):
+        d = {}
+        for entity in qs.all():
+            if key_str == "symbol":
+                key = entity.symbol.lower()
+                d[key] = entity
+
+            if key_str == "name":
+                key = entity.symbol.lower()
+                d[key] = entity
+
+                key = entity.name.lower()
+                d[key] = entity
+
+            if key_str == "equity_index":
+                key = f"{entity.equity.symbol}-{entity.index.symbol}".lower()
+                d[key] = entity
+        return d
 
     def create_or_update(self, data, entityType):
         if data is None or len(data) == 0:

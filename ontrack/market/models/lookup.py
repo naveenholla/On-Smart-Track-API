@@ -225,6 +225,7 @@ class Equity(MarketEntity):
     isin_number = models.CharField(max_length=100, null=True, blank=True)
     industry = models.CharField(max_length=100, null=True, blank=True)
 
+    details_view_name = "api_market:equity-detail"
     backend = EquityBackendManager()
 
     class Meta(BaseModel.Meta):
@@ -256,7 +257,7 @@ class Index(MarketEntity):
 class EquityIndex(BaseModel):
     index = models.ForeignKey(
         Index,
-        related_name="indices",
+        related_name="equity_indices",
         on_delete=models.CASCADE,
         null=True,
         blank=True,

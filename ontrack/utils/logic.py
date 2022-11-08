@@ -144,7 +144,8 @@ class LogicHelper:
                 skiprows=skiprows,
                 skipfooter=0,
                 header=header,
-                engine="python",
+                encoding="ISO-8859-1",
+                lineterminator="\n",
             )
             LogicHelper.logger.log_debug(f"{len(data)} records found from {url}.")
             return data

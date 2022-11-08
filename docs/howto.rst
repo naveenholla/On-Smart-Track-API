@@ -7,7 +7,9 @@ Get Started
 Documentation can be written as rst files in `ontrack/docs`.
 
 
-To build and serve docs, use the command::
+To build and serve docs, use the commands::
+    
+    docker-compose -f local.yml up docs
     
     make livehtml 
     
@@ -32,3 +34,8 @@ To compile all docstrings automatically into documentation source files, use the
     
         make apidocs
 
+
+This can be done in the docker container:
+    :: 
+        
+        docker run --rm docs make apidocs

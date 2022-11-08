@@ -8,19 +8,30 @@ from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
+context = {"dark": True}
+
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path(
+        "",
+        view=TemplateView.as_view(
+            template_name="landing.html", extra_context=dict(dark=True)
+        ),
+        name="landing",
+    ),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
     ),
-    path("api/market/", include("ontrack.market.api.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("ontrack.users.urls.user", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("dashboard/", include("ontrack.dashboard.urls", namespace="dashboard")),
+    path("marketdata/", include("ontrack.market.urls", namespace="marketdata")),
+    path("api/market/", include("ontrack.market.api.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()
@@ -65,6 +76,6 @@ if settings.DEBUG:
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
-admin.site.site_header = "OnSmartTrack API Admin"
-admin.site.site_title = "OnSmartTrack API Admin Portal"
-admin.site.index_title = "Welcome to On Smart Track API Portal"
+admin.site.site_header = "On Smart Track Admin"
+admin.site.site_title = "On Smart Track Admin Portal"
+admin.site.index_title = "Welcome to On Smart Track Portal"

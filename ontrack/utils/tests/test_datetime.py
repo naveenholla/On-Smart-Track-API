@@ -1,12 +1,11 @@
-from datetime import datetime, time, timedelta
+from datetime import timedelta
 
 import pytest
-import pytz
 from freezegun import freeze_time
 
 from ontrack.utils.datetime import DateTimeHelper as dt
 
-utcTimeZone = pytz.timezone("UTC")
+time_zone = "UTC"
 test_year = 2021
 test_month = 6
 test_date = 20
@@ -14,44 +13,34 @@ test_week = 1
 test_hour = 6
 test_minute = 52
 test_second = 12
-test_millisecond = 500
-test_timezone = utcTimeZone
-test_datetime = datetime(
+test_datetime = dt.get_date_time(
     test_year,
     test_month,
     test_date,
     test_hour,
     test_minute,
     test_second,
-    test_millisecond,
-    tzinfo=test_timezone,
+    time_zone=time_zone,
 )
 
-test_datetime_2 = datetime(
+test_datetime_2 = dt.get_date_time(
     test_year + 1,
     test_month + 1,
     test_date + 1,
     test_hour + 1,
     test_minute + 1,
     test_second + 1,
-    test_millisecond + 1,
-    tzinfo=test_timezone,
+    time_zone=time_zone,
 )
 
-test_date_obj = datetime(
+test_date_obj = dt.get_date_time(
     test_year,
     test_month,
     test_date,
-    tzinfo=test_timezone,
+    time_zone=time_zone,
 )
 
-test_time = time(
-    test_hour,
-    test_minute,
-    test_second,
-    test_millisecond,
-    tzinfo=test_timezone,
-)
+test_time = test_datetime.timetz()
 
 
 @pytest.mark.unittest
@@ -64,14 +53,14 @@ def test_current_date_freeze_time():
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_date():
-    date_obj = dt.current_date()
+    date_obj = dt.current_date(time_zone=time_zone)
     assert date_obj == test_date_obj
 
 
 @pytest.mark.unittest
 @freeze_time(test_datetime)
 def test_current_time():
-    time_obj = dt.current_time()
+    time_obj = dt.current_time(time_zone=time_zone)
     assert time_obj == test_time
 
 
@@ -89,8 +78,6 @@ def test_current_time():
         {"hours": test_hour},
         {"minutes": test_minute},
         {"seconds": test_second},
-        {"milliseconds": test_millisecond},
-        {"microseconds": test_millisecond},
     ],
     ids=[
         "Week(s)",
@@ -98,8 +85,6 @@ def test_current_time():
         "Hour(s)",
         "Minute(s)",
         "Second(s)",
-        "Millisecond(s)",
-        "Microsecond(s)",
     ],
 )
 @pytest.mark.parametrize("is_future", [True, False], ids=["Add", "Substract"])
@@ -144,7 +129,7 @@ def test_set_time_to_date(input_time_obj, time_zone, expected_hour, expected_min
             time_zone=time_zone,
             dateTimeObj=input_time_obj,
         )
-        assert d.tzinfo.zone == "UTC"
+        assert d.tzinfo == input_time_obj.tzinfo
 
         assert d.hour == expected_hour
         assert d.minute == expected_minute

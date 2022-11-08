@@ -1,3 +1,5 @@
+from django.db import transaction
+
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
@@ -9,7 +11,8 @@ from ontrack.market.models.participant import (
     ParticipantActivity,
     ParticipantStatsActivity,
 )
-from ontrack.utils.base.enum import AdminSettingKey, HolidayCategoryType
+from ontrack.utils.base.enum import AdminSettingKey as sk
+from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
@@ -22,114 +25,77 @@ class EndOfDayData(BaseLogic):
         self.logger = ApplicationLogger()
         self.settings = SettingLogic()
 
-        self.exchange_symbol = exchange_symbol
+        exchange_qs = Exchange.backend.get_queryset()
+        self.exchange = exchange_qs.unique_search(exchange_symbol).first()
 
-        self.exchange_qs = Exchange.backend.get_queryset()
-        self.equity_qs = Equity.backend.get_queryset()
+        if not self.exchange:
+            return
 
-        self.index_qs = Index.backend.get_queryset()
-        self.exchange_qs = Exchange.backend.get_queryset()
+        equity_qs = Equity.backend.get_queryset()
+        self.equity_dict = self.create_dict(equity_qs)
 
-        self.equity_eod_qs = EquityEndOfDay.backend.get_queryset()
-        self.index_eod_qs = IndexEndOfDay.backend.get_queryset()
+        index_qs = Index.backend.get_queryset()
+        self.index_dict = self.create_dict(index_qs, "name")
 
-        self.equity_derivative_eod_qs = EquityDerivativeEndOfDay.backend.get_queryset()
-        self.index_derivative_eod_qs = IndexDerivativeEndOfDay.backend.get_queryset()
+        self.pull_equity_obj = PullEquityData(self.exchange, self.equity_dict)
+        self.pull_index_obj = PullIndexData(self.exchange, self.index_dict)
+        self.pull_particpant_obj = PullParticipantData(self.exchange)
 
-        self.participant_qs = ParticipantActivity.backend.get_queryset()
-        self.participant_stats_qs = ParticipantStatsActivity.backend.get_queryset()
+    def load_equity_eod_data(self, date):
+        already_processed = EquityEndOfDay.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        self.exchange = self.exchange_qs.unique_search(self.exchange_symbol).first()
+        result = self.pull_equity_obj.pull_parse_eod_data(date)
 
-    def load_equity_eod_data(self, date, save_data=True):
-        pull_equity_obj = PullEquityData(
-            self.exchange_symbol, self.exchange_qs, self.equity_qs, self.equity_eod_qs
-        )
+        return result
 
-        result = pull_equity_obj.pull_parse_eod_data(date)
-        if save_data:
-            records_stats = self.create_or_update(result, EquityEndOfDay)
+    def load_equity_derivative_eod_data(self, date):
+        already_processed = EquityDerivativeEndOfDay.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        return result, records_stats
+        result = self.pull_equity_obj.pull_parse_derivative_eod_data(date)
 
-    def load_equity_derivative_eod_data(self, date, save_data=True):
-        pull_equity_obj = PullEquityData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.equity_qs,
-            self.equity_eod_qs,
-            self.equity_derivative_eod_qs,
-        )
+        return result
 
-        result = pull_equity_obj.pull_parse_derivative_eod_data(date)
-        if save_data:
-            records_stats = self.create_or_update(result, EquityDerivativeEndOfDay)
+    def load_index_eod_data(self, date):
+        already_processed = IndexEndOfDay.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        return result, records_stats
+        result = self.pull_index_obj.pull_parse_eod_data(date)
 
-    def load_index_eod_data(self, date, save_data=True):
-        pull_index_obj = PullIndexData(
-            self.exchange_symbol, self.exchange_qs, self.index_qs, self.index_eod_qs
-        )
+        return result
 
-        result = pull_index_obj.pull_parse_eod_data(date)
-        if save_data:
-            records_stats = self.create_or_update(result, IndexEndOfDay)
+    def load_index_derivative_eod_data(self, date):
+        already_processed = IndexDerivativeEndOfDay.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        return result, records_stats
+        result = self.pull_index_obj.pull_parse_derivative_eod_data(date)
 
-    def load_index_derivative_eod_data(self, date, save_data=True):
-        pull_index_obj = PullIndexData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.index_qs,
-            self.index_eod_qs,
-            self.index_derivative_eod_qs,
-        )
+        return result
 
-        result = pull_index_obj.pull_parse_derivative_eod_data(date)
-        if save_data:
-            records_stats = self.create_or_update(result, IndexDerivativeEndOfDay)
+    def load_participant_eod_data(self, date):
+        already_processed = ParticipantActivity.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        return result, records_stats
+        result = self.pull_particpant_obj.pull_parse_eod_data(date)
 
-    def load_participant_eod_data(self, date, save_data=True):
-        pull_particpant_obj = PullParticipantData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.participant_qs,
-        )
-
-        result = pull_particpant_obj.pull_parse_eod_data(date)
-        if save_data:
-            records_stats = self.create_or_update(result, ParticipantActivity)
-
-        return result, records_stats
+        return result
 
     def load_participant_stats_eod_data(self, date, save_data=True):
-        pull_particpant_obj = PullParticipantData(
-            self.exchange_symbol,
-            self.exchange_qs,
-            self.participant_qs,
-            self.participant_stats_qs,
-        )
+        already_processed = ParticipantStatsActivity.backend.filter(date=date).count()
+        if already_processed > 0:
+            return "Already Processed."
 
-        result = pull_particpant_obj.pull_parse_eod_stats(date)
-        if save_data:
-            records_stats = self.create_or_update(result, ParticipantStatsActivity)
+        result = self.pull_particpant_obj.pull_parse_eod_stats(date)
 
-        return result, records_stats
+        return result
 
-    def load_eod_data(self, date):
-        self.load_equity_eod_data(date)
-        self.load_index_eod_data(date)
-
-        self.load_equity_derivative_eod_data(date)
-        self.load_index_derivative_eod_data(date)
-
-        self.load_participant_eod_data(date)
-
-    def execute_equity_eod_data_task(self):
+    def execute_equity_eod_data_task(self, run_date=None, end_date=None):
         output = []
         with application_context(
             exchange=self.exchange,
@@ -138,27 +104,29 @@ class EndOfDayData(BaseLogic):
             if self.exchange is None:
                 return "Exchange is required."
 
-            date_key = AdminSettingKey.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
-            pause_hour_key = AdminSettingKey.DATAPULL_EOD_DATA_PAUSE_HOURS
-            default_value_key = AdminSettingKey.DEFAULT_START_DATE_EQUITY_DATA_PULL
+            date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
+            pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
 
-            cet = self.can_execute_task(date_key, pause_hour_key, default_value_key)
-            if not cet[0]:
-                message = cet[1]
-                self.logger.log_info(message)
-                return message
+            if not run_date:
+                cet = self.can_execute_task(date_key, pause_hour_key)
+                if not cet[0]:
+                    message = cet[1]
+                    self.logger.log_info(message)
+                    return message
+                run_date = cet[2]
 
-            pause_hours = self.settings.get_by_key(
-                AdminSettingKey.DATAPULL_EOD_DATA_PAUSE_HOURS
-            )
+            end_date_provided = True
+            if not end_date:
+                end_date_provided = False
+                end_date = dt.current_date_time()
+
+            pause_hours = self.settings.get_by_key(pause_hour_key)
             pause_hours = nh.str_to_float(pause_hours)
-            run_date = cet[2]
-            currentdate = dt.current_date()
 
-            self.logger.log_debug(f"Current Date:{currentdate}")
+            self.logger.log_debug(f"End Date:{end_date}")
             self.logger.log_debug(f"Date:{run_date}")
 
-            while dt.compare_date_time(run_date, currentdate, "lte"):
+            while dt.compare_date_time(run_date, end_date, "lte"):
                 self.logger.log_debug(f"Processing Date:{run_date}")
                 run_date_str = dt.datetime_to_display_str(run_date)
 
@@ -170,17 +138,32 @@ class EndOfDayData(BaseLogic):
                     self.logger.log_info(message)
                     continue
 
-                if not dt.is_data_refreshed(run_date):
+                if not dt.is_data_refreshed(run_date, end_date):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "Data is not refreshed yet."
                     output.append(self.message_creator(run_date_str, message))
                     self.logger.log_info(message)
                     continue
 
-                result = self.load_equity_eod_data(run_date)
-                output.append(self.message_creator(run_date_str, result))
-                self.settings.save_task_execution_time(date_key, run_date)
+                try:
+                    result = self.load_equity_eod_data(run_date)
+                    if isinstance(result, str):
+                        output.append(self.message_creator(run_date_str, result))
+                    else:
+                        with transaction.atomic():
+                            records_stats = self.create_or_update(
+                                result, EquityEndOfDay
+                            )
+                            if not end_date_provided:
+                                self.settings.save_task_execution_time(
+                                    date_key, run_date
+                                )
+
+                        output.append(self.message_creator(run_date_str, records_stats))
+                except Exception as e:
+                    message = f"Exception - `{format(e)}`."
+                    self.logger.log_critical(message=message)
+                    output.append(self.message_creator(run_date_str, message))
 
                 run_date = dt.get_future_date(run_date, hours=pause_hours)
-
             return output

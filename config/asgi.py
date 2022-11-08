@@ -1,5 +1,5 @@
 """
-ASGI config for On Smart Project API project.
+ASGI config for On Smart Track project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

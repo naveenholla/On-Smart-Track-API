@@ -5,6 +5,9 @@ rcssmin==1.1.0  # https://github.com/ndparker/rcssmin
 argon2-cffi==21.3.0  # https://github.com/hynek/argon2_cffi
 whitenoise==6.2.0  # https://github.com/evansd/whitenoise
 redis==4.3.4  # https://github.com/redis/redis-py
+celery==5.2.7  # pyup: < 6.0  # https://github.com/celery/celery
+django-celery-beat==2.4.0  # https://github.com/celery/django-celery-beat
+flower==1.2.0  # https://github.com/mher/flower
 uvicorn[standard]==0.19.0  # https://github.com/encode/uvicorn
 
 # Django
@@ -22,7 +25,6 @@ djangorestframework==3.14.0  # https://github.com/encode/django-rest-framework
 django-cors-headers==3.13.0 # https://github.com/adamchainz/django-cors-headers
 # DRF-spectacular for api documentation
 drf-spectacular==0.24.2  # https://github.com/tfranzel/drf-spectacular
-
 django_cryptography==1.1
 celery-progress==0.1.3
 pandas==1.5.1
@@ -41,7 +43,7 @@ yfinance==0.1.85
 alphaVantage-api==1.0.33
 mplfinance==0.12.9b5
 scipy==1.9.3
-sklearn==1.1.3
+sklearn==0.0
 statsmodels==0.13.5
 stochastic==0.7.0
 tqdm==4.64.1

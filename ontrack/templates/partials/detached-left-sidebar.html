@@ -1,0 +1,59 @@
+{% load static i18n compress%}
+<!-- ========== Left Sidebar Start ========== -->
+<div class="leftside-menu leftside-menu-detached">
+
+    <div class="leftbar-user">
+        <a href="javascript: void(0);">
+            <img src="{% static 'images/users/avatar-1.jpg' %}" alt="user-image" height="42" class="rounded-circle shadow-sm">
+            <span class="leftbar-user-name">Sachin Gupta</span>
+        </a>
+    </div>
+
+    <!--- Sidemenu -->
+    <ul class="side-nav">
+
+        <li class="side-nav-title side-nav-item">Navigation</li>
+
+        <li class="side-nav-item">
+            <a data-bs-toggle="collapse" href="#sidebarDashboards" aria-expanded="false" aria-controls="sidebarDashboards" class="side-nav-link">
+                <i class="uil-home-alt"></i>
+                <span class="badge bg-success float-end">4</span>
+                <span> Dashboards </span>
+            </a>
+            <div class="collapse" id="sidebarDashboards">
+                <ul class="side-nav-second-level">
+                    <li>
+                        <a href="#">Analytics</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dashboard:index' %}">Ecommerce</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dashboard:wallet' %}">E-Wallet <span class="badge rounded bg-danger font-10 float-end">New</span></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'dashboard:projects' %}">Projects</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Help Box -->
+    <div class="help-box help-box-light text-center">
+        <a href="javascript: void(0);" class="float-end close-btn text-body">
+            <i class="mdi mdi-close"></i>
+        </a>
+        <img src="{% static 'images/help-icon.svg' %}" height="90" alt="Helper Icon Image" />
+        <h5 class="mt-3">Unlimited Access</h5>
+        <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
+        <a href="javascript: void(0);" class="btn btn-outline-primary btn-sm">Upgrade</a>
+    </div>
+    <!-- end Help Box -->
+    <!-- End Sidebar -->
+
+    <div class="clearfix"></div>
+    <!-- Sidebar -left -->
+
+</div>
+<!-- Left Sidebar End -->

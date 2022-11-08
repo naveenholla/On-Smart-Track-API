@@ -16,6 +16,7 @@ from ontrack.users.models.lookup import (
     TodoTask,
     TransactionType,
 )
+from ontrack.users.models.user import Setting, UserProfile
 
 User = get_user_model()
 
@@ -46,8 +47,24 @@ class UserAdmin(auth_admin.UserAdmin):
     search_fields = ["name"]
 
 
-# Register your models here.
+# class UserProfileInLine(admin.StackedInline):
+#     model = UserProfile
+#     can_delete = False
 
+# class AccountsUserAdmin(AuthUserAdmin):
+#     def add_view(self, *args, **kwargs):
+#         self.inlines = []
+#         return super(AccountsUserAdmin, self).add_view(*args, **kwargs)
+
+#     def change_view(self, *args, **kwargs):
+#         self.inlines = [UserProfileInLine]
+#         return super(AccountsUserAdmin, self).change_view(*args, **kwargs)
+
+# admin.site.unregister(User)
+# admin.site.register(User, AccountsUserAdmin)
+
+admin.site.register(UserProfile)
+admin.site.register(Setting)
 
 admin.site.register(AccountType)
 admin.site.register(TransactionType)

@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "users/base.html" %}
 {% load static %}
 
 {% block title %}User: {{ object.username }}{% endblock %}
 
-{% block content %}
+{% block page_content %}
 <div class="container">
 
   <div class="row">
@@ -31,4 +31,4 @@
 {% endif %}
 
 </div>
-{% endblock content %}
+{% endblock page_content %}

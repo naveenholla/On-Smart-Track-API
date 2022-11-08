@@ -1,5 +1,5 @@
 """
-WSGI config for On Smart Project API project.
+WSGI config for On Smart Track project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable

@@ -15,6 +15,11 @@ urlpatterns = [
         name="exchange-detail",
     ),
     path(
+        "stock_selection/",
+        view=endofday.StockSelectionAPIView.as_view(),
+        name="equity-list",
+    ),
+    path(
         "equity/",
         view=equity.EquityListCreateAPIView.as_view(),
         name="equity-list",

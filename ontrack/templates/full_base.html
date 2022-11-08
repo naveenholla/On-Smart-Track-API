@@ -1,0 +1,6 @@
+{% extends "vertical_base.html" %}
+{% load static i18n compress%}
+
+{% block body_extra %}
+class="loading hide-menu" data-layout="full" data-layout-color="{% if dark %}dark{% else %}light{% endif %}" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true"
+{% endblock %}

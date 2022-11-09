@@ -51,10 +51,13 @@ class Exchange(BaseModel):
 
     @property
     def timezone_name(self):
-        try:
+        if hasattr(self.time_zone, "zone"):
             return self.time_zone.zone
-        except Exception:
-            return "Asia/Kolkata"  # TODO: Need to Fix This for GITHUB Test Cases
+
+        if hasattr(self.time_zone, "key"):
+            return self.time_zone.key
+
+        return None
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

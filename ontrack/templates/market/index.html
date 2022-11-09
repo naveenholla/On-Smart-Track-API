@@ -1,0 +1,137 @@
+{% extends "vertical_base.html" %}
+{% load static i18n %}
+
+{% block title %}{% trans "Dashboard" %}{% endblock title %}
+
+{% block extra_css %}
+
+<!-- third party css -->
+<link href="{% static 'css/vendor/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css" />
+<!-- third party css end -->
+
+{% endblock %}
+
+{% block content %}
+<!-- Start Content-->
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </div>
+                <h4 class="page-title">Products</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <a href="javascript:void(0);" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Add Products</a>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="text-sm-end">
+                                <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog-outline"></i></button>
+                                <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                <button type="button" class="btn btn-light mb-2">Export</button>
+                            </div>
+                        </div><!-- end col-->
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="all" style="width: 20px;">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck1">
+                                            <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                        </div>
+                                    </th>
+                                    <th class="all">Product</th>
+                                    <th>Category</th>
+                                    <th>Added Date</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th style="width: 85px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in records %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck{{data.id}}">
+                                            <label class="form-check-label" for="customCheck{{data.id}}">&nbsp;</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <img src="{{data.img}}" alt="contact-img" title="contact-img" class="rounded me-3" height="48" />
+                                        <p class="m-0 d-inline-block align-middle font-16">
+                                            <a href="{% url 'market:index' %}" class="text-body">{{data.name}}</a>
+                                            <br/>
+
+
+                                        </p>
+                                    </td>
+                                    <td>
+                                        {{data.symbol}}
+                                    </td>
+                                    <td>
+                                        {{data.symbol}}
+                                    </td>
+                                    <td>
+                                        {{data.symbol}}
+                                    </td>
+
+                                    <td>
+                                        {{data.symbol}}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{{data.status.color}}">{{data.status.name}}</span>
+                                    </td>
+
+                                    <td class="table-action">
+                                        <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                        <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                        <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- container -->
+
+{% endblock %}
+
+{% block extra_javascript %}
+
+<!-- Third party js -->
+<script src="{% static 'js/vendor/apexcharts.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery-jvectormap-1.2.2.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery-jvectormap-world-mill-en.js' %}"></script>
+<!-- Third party js ends -->
+
+{% comment %} <script src="{% static 'js/pages/demo.dashboard.js' %}"></script> {% endcomment %}
+<!-- Init js end -->
+
+{% endblock %}

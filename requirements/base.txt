@@ -49,3 +49,4 @@ stochastic==0.7.0
 tqdm==4.64.1
 vectorbt==0.24.2
 pandas_datareader==0.10.0
+djangorestframework-simplejwt==5.2.2

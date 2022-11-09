@@ -412,6 +412,23 @@ class DateTimeHelper:
         return waitSeconds
 
     @staticmethod
+    def get_last_working_day(date=None) -> bool:
+        if not date:
+            date = DateTimeHelper.current_date()
+
+        last_working_day = None
+        while last_working_day is None:
+            if not DateTimeHelper.is_data_refreshed(date) or DateTimeHelper.is_holiday(
+                date
+            ):
+                date = DateTimeHelper.get_past_date(date, days=1)
+                continue
+
+            last_working_day = date
+
+        return last_working_day
+
+    @staticmethod
     def get_monthly_expiry_day_date(dateTimeObj=None, index=0) -> datetime:
         if dateTimeObj is None:
             dateTimeObj = DateTimeHelper.current_date_time()

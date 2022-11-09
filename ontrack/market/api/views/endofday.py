@@ -4,14 +4,23 @@ from operator import itemgetter
 import pandas as pd
 import talib
 from django.db.models import Avg, OuterRef, Prefetch, Subquery
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.models.equity import EquityEndOfDay
-from ontrack.market.models.lookup import Equity, EquityIndex
+from ontrack.market.models.lookup import (
+    Equity,
+    EquityIndex,
+    Exchange,
+    MarketDay,
+    MarketDayCategory,
+)
 from ontrack.ta.candles.cdl_recognization import recognize_candlestick
+from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.mixins import SuperAdminPermissionMixin
+from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.numbers import NumberHelper as nh
 
@@ -33,13 +42,36 @@ class EquityEndOfDayDataTaskAPIView(SuperAdminPermissionMixin, APIView):
 
 
 class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "market/index.html"
+
     def get(self, request, *args, **kwargs):
+        exchange = request.query_params.get("exchange")
         index_symbol = request.query_params.get("symbol")
         date = dt.str_to_datetime(request.query_params.get("date"), "%Y-%m-%d")
         days_count = nh.str_to_float(request.query_params.get("days_count"))
 
-        if not date:
-            date = dt.get_date_time(2022, 11, 7)
+        if not exchange:
+            return Response({"status_code": 404})
+
+        days = MarketDay.backend.prefetch_related("daytype")
+        catgories = MarketDayCategory.backend.prefetch_related(
+            Prefetch("days", queryset=days, to_attr="holidays")
+        )
+        exchangeobj = (
+            Exchange.backend.unique_search(exchange)
+            .prefetch_related(
+                Prefetch("holiday_categories", queryset=catgories, to_attr="categories")
+            )
+            .first()
+        )
+
+        with application_context(
+            exchange=exchangeobj,
+            holiday_category_name=HolidayCategoryType.EQUITIES,
+        ):
+            date = dt.get_last_working_day(date)
+            print(date)
 
         if not days_count:
             days_count = 30
@@ -136,6 +168,7 @@ class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
         records = sorted(records, key=itemgetter("candlestick_rank"), reverse=False)
         records = [d for d in records if d["candlestick_rank"] > 0]
         result = {
+            "date": date,
             "count": len(records),
             "symbols": [sub["symbol"] for sub in records],
             "records": records,

@@ -6,19 +6,16 @@ from ontrack.lookup.api.logic.lookup import InitializeData as lookup_initilizati
 from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.serializers import lookup
 from ontrack.market.models.lookup import Exchange
-from ontrack.utils.base.mixins import (
-    StaffEditorPermissionMixin,
-    SuperAdminPermissionMixin,
-)
+from ontrack.utils.base.mixins import SuperAdminPermissionMixin
 from ontrack.utils.datetime import DateTimeHelper as dt
 
 
-class ExchangeListCreateAPIView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
+class ExchangeListCreateAPIView(SuperAdminPermissionMixin, generics.ListCreateAPIView):
     queryset = Exchange.backend.all()
     serializer_class = lookup.ExchangeListCreateSerializer
 
 
-class ExchangeDetailAPIView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
+class ExchangeDetailAPIView(SuperAdminPermissionMixin, generics.RetrieveAPIView):
     queryset = Exchange.backend.all()
     serializer_class = lookup.ExchangeDetailsSerializer
 

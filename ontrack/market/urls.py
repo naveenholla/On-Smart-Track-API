@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views.views import marketdata_index_view
+from .api.views.endofday import StockSelectionAPIView
 
 app_name = "market"
-urlpatterns = [path("index/<int:id>", view=marketdata_index_view, name="index")]
+urlpatterns = [path("index/", view=StockSelectionAPIView.as_view(), name="index")]

@@ -3,11 +3,11 @@
 Werkzeug[watchdog]==2.2.2 # https://github.com/pallets/werkzeug
 ipdb==0.13.9  # https://github.com/gotcha/ipdb
 psycopg2-binary==2.9.5  # https://github.com/psycopg/psycopg2
-watchfiles==0.18.0  # https://github.com/samuelcolvin/watchfiles
+watchfiles==0.18.1  # https://github.com/samuelcolvin/watchfiles
 
 # Testing
 # ------------------------------------------------------------------------------
-mypy==0.982  # https://github.com/python/mypy
+mypy==0.990  # https://github.com/python/mypy
 django-stubs==1.13.0  # https://github.com/typeddjango/django-stubs
 pytest==7.2.0  # https://github.com/pytest-dev/pytest
 pytest-sugar==0.9.5  # https://github.com/Frozenball/pytest-sugar

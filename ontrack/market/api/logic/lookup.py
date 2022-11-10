@@ -1,4 +1,7 @@
+from functools import lru_cache
+
 from django.db import transaction
+from django.db.models import Prefetch
 
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
@@ -28,46 +31,53 @@ class MarketLookupData(BaseLogic):
         self.settings = SettingLogic()
         self.fixtureData = FixtureData()
 
-        exchange_qs = Exchange.backend.get_queryset()
-        self.exchange = exchange_qs.unique_search(exchange_symbol).first()
-        self.equity_dict = None
-        self.index_dict = None
-        self.equityindex_dict = None
+        self.exchange_symbol = exchange_symbol
 
-        if not self.exchange:
+    @lru_cache(1)
+    def exchange(self):
+        if not self.exchange_symbol:
             return
 
-        self.daytype_qs = MarketDayType.backend.get_queryset()
-        self.category_qs = MarketDayCategory.backend.get_queryset()
-        self.day_qs = MarketDay.backend.get_queryset()
-        self.holiday_obj = HolidayData(
-            self.exchange, self.daytype_qs, self.category_qs, self.day_qs
+        datetype = MarketDayType.backend.all()
+        days = MarketDay.backend.prefetch_related(
+            Prefetch("daytype", queryset=datetype, to_attr="type")
+        )
+        catgories = MarketDayCategory.backend.prefetch_related(
+            Prefetch("days", queryset=days, to_attr="holidays")
         )
 
-    def populate_equity_dict(self):
-        if not self.equity_dict or len(self.equity_dict) == 0:
-            equity_qs = Equity.backend.get_queryset()
-            self.equity_dict = self.create_dict(equity_qs)
-
-            self.pull_equity_obj = PullEquityData(self.exchange, self.equity_dict)
-
-    def populate_index_dict(self):
-        if not self.index_dict or len(self.index_dict) == 0:
-            index_qs = Index.backend.get_queryset()
-            self.index_dict = self.create_dict(index_qs, "name")
-
-            self.pull_index_obj = PullIndexData(self.exchange, self.index_dict)
-
-    def populate_equity_index_dict(self):
-        self.populate_equity_dict()
-        self.populate_index_dict()
-        if not self.equityindex_dict or len(self.equityindex_dict) == 0:
-            equityindex_qs = EquityIndex.backend.get_queryset()
-            self.equityindex_dict = self.create_dict(equityindex_qs, "equity_index")
-
-            self.pull_equity_index_obj = PullEquityIndexData(
-                self.exchange, self.equity_dict, self.index_dict, self.equityindex_dict
+        exchange = (
+            Exchange.backend.unique_search(self.exchange_symbol)
+            .prefetch_related(
+                Prefetch("holiday_categories", queryset=catgories, to_attr="categories")
             )
+            .first()
+        )
+
+        return exchange
+
+    @lru_cache(1)
+    def equity_dict(self):
+        exchange = self.exchange()
+        qs = Equity.backend.filter(exchange_id=exchange.id)
+        return qs
+
+    @lru_cache(1)
+    def index_dict(self):
+        exchange = self.exchange()
+        qs = Index.backend.filter(exchange_id=exchange.id)
+        return qs
+
+    @lru_cache(1)
+    def equityindex_dict(self):
+        exchange = self.exchange()
+        qs = EquityIndex.backend.filter(equity__exchange_id=exchange.id)
+        return qs
+
+    @lru_cache(1)
+    def daytype_dict(self):
+        qs = MarketDayType.backend.all()
+        return qs
 
     def load_fixtures_all_data(self, temp_folder_path=None):
         fixtures = [
@@ -93,39 +103,54 @@ class MarketLookupData(BaseLogic):
         self.fixtureData.load_fixtures_data(fixtures, temp_folder_path)
 
     def load_equity_data(self):
-        self.populate_equity_dict()
-        result = self.pull_equity_obj.pull_and_parse_lookup_data()
-        self.equity_dict = None
+        pull_equity_obj = PullEquityData(self.exchange(), self.equity_dict())
+        result = pull_equity_obj.pull_and_parse_lookup_data()
+        self.equity_dict.cache_clear()
         return result
 
     def load_index_data(self):
-        self.populate_index_dict()
-        result = self.pull_index_obj.pull_and_parse_lookup_data()
-        self.index_dict = None
+        pull_index_obj = PullIndexData(self.exchange(), self.index_dict())
+        result = pull_index_obj.pull_and_parse_lookup_data()
+        self.index_dict.cache_clear()
         return result
 
     def pull_indices_market_cap(self, record):
-        self.populate_equity_index_dict()
-        result = self.pull_equity_index_obj.pull_indices_market_cap(record)
+        ex = self.exchange()
+        eq = self.equity_dict()
+        inx = self.index_dict()
+        eqinx = self.equityindex_dict()
+        obj = PullEquityIndexData(ex, eq, inx, eqinx)
+        result = obj.pull_indices_market_cap(record)
         return result
 
     def parse_indices_market_cap(self, index_name, record):
-        self.populate_equity_index_dict()
-        result = self.pull_equity_index_obj.parse_indices_market_cap(index_name, record)
+        ex = self.exchange()
+        eq = self.equity_dict()
+        inx = self.index_dict()
+        eqinx = self.equityindex_dict()
+        obj = PullEquityIndexData(ex, eq, inx, eqinx)
+        result = obj.parse_indices_market_cap(index_name, record)
         return result
 
     def load_equity_index_data(self):
-        self.populate_equity_index_dict()
-        result = self.pull_equity_index_obj.pull_and_parse_market_cap()
-        self.equityindex_dict = None
+        ex = self.exchange()
+        eq = self.equity_dict()
+        inx = self.index_dict()
+        eqinx = self.equityindex_dict()
+        obj = PullEquityIndexData(ex, eq, inx, eqinx)
+        result = obj.pull_and_parse_market_cap()
+        self.equityindex_dict.cache_clear()
         return result
 
     def load_holidays_data(self):
-        return self.holiday_obj.pull_parse_exchange_holidays()
+        ex = self.exchange()
+        dty = self.daytype_dict()
+        obj = HolidayData(ex, dty)
+        return obj.pull_parse_exchange_holidays()
 
     def execute_market_lookup_data_task(self):
         output = []
-        with application_context(exchange=self.exchange):
+        with application_context(exchange=self.exchange()):
             date_key = sk.DATAPULL_EQUITY_LOOKUP_LAST_PULL_DATE
             pause_hour_key = sk.DATAPULL_EQUITY_LOOKUP_PAUSE_HOURS
             cet = self.can_execute_task(date_key, pause_hour_key)
@@ -164,7 +189,7 @@ class MarketLookupData(BaseLogic):
 
     def execute_holidays_lookup_data_task(self):
         output = []
-        with application_context(exchange=self.exchange):
+        with application_context(exchange=self.exchange()):
             date_key = sk.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
             pause_hour_key = sk.DATAPULL_HOLIDAYS_LOOKUP_PAUSE_HOURS
             cet = self.can_execute_task(date_key, pause_hour_key)

@@ -10,7 +10,8 @@ from ontrack.utils.base.enum import ExchangeType
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         obj = MarketLookupData(ExchangeType.NSE)
-        if not obj.exchange:
+        exchange = obj.exchange()
+        if not exchange:
             obj.load_fixtures_all_data()
 
 

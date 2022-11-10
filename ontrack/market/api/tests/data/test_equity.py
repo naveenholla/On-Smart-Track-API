@@ -25,20 +25,18 @@ class TestPullEquityData:
         self.equity_qs = Equity.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def equity_data_fixture(
-        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
-    ):
-        self.exchange_fixture = exchange_fixture
+    def equity_data_fixture(self, market_lookup_data_fixture: MarketLookupData):
         self.marketlookupdata = market_lookup_data_fixture
+        self.exchange = self.marketlookupdata.exchange()
 
-        self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
-        self.livedata = LiveData(exchange_fixture.symbol)
+        self.endofdaydata = EndOfDayData(self.exchange.symbol)
+        self.livedata = LiveData(self.exchange.symbol)
 
     @pytest.mark.lookup_data
     @pytest.mark.integration
     def test_pull_and_parse_lookup_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         records = self.marketlookupdata.load_equity_data()
         self.endofdaydata.create_or_update(records, Equity)
@@ -64,8 +62,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_eod_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_equity_eod_data(date)
@@ -80,8 +78,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_derivative_eod_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_equity_derivative_eod_data(date)
@@ -98,8 +96,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_equity_live_data()
         records_stats = self.livedata.create_or_update(result, EquityLiveData)
@@ -112,8 +110,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_open_interest_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_equity_live_open_interest_data()
         records_stats = self.livedata.create_or_update(result, EquityLiveOpenInterest)
@@ -126,8 +124,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_derivative_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_equity_live_derivative_data()
         records_stats = self.livedata.create_or_update(result, EquityLiveDerivativeData)
@@ -140,8 +138,8 @@ class TestPullEquityData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_option_chain_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_equity_live_option_chain_data()
         records_stats = self.livedata.create_or_update(result, EquityLiveOptionChain)

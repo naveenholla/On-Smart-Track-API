@@ -25,20 +25,18 @@ class TestPullIndexData:
         self.index_qs = Index.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def index_data_fixture(
-        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
-    ):
-        self.exchange_fixture = exchange_fixture
+    def index_data_fixture(self, market_lookup_data_fixture: MarketLookupData):
         self.marketlookupdata = market_lookup_data_fixture
+        self.exchange = self.marketlookupdata.exchange()
 
-        self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
-        self.livedata = LiveData(exchange_fixture.symbol)
+        self.endofdaydata = EndOfDayData(self.exchange.symbol)
+        self.livedata = LiveData(self.exchange.symbol)
 
     @pytest.mark.lookup_data
     @pytest.mark.integration
     def test_pull_and_parse_lookup_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         records = self.marketlookupdata.load_index_data()
         self.endofdaydata.create_or_update(records, Index)
@@ -67,8 +65,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_eod_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_index_eod_data(date)
@@ -83,8 +81,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_derivative_eod_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_index_derivative_eod_data(date)
@@ -101,8 +99,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_index_live_data()
         records_stats = self.livedata.create_or_update(result, IndexLiveData)
@@ -115,8 +113,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_open_interest_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_index_live_open_interest_data()
         records_stats = self.livedata.create_or_update(result, IndexLiveOpenInterest)
@@ -129,8 +127,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_derivative_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_index_live_derivative_data()
         records_stats = self.livedata.create_or_update(result, IndexLiveDerivativeData)
@@ -143,8 +141,8 @@ class TestPullIndexData:
     @pytest.mark.integration
     @pytest.mark.live_data_pull
     def test_pull_parse_live_option_chain_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         result = self.livedata.load_index_live_option_chain_data()
         records_stats = self.livedata.create_or_update(result, IndexLiveOptionChain)

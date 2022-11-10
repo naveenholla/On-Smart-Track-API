@@ -1,9 +1,4 @@
-from ontrack.market.models.lookup import Exchange
-from ontrack.market.querysets.lookup import (
-    MarketDayCategoryQuerySet,
-    MarketDayQuerySet,
-    MarketDayTypeQuerySet,
-)
+from ontrack.market.models.lookup import Exchange, MarketDayCategory, MarketDayType
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.logger import ApplicationLogger
@@ -14,17 +9,15 @@ class HolidayData:
     def __init__(
         self,
         exchange: Exchange,
-        daytype_qs: MarketDayTypeQuerySet,
-        category_qs: MarketDayCategoryQuerySet,
-        day_qs: MarketDayQuerySet,
+        daytype_dict: dict,
     ):
         self.logger = ApplicationLogger()
         self.exchange = exchange
-        self.daytype_qs = daytype_qs
-        self.category_qs = category_qs
-        self.day_qs = day_qs
+        self.daytype_dict = daytype_dict
 
-    def __process_record(self, daytype, category, record):
+    def __process_record(
+        self, daytype: MarketDayType, category: MarketDayCategory, record
+    ):
         date = dt.str_to_datetime(record["tradingDate"], "%d-%b-%Y", self.timezone)
         day = record["day"] if "day" in record else None
         is_working = record["is_working_day"] if "is_working_day" in record else False
@@ -32,17 +25,13 @@ class HolidayData:
         end_time = record["end_time"] if "end_time" in record else None
         description = record["description"]
 
-        filter = {
-            "category_id": category.id,
-            "daytype_id": daytype.id,
-            "date": date,
-            "day": day,
-        }
-
         pk = None
-        dayobj = self.day_qs.unique_search(**filter).first()
-        if dayobj is not None:
-            pk = dayobj.id
+        holidays = self.exchange.get_days_by_category(
+            daytype.name, category.display_name
+        )
+        dayobj = [e for e in holidays if dt.compare_date(date, e.date) and e.day == day]
+        if len(dayobj) > 0:
+            pk = dayobj[0].id
 
         entity = {}
         entity["id"] = pk
@@ -59,25 +48,29 @@ class HolidayData:
         return entity
 
     def __process_day_type(self, type_record):
-        exchange_symbol = type_record["exchange_symbol"]
+        self.logger.log_debug(f"Starting with {self.exchange.symbol}.")
+
         day_type_name = type_record["type"]
 
-        day_type = self.daytype_qs.unique_search(day_type_name).first()
+        day_type = [
+            e for e in self.daytype_dict if e.name.lower() == day_type_name.lower()
+        ]
+        if len(day_type) == 0:
+            self.logger.log_info(f"Holiday types '{day_type_name}' not exists.")
+            return None
+        day_type = day_type[0]
 
-        if self.exchange is None or day_type is None:
-            self.logger.log_info(
-                f"Exchange '{exchange_symbol}' of Holiday types '{day_type_name}' not exists."
-            )
+        if not self.exchange.categories or len(self.exchange.categories) == 0:
+            self.logger.log_info("Categories doesn't exists.")
             return None
 
-        self.logger.log_debug(f"Starting with {self.exchange.symbol}.")
         self.timezone = self.exchange.timezone_name
 
         headers = Configurations.get_header_values_config()
         holidays = LogicHelper.pull_data_from_external_api(type_record, headers)
 
         entities = []
-        for category in list(self.exchange.holiday_categories.all()):
+        for category in list(self.exchange.categories):
             if category.code not in holidays:
                 self.logger.log_debug("Category not enabled or exists.")
                 continue

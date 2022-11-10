@@ -44,31 +44,29 @@ class PullEquityIndexData:
         equity_symbol = self.__get_name_from_label(record["label"])
         weight = record["weight"]
 
-        index = (
-            self.index_dict[index_symbol.lower()]
-            if index_symbol.lower() in self.index_dict
-            else None
-        )
-        if index is None:
+        index = [e for e in self.index_dict if e.symbol.lower() == index_symbol.lower()]
+        if len(index) == 0:
             self.logger.log_warning(f"Index '{index_symbol}' doesn't exists")
             return None
+        index = index[0]
 
-        equity = (
-            self.equity_dict[equity_symbol.lower()]
-            if equity_symbol.lower() in self.equity_dict
-            else None
-        )
-        if equity is None:
+        equity = [
+            e for e in self.equity_dict if e.symbol.lower() == equity_symbol.lower()
+        ]
+        if len(equity) == 0:
             self.logger.log_warning(f"Equity '{equity_symbol}' doesn't exists")
             return None
+        equity = equity[0]
 
         pk = None
-        key = f"{index_symbol.lower()}-{equity_symbol.lower()}"
-        existing_entity = (
-            self.equityindex_dict[key] if key in self.equityindex_dict else None
-        )
-        if existing_entity is not None:
-            pk = existing_entity.id
+        existing_entity = [
+            e
+            for e in self.equityindex_dict
+            if e.index.symbol.lower() == index_symbol.lower()
+            and e.equity.symbol.lower() == equity_symbol.lower()
+        ]
+        if len(existing_entity) > 0:
+            pk = existing_entity[0].id
 
         entity = {}
         entity["id"] = pk

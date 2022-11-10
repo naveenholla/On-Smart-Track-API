@@ -44,9 +44,9 @@ class PullIndexData:
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
-        existing_entity = self.index_dict[symbol] if symbol in self.index_dict else None
-        if existing_entity is not None:
-            pk = existing_entity.id
+        existing_entity = [e for e in self.index_dict if e.symbol.lower() == symbol]
+        if len(existing_entity) > 0:
+            pk = existing_entity[0].id
 
         lot_size = 0
         mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
@@ -81,9 +81,10 @@ class PullIndexData:
         index_name = record["Index Name"].strip().lower()
         date = dt.str_to_datetime(record["Index Date"], "%d-%m-%Y", self.timezone)
 
-        index = self.index_dict[index_name] if index_name in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.name.lower() == index_name]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         open_price = nh.str_to_float(record["Open Index Value"])
         high_price = nh.str_to_float(record["High Index Value"])
@@ -142,9 +143,10 @@ class PullIndexData:
         if instrument != InstrumentType.FUTIDX.lower():
             return None
 
-        index = self.index_dict[symbol] if symbol in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.symbol.lower() == symbol]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         open_price = nh.str_to_float(record["OPEN"])
         high_price = nh.str_to_float(record["HIGH"])
@@ -193,9 +195,10 @@ class PullIndexData:
     def __parse_live_data(self, record, date):
         index_name = record["index"].strip().lower()
 
-        index = self.index_dict[index_name] if index_name in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.name.lower() == index_name]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         open_price = nh.str_to_float(record["open"])
         high_price = nh.str_to_float(record["high"])
@@ -265,9 +268,10 @@ class PullIndexData:
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
-        index = self.index_dict[symbol] if symbol in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.symbol.lower() == symbol]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         contract = record["contract"]
         identifier = record["identifier"]
@@ -314,9 +318,10 @@ class PullIndexData:
         strike_price = nh.str_to_float(record["strikePrice"])
         instrument = InstrumentType.OPTIDX
 
-        index = self.index_dict[symbol] if symbol in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.symbol.lower() == symbol]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         open_interest = nh.str_to_float(record["openInterest"])
         change_in_open_interest = nh.str_to_float(record["changeinOpenInterest"])
@@ -382,9 +387,10 @@ class PullIndexData:
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
-        index = self.index_dict[symbol] if symbol in self.index_dict else None
-        if index is None:
+        index = [e for e in self.index_dict if e.symbol.lower() == symbol]
+        if len(index) == 0:
             return None
+        index = index[0]
 
         lastest_open_interest = nh.str_to_float(record["latestOI"])
         previous_open_interest = nh.str_to_float(record["prevOI"])
@@ -444,6 +450,7 @@ class PullIndexData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
+        data.fillna("0")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)

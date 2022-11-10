@@ -32,22 +32,34 @@ class Exchange(BaseModel):
 
     backend = ExchangeBackendManager()
 
+    def get_category_by_name(self, category_name: HolidayCategoryType):
+        categories = self.categories
+        if not categories or len(categories) == 0:
+            return None
+
+        category = [
+            x for x in categories if x.display_name.lower() == category_name.lower()
+        ]
+
+        if category is None or len(category) == 0:
+            return None
+
+        return category[0]
+
     def get_days_by_category(
         self, day_type_name: MarketDayTypeEnum, category_name: HolidayCategoryType
     ):
-        if not self.holiday_categories:
+        category = self.get_category_by_name(category_name)
+        if category is None:
             return None
 
-        category = self.holiday_categories.filter(
-            display_name__iexact=category_name
-        ).first()
+        holidays = category.holidays
 
-        if not category or not category.days:
+        if holidays is None or len(holidays) == 0:
             return None
 
-        days = category.days.filter(daytype__name__iexact=day_type_name)
-
-        return list(days.all())
+        days = [x for x in holidays if x.type.name.lower() == day_type_name.lower()]
+        return days
 
     @property
     def timezone_name(self):

@@ -37,20 +37,16 @@ def recognize_candlestick(df):
         # df["CDL3LINESTRIKE"] = talib.CDL3LINESTRIKE(op, hi, lo, cl)
         df[candle] = getattr(talib, candle)(op, hi, lo, cl)
 
+    df["candlestick"] = np.nan
     df["candlestick_pattern"] = np.nan
     df["candlestick_rank"] = np.nan
-    df["candlestick_match_count"] = np.nan
-    df["candlestick_pattern_all"] = np.nan
-    df["candlestick_pattern_all_values"] = np.nan
     for index, row in df.iterrows():
 
         # no pattern found
         if len(row[candle_names]) - sum(row[candle_names] == 0) == 0:
+            df.loc[index, "candlestick"] = "000|NO_PATTERN|NEUTRAL|0"
             df.loc[index, "candlestick_pattern"] = "NO_PATTERN"
             df.loc[index, "candlestick_rank"] = 0
-            df.loc[index, "candlestick_match_count"] = 0
-            df.loc[index, "candlestick_pattern_all"] = "None"
-            df.loc[index, "candlestick_pattern_all_values"] = "None"
         else:
             add_candle_stick_pattern(df, row, index, candle_names)
 
@@ -65,23 +61,27 @@ def add_candle_stick_pattern(df, row, index, candle_names):
     data = compress(row[candle_names].keys(), row[candle_names].values != 0)
     patterns = list(data)
     container = []
-    container_values = []
+    c_candlestick = []
     for pattern in patterns:
         if row[pattern] > 0:
-            container.append(pattern + "_Bull")
-            container_values.append(str(row[pattern]))
+            sentiment = "Bull"
+            name = pattern + "_Bull"
+            rank = f"{candle_rankings[name]:0>3}"
+            value = str(row[pattern])
         else:
-            container.append(pattern + "_Bear")
-            container_values.append(str(row[pattern]))
+            sentiment = "Bear"
+            name = pattern + "_Bear"
+            rank = f"{candle_rankings[name]:0>3}"
+            value = str(row[pattern])
+
+        container.append(name)
+        c_candlestick.append(f"{rank}|{pattern}|{sentiment}|{value}")
+
     rank_list = [candle_rankings[p] for p in container]
     if len(rank_list) == len(container):
         rank_index_best = rank_list.index(min(rank_list))
         df.loc[index, "candlestick_pattern"] = container[rank_index_best]
         df.loc[index, "candlestick_rank"] = min(rank_list)
-        df.loc[index, "candlestick_match_count"] = len(container)
 
         separator = ";"
-        df.loc[index, "candlestick_pattern_all"] = separator.join(container)
-        df.loc[index, "candlestick_pattern_all_values"] = separator.join(
-            container_values
-        )
+        df.loc[index, "candlestick"] = separator.join(c_candlestick)

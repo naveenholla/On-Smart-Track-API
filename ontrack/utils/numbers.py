@@ -45,6 +45,8 @@ class NumberHelper:
             return 0.00
 
         if isinstance(value, float):
+            if math.isnan(value):
+                return 0.00
             return value
 
         value = str(value).strip()

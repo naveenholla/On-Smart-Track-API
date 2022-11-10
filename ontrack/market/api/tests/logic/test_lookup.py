@@ -14,10 +14,7 @@ class TestLogicLookup:
         self.exchange_qs = Exchange.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def exchange_data_fixture(
-        self, exchange_fixture, market_lookup_data_fixture: MarketLookupData
-    ):
-        self.exchange_fixture = exchange_fixture
+    def exchange_data_fixture(self, market_lookup_data_fixture: MarketLookupData):
         self.marketlookupdata = market_lookup_data_fixture
 
     @pytest.mark.unittest

@@ -44,11 +44,9 @@ class PullEquityData:
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
 
         pk = None
-        existing_entity = (
-            self.equity_dict[symbol] if symbol in self.equity_dict else None
-        )
-        if existing_entity is not None:
-            pk = existing_entity.id
+        existing_entity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(existing_entity) > 0:
+            pk = existing_entity[0].id
 
         lot_size = 0
         mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
@@ -83,9 +81,10 @@ class PullEquityData:
         if series != "eq":
             return None
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         open_price = nh.str_to_float(record["OPEN_PRICE"])
         high_price = nh.str_to_float(record["HIGH_PRICE"])
@@ -141,9 +140,10 @@ class PullEquityData:
         if instrument != InstrumentType.FUTSTK.lower():
             return None
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         open_price = nh.str_to_float(record["OPEN"])
         high_price = nh.str_to_float(record["HIGH"])
@@ -196,9 +196,10 @@ class PullEquityData:
         if series != "eq":
             return None
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         meta = record["meta"]
         industry = meta["industry"].strip() if "industry" in meta else None
@@ -279,9 +280,10 @@ class PullEquityData:
             record["expiryDate"], "%d-%b-%Y", self.timezone
         )
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         contract = record["contract"]
         identifier = record["identifier"]
@@ -328,9 +330,10 @@ class PullEquityData:
         strike_price = nh.str_to_float(record["strikePrice"])
         instrument = InstrumentType.OPTSTK
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         open_interest = nh.str_to_float(record["openInterest"])
         change_in_open_interest = nh.str_to_float(record["changeinOpenInterest"])
@@ -396,9 +399,10 @@ class PullEquityData:
     def __parse_live_open_interest(self, record, date):
         symbol = record["symbol"].strip().lower()
 
-        equity = self.equity_dict[symbol] if symbol in self.equity_dict else None
-        if equity is None:
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
             return None
+        equity = equity[0]
 
         lastest_open_interest = nh.str_to_float(record["latestOI"])
         previous_open_interest = nh.str_to_float(record["prevOI"])

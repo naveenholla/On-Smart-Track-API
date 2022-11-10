@@ -1,6 +1,7 @@
 import pytest
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.tests.test_base import assert_record_creation, test_date
 from ontrack.market.models.lookup import Exchange
 from ontrack.market.models.participant import (
@@ -17,15 +18,17 @@ class TestPullParticipantData:
         self.participant_stats_qs = ParticipantStatsActivity.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def equity_data_fixture(self, exchange_fixture):
-        self.exchange_fixture = exchange_fixture
-        self.endofdaydata = EndOfDayData(exchange_fixture.symbol)
+    def equity_data_fixture(self, market_lookup_data_fixture: MarketLookupData):
+        self.marketlookupdata = market_lookup_data_fixture
+        self.exchange = self.marketlookupdata.exchange()
+
+        self.endofdaydata = EndOfDayData(self.exchange.symbol)
 
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_eod_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_participant_eod_data(date)
@@ -40,8 +43,8 @@ class TestPullParticipantData:
     @pytest.mark.integration
     @pytest.mark.eod_data_pull
     def test_pull_parse_eod_stats_data(self):
-        assert self.exchange_fixture is not None
-        assert self.exchange_fixture.symbol is not None
+        assert self.exchange is not None
+        assert self.exchange.symbol is not None
 
         date = test_date
         result = self.endofdaydata.load_participant_stats_eod_data(date)

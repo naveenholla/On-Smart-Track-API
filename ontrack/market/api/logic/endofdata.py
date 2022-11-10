@@ -1,19 +1,27 @@
+from operator import itemgetter
+
+import pandas as pd
+import talib
 from django.db import transaction
+from django.db.models import Avg, Max, OuterRef, Prefetch, Subquery
 
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
 from ontrack.market.api.data.participant import PullParticipantData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.equity import EquityDerivativeEndOfDay, EquityEndOfDay
 from ontrack.market.models.index import IndexDerivativeEndOfDay, IndexEndOfDay
-from ontrack.market.models.lookup import Equity, Exchange, Index
+from ontrack.market.models.lookup import Equity
 from ontrack.market.models.participant import (
     ParticipantActivity,
     ParticipantStatsActivity,
 )
+from ontrack.ta.candles.cdl_recognization import recognize_candlestick
 from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
+from ontrack.utils.config import Configurations as conf
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.logger import ApplicationLogger
@@ -24,29 +32,17 @@ class EndOfDayData(BaseLogic):
     def __init__(self, exchange_symbol: str):
         self.logger = ApplicationLogger()
         self.settings = SettingLogic()
-
-        exchange_qs = Exchange.backend.get_queryset()
-        self.exchange = exchange_qs.unique_search(exchange_symbol).first()
-
-        if not self.exchange:
-            return
-
-        equity_qs = Equity.backend.get_queryset()
-        self.equity_dict = self.create_dict(equity_qs)
-
-        index_qs = Index.backend.get_queryset()
-        self.index_dict = self.create_dict(index_qs, "name")
-
-        self.pull_equity_obj = PullEquityData(self.exchange, self.equity_dict)
-        self.pull_index_obj = PullIndexData(self.exchange, self.index_dict)
-        self.pull_particpant_obj = PullParticipantData(self.exchange)
+        self.marketlookupdata = MarketLookupData(exchange_symbol)
 
     def load_equity_eod_data(self, date):
         already_processed = EquityEndOfDay.backend.filter(date=date).count()
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_equity_obj.pull_parse_eod_data(date)
+        ex = self.marketlookupdata.exchange()
+        eq = self.marketlookupdata.equity_dict()
+        obj = PullEquityData(ex, eq)
+        result = obj.pull_parse_eod_data(date)
 
         return result
 
@@ -55,7 +51,10 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_equity_obj.pull_parse_derivative_eod_data(date)
+        ex = self.marketlookupdata.exchange()
+        eq = self.marketlookupdata.equity_dict()
+        obj = PullEquityData(ex, eq)
+        result = obj.pull_parse_derivative_eod_data(date)
 
         return result
 
@@ -64,7 +63,10 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_index_obj.pull_parse_eod_data(date)
+        ex = self.marketlookupdata.exchange()
+        inx = self.marketlookupdata.index_dict()
+        obj = PullIndexData(ex, inx)
+        result = obj.pull_parse_eod_data(date)
 
         return result
 
@@ -73,7 +75,10 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_index_obj.pull_parse_derivative_eod_data(date)
+        ex = self.marketlookupdata.exchange()
+        inx = self.marketlookupdata.index_dict()
+        obj = PullIndexData(ex, inx)
+        result = obj.pull_parse_derivative_eod_data(date)
 
         return result
 
@@ -82,7 +87,9 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_particpant_obj.pull_parse_eod_data(date)
+        ex = self.marketlookupdata.exchange()
+        obj = PullParticipantData(ex)
+        result = obj.pull_parse_eod_data(date)
 
         return result
 
@@ -91,17 +98,19 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        result = self.pull_particpant_obj.pull_parse_eod_stats(date)
+        ex = self.marketlookupdata.exchange()
+        obj = PullParticipantData(ex)
+        result = obj.pull_parse_eod_stats(date)
 
         return result
 
     def execute_equity_eod_data_task(self, run_date=None, end_date=None):
         output = []
         with application_context(
-            exchange=self.exchange,
+            exchange=self.marketlookupdata.exchange(),
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
-            if self.exchange is None:
+            if self.marketlookupdata.exchange() is None:
                 return "Exchange is required."
 
             date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
@@ -167,3 +176,118 @@ class EndOfDayData(BaseLogic):
 
                 run_date = dt.get_future_date(run_date, hours=pause_hours)
             return output
+
+    def stock_selection_hidden_move(self, date, index, avg_days):
+        with application_context(
+            exchange=self.marketlookupdata.exchange(),
+            holiday_category_name=HolidayCategoryType.EQUITIES,
+        ):
+            date = dt.get_last_working_day(date)
+
+            if not avg_days:
+                avg_days = conf.get_default_value_by_key("default_average_count")
+
+            if not index:
+                index = "cnx750"
+
+            past_date = dt.get_past_date(date, days=avg_days)
+
+            e_eod_qs = EquityEndOfDay.backend.values("entity_id")
+            e_eod_qs = e_eod_qs.filter(date__gte=past_date, date__lt=date)
+            e_eod_qs = e_eod_qs.annotate(avg_qpt=Avg("quantity_per_trade") * 2)
+            e_eod_qs = e_eod_qs.filter(entity_id=OuterRef("entity_id"))
+
+            sub_query_eod_qs = Subquery(e_eod_qs.values("avg_qpt")[:1])
+
+            eod_latest_qs = EquityEndOfDay.backend.filter(date=date)
+            eod_latest_qs = eod_latest_qs.filter(
+                quantity_per_trade__gt=sub_query_eod_qs
+            )
+
+            sub_query_e_qs = Subquery(eod_latest_qs.values("entity_id"))
+            qs = Equity.backend.filter(id__in=sub_query_e_qs)
+
+            qs = qs.filter(equity_indices__index__symbol__iexact=index)
+            qs = qs.annotate(weightage=Max("equity_indices__equity_weightage"))
+
+            eod_qs = EquityEndOfDay.backend
+            eod_qs = eod_qs.filter(date__gte=past_date, date__lte=date).order_by("date")
+            qs = qs.prefetch_related(
+                Prefetch("eod_data", queryset=eod_qs, to_attr="eod")
+            )
+
+            records = []
+            for equity in qs.all():
+                eod_data = equity.eod
+
+                js_array = []
+                for eod in eod_data:
+                    js_array.append(eod.__dict__)
+
+                if len(eod_data) == 0:
+                    continue
+
+                df = pd.DataFrame(js_array)
+                df = df.drop(["_state"], axis=1, errors="ignore")
+                df.rename(
+                    columns={
+                        "open_price": "open",
+                        "high_price": "high",
+                        "low_price": "low",
+                        "close_price": "close",
+                        "entity__symbol": "symbol",
+                    },
+                    inplace=True,
+                )
+
+                key = "quantity_per_trade"
+                window = 20
+                df["qpt_avg"] = df[key].rolling(window=window).mean()
+                df["qpt_ratio"] = df[key].astype(float) / df["qpt_avg"]
+
+                key = "traded_quantity"
+                df["vol_avg"] = df[key].rolling(window=window).mean()
+                df["vol_ratio"] = df[key].astype(float) / df["vol_avg"]
+
+                key = "delivery_percentage"
+                df["del_avg"] = df[key].rolling(window=window).mean()
+                df["del_ratio"] = df[key].astype(float) / df["del_avg"]
+
+                df["MA_10"] = talib.EMA(df["close"], timeperiod=10)
+                df = recognize_candlestick(df)
+
+                df = df.fillna(0)
+                row = df.iloc[-1]
+                record = {}
+                record["id"] = equity.id
+                record["symbol"] = equity.symbol
+                record["weightage"] = nh.roundOff(equity.weightage)
+                record["slug"] = equity.slug
+                record["qpt_ratio"] = nh.roundOff(row["qpt_ratio"])
+                record["vol_ratio"] = nh.roundOff(row["vol_ratio"])
+                record["del_ratio"] = nh.roundOff(row["del_ratio"])
+
+                cdl_rows = []
+                for cdl in row["candlestick"].split(";"):
+                    cdl_rs = cdl.split("|")
+                    cdl_row = {}
+                    cdl_row["rank"] = nh.str_to_float(cdl_rs[0])
+                    cdl_row["name"] = cdl_rs[1]
+                    cdl_row["sentiment"] = cdl_rs[2]
+                    cdl_row["score"] = nh.str_to_float(cdl_rs[3])
+                    cdl_rows.append(cdl_row)
+
+                cdl_rows = sorted(cdl_rows, key=itemgetter("rank"), reverse=False)
+                record["candlestick"] = cdl_rows
+                record["candlestick_pattern"] = row["candlestick_pattern"]
+                record["candlestick_rank"] = row["candlestick_rank"]
+                records.append(record)
+
+            records = sorted(records, key=itemgetter("weightage"), reverse=True)
+            records = [d for d in records if d["candlestick_rank"] > 0]
+            result = {
+                "date": date,
+                "count": len(records),
+                "records": records,
+            }
+            return result

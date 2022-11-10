@@ -9,14 +9,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.equity import EquityEndOfDay
-from ontrack.market.models.lookup import (
-    Equity,
-    EquityIndex,
-    Exchange,
-    MarketDay,
-    MarketDayCategory,
-)
+from ontrack.market.models.lookup import Equity, EquityIndex
 from ontrack.ta.candles.cdl_recognization import recognize_candlestick
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.mixins import SuperAdminPermissionMixin
@@ -30,8 +25,13 @@ class EquityEndOfDayDataTaskAPIView(SuperAdminPermissionMixin, APIView):
         exchange = request.data.get("exchange")
         startdate = dt.str_to_datetime(request.data.get("startdate"), "%Y-%m-%d")
         enddate = dt.str_to_datetime(request.data.get("enddate"), "%Y-%m-%d")
+
+        if not exchange:
+            return Response(None)
+
         obj = EndOfDayData(exchange)
         result = obj.execute_equity_eod_data_task(startdate, enddate)
+
         return Response(
             data={
                 "datetime": dt.current_dt_display_str(),
@@ -42,6 +42,25 @@ class EquityEndOfDayDataTaskAPIView(SuperAdminPermissionMixin, APIView):
 
 
 class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
+    # renderer_classes = [TemplateHTMLRenderer]
+    # template_name = "market/index.html"
+
+    def get(self, request, *args, **kwargs):
+        exchange = request.query_params.get("exchange")
+        index = request.query_params.get("symbol")
+        date = dt.str_to_datetime(request.query_params.get("date"), "%Y-%m-%d")
+        avg_days = nh.str_to_float(request.query_params.get("avg_days"))
+
+        if not exchange:
+            return Response(None)
+
+        obj = EndOfDayData(exchange)
+        result = obj.stock_selection_hidden_move(date, index, avg_days)
+
+        return Response(result)
+
+
+class StockSelectionAPIViewReference(SuperAdminPermissionMixin, APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "market/index.html"
 
@@ -52,20 +71,9 @@ class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
         days_count = nh.str_to_float(request.query_params.get("days_count"))
 
         if not exchange:
-            return Response({"status_code": 404})
+            return Response(None)
 
-        days = MarketDay.backend.prefetch_related("daytype")
-        catgories = MarketDayCategory.backend.prefetch_related(
-            Prefetch("days", queryset=days, to_attr="holidays")
-        )
-        exchangeobj = (
-            Exchange.backend.unique_search(exchange)
-            .prefetch_related(
-                Prefetch("holiday_categories", queryset=catgories, to_attr="categories")
-            )
-            .first()
-        )
-
+        exchangeobj = MarketLookupData().populate_exchange(exchange)
         with application_context(
             exchange=exchangeobj,
             holiday_category_name=HolidayCategoryType.EQUITIES,

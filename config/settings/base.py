@@ -5,6 +5,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import environ
+from debug_toolbar.panels.logging import collector
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # ontrack/
@@ -300,6 +301,11 @@ LOGGING = {
             "level": "ERROR",
             "class": "django.utils.log.AdminEmailHandler",
         },
+        "djdt_log": {
+            "level": "DEBUG",
+            "class": "debug_toolbar.panels.logging.ThreadTrackingHandler",
+            "collector": collector,
+        },
     },
     "loggers": {
         "django": {
@@ -323,7 +329,10 @@ LOGGING = {
             "propagate": True,
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {
+        "level": "DEBUG",
+        "handlers": ["djdt_log"],
+    },
 }
 
 # Celery

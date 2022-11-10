@@ -1,6 +1,7 @@
 import pytest
 from freezegun import freeze_time
 
+from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.context import application_context
@@ -13,13 +14,14 @@ class TestExchangeData:
         self.exchange_qs = Exchange.backend.get_queryset()
 
     @pytest.fixture(autouse=True)
-    def exchange_data_fixture(self, exchange_fixture):
-        self.exchange_fixture = exchange_fixture
+    def exchange_data_fixture(self, market_lookup_data_fixture: MarketLookupData):
+        self.market_lookup_data_fixture = market_lookup_data_fixture
+        self.exchange = market_lookup_data_fixture.exchange()
 
     @pytest.mark.unittest
     def test_exchange_trading_holiday(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             days = dt.get_exchange_trading_holidays()
@@ -29,7 +31,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_exchange_is_holiday(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             assert dt.is_holiday(dt.get_date_time(2022, 1, 26))
@@ -40,7 +42,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_exchange_start_time(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             date = dt.get_date_time(2022, 10, 20, 9, 15, 0)
@@ -64,7 +66,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_exchange_end_time(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             date = dt.get_date_time(2022, 10, 20, 15, 30, 0)
@@ -88,7 +90,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_exchange_refresh_time(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             date = dt.get_date_time(2022, 10, 20, 20, 00, 0)
@@ -107,7 +109,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_is_market_open(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             date = dt.get_date_time(2022, 1, 26, 10, 0, 0)
@@ -133,7 +135,7 @@ class TestExchangeData:
     @pytest.mark.unittest
     def test_is_market_close_for_the_day(self):
         with application_context(
-            exchange=self.exchange_fixture,
+            exchange=self.exchange,
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             date = dt.get_date_time(2022, 1, 26, 10, 0, 0)

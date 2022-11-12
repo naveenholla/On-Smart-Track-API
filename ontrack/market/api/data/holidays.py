@@ -1,7 +1,7 @@
 from ontrack.market.models.lookup import Exchange, MarketDayCategory, MarketDayType
+from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
-from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 
 
@@ -10,10 +10,11 @@ class HolidayData:
         self,
         exchange: Exchange,
         daytype_dict: dict,
+        tp: TaskProgressStatus = None,
     ):
-        self.logger = ApplicationLogger()
         self.exchange = exchange
         self.daytype_dict = daytype_dict
+        self.taskprogress = tp
 
     def __process_record(
         self, daytype: MarketDayType, category: MarketDayCategory, record
@@ -48,7 +49,7 @@ class HolidayData:
         return entity
 
     def __process_day_type(self, type_record):
-        self.logger.log_debug(f"Starting with {self.exchange.symbol}.")
+        self.tp.log_debug(f"Starting with {self.exchange.symbol}.")
 
         day_type_name = type_record["type"]
 
@@ -56,12 +57,12 @@ class HolidayData:
             e for e in self.daytype_dict if e.name.lower() == day_type_name.lower()
         ]
         if len(day_type) == 0:
-            self.logger.log_info(f"Holiday types '{day_type_name}' not exists.")
+            self.tp.log_info(f"Holiday types '{day_type_name}' not exists.")
             return None
         day_type = day_type[0]
 
         if not self.exchange.categories or len(self.exchange.categories) == 0:
-            self.logger.log_info("Categories doesn't exists.")
+            self.tp.log_info("Categories doesn't exists.")
             return None
 
         self.timezone = self.exchange.timezone_name
@@ -72,7 +73,7 @@ class HolidayData:
         entities = []
         for category in list(self.exchange.categories):
             if category.code not in holidays:
-                self.logger.log_debug("Category not enabled or exists.")
+                self.tp.log_debug("Category not enabled or exists.")
                 continue
 
             records = holidays[category.code]
@@ -86,6 +87,11 @@ class HolidayData:
 
         results = []
         for record in self.holiday_config:
+            s1 = record["exchange_symbol"].lower()
+            s2 = self.exchange.symbol.lower()
+            if s1 != s2:
+                continue
+
             result = self.__process_day_type(record)
             if result is not None:
                 results += result

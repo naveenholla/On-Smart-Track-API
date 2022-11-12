@@ -2,10 +2,15 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ontrack.lookup.api.logic.lookup import InitializeData as lookup_initilization
+from ontrack.lookup.tasks import (
+    execute_initial_lookup_data_task as lookup_initial_data_task,
+)
 from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.market.api.serializers import lookup
 from ontrack.market.models.lookup import Exchange
+from ontrack.market.tasks.lookup import (
+    execute_initial_lookup_data_task as market_initial_data_task,
+)
 from ontrack.utils.base.mixins import SuperAdminPermissionMixin
 from ontrack.utils.datetime import DateTimeHelper as dt
 
@@ -22,15 +27,13 @@ class ExchangeDetailAPIView(SuperAdminPermissionMixin, generics.RetrieveAPIView)
 
 class InitialDataTaskAPIView(SuperAdminPermissionMixin, APIView):
     def put(self, request, *args, **kwargs):
-        obj = lookup_initilization()
-        result2 = obj.execute_initial_lookup_data_task()
-
-        obj = MarketLookupData("")
-        result = obj.execute_initial_lookup_data_task()
+        taskid = lookup_initial_data_task().delay()
+        taskid2 = market_initial_data_task().delay()
         return Response(
             data={
                 "datetime": dt.current_dt_display_str(),
-                "result": f"{result} {result2}",
+                "task_1": taskid,
+                "task_2": taskid2,
             }
         )
 

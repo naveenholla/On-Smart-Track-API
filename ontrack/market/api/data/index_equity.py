@@ -6,10 +6,10 @@ import yaml
 
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.models.lookup import Exchange
+from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.filesystem import FileSystemHelper
-from ontrack.utils.logger import ApplicationLogger
 
 
 class PullEquityIndexData:
@@ -19,9 +19,8 @@ class PullEquityIndexData:
         equity_dict: dict = None,
         index_dict: dict = None,
         equityindex_dict: dict = None,
+        tp: TaskProgressStatus = None,
     ):
-        self.logger = ApplicationLogger()
-
         self.exchange = exchange
         self.exchange_symbol = exchange.symbol
         self.timezone = exchange.timezone_name
@@ -31,6 +30,7 @@ class PullEquityIndexData:
         self.index_dict = index_dict
         self.equity_dict = equity_dict
         self.equityindex_dict = equityindex_dict
+        self.taskprogress = tp
 
     def __get_name_from_label(self, label: str) -> str:
         # remove only the last instance of space
@@ -46,7 +46,7 @@ class PullEquityIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == index_symbol.lower()]
         if len(index) == 0:
-            self.logger.log_warning(f"Index '{index_symbol}' doesn't exists")
+            self.tp.log_warning(f"Index '{index_symbol}' doesn't exists")
             return None
         index = index[0]
 
@@ -54,7 +54,7 @@ class PullEquityIndexData:
             e for e in self.equity_dict if e.symbol.lower() == equity_symbol.lower()
         ]
         if len(equity) == 0:
-            self.logger.log_warning(f"Equity '{equity_symbol}' doesn't exists")
+            self.tp.log_warning(f"Equity '{equity_symbol}' doesn't exists")
             return None
         equity = equity[0]
 
@@ -122,7 +122,7 @@ class PullEquityIndexData:
         temp_folder = FileSystemHelper.create_temp_folder("IndexWeightage")
 
         if "url" not in record:
-            self.logger.log_debug("No url exists for '%s'." % record["name"])
+            self.tp.log_warning("No url exists for '%s'." % record["name"])
             return None
 
         # get indices details
@@ -131,16 +131,15 @@ class PullEquityIndexData:
         sector_name_file_name = index_name.replace(" ", "_")
         url_temp = f"{temp_folder}/{sector_name_file_name}_temp.json"
 
-        self.logger.log_debug(f"Started with {index_name}, {index_url}.")
+        self.tp.log_message(f"Started with {index_name}, {index_url}.")
 
         try:
-
             with urlopen(index_url) as webpage:
                 result = self.__parse_webContent(webpage, url_temp)
 
         except Exception as e:
             message = f"Exception from pull indices {index_url} - `{format(e)}`."
-            self.logger.log_critical(message=message)
+            self.tp.log_error(message=message)
             raise
 
         return result

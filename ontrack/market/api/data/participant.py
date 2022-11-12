@@ -1,17 +1,17 @@
 import pandas as pd
 
 from ontrack.utils.base.enum import ClientType, InstrumentType, OptionType
+from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
-from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper as nh
 from ontrack.utils.string import StringHelper
 
 
 class PullParticipantData:
-    def __init__(self, exchange):
-        self.logger = ApplicationLogger()
+    def __init__(self, exchange, tp: TaskProgressStatus = None):
+        self.tp = tp
         self.exchange = exchange
         self.urls = Configurations.get_urls_config()
 
@@ -194,10 +194,10 @@ class PullParticipantData:
     def pull_parse_eod_data(self, date):
         url_record = self.urls["fo_participant_oi"]
         url = StringHelper.format_url(url_record, date)
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_debug(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning("Exchange doesn't exists")
+            self.tp.log_warning("Exchange doesn't exists")
             return None
 
         # pull csv containing all the listed equities from web
@@ -219,10 +219,10 @@ class PullParticipantData:
     def pull_parse_eod_stats(self, date):
         url_record = self.urls["fii_stats"]
         url = StringHelper.format_url(url_record, date)
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_debug(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning("Exchange doesn't exists")
+            self.tp.log_warning("Exchange doesn't exists")
             return None
 
         data = pd.read_excel(url, header=2)

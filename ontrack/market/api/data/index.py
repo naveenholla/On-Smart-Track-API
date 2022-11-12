@@ -9,10 +9,10 @@ from ontrack.market.models.index import (
 )
 from ontrack.market.models.lookup import Exchange
 from ontrack.utils.base.enum import InstrumentType, OptionType
+from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations
 from ontrack.utils.datetime import DateTimeHelper as dt
 from ontrack.utils.filesystem import FileSystemHelper
-from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.logic import LogicHelper
 from ontrack.utils.numbers import NumberHelper as nh
 from ontrack.utils.string import StringHelper
@@ -21,14 +21,19 @@ from .common import CommonData
 
 
 class PullIndexData:
-    def __init__(self, exchange: Exchange = None, index_dict: dict = None):
-        self.logger = ApplicationLogger()
+    def __init__(
+        self,
+        exchange: Exchange = None,
+        index_dict: dict = None,
+        tp: TaskProgressStatus = None,
+    ):
         self.urls = Configurations.get_urls_config()
         self.settings = SettingLogic()
 
         self.index_dict = index_dict
 
         self.exchange = exchange
+        self.tp = tp
 
         if exchange:
             self.exchange_symbol = exchange.symbol
@@ -83,6 +88,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.name.lower() == index_name]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
             return None
         index = index[0]
 
@@ -145,6 +151,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -197,6 +204,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.name.lower() == index_name]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
             return None
         index = index[0]
 
@@ -270,6 +278,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -320,6 +329,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -380,6 +390,7 @@ class PullIndexData:
         )
 
         if pe_entity is None or ce_entity is None:
+            self.tp.log_warning("PE/CE is not exists.")
             return None
 
         return pe_entity, ce_entity
@@ -389,6 +400,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
+            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -416,7 +428,7 @@ class PullIndexData:
         return entity
 
     def pull_and_parse_lookup_data(self):
-        self.logger.log_debug("Started with indices.")
+        self.tp.log_message("Started with indices.")
 
         indices_percentage_records = self.urls["indices_percentage"]
 
@@ -425,11 +437,11 @@ class PullIndexData:
         self.market_cap_records = commonobj.pull_marketlot_data(market_cap_url)
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists.")
             return None
 
         if indices_percentage_records is None or len(indices_percentage_records) == 0:
-            self.logger.log_warning("No index records exists.")
+            self.tp.log_warning("No index records exists.")
             return None
 
         entities = []
@@ -442,10 +454,10 @@ class PullIndexData:
     def pull_parse_eod_data(self, date):
         url_record = self.urls["index_bhavcopy"]
         url = StringHelper.format_url(url_record, date)
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return None
 
         # pull csv containing all the listed equities from web
@@ -467,10 +479,10 @@ class PullIndexData:
     def pull_parse_derivative_eod_data(self, date):
         url_record = self.urls["fo_bhavcopy"]
         url = StringHelper.format_url(url_record, date)
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return None
 
         temp_folder = FileSystemHelper.create_temp_folder("fo")
@@ -479,6 +491,7 @@ class PullIndexData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas(path=path)
+        self.tp.log_message("Data pull completed.")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -495,10 +508,10 @@ class PullIndexData:
     def pull_parse_live_data(self):
         url_record = self.urls["live_index_data"]
         url = url_record["url"]
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -508,6 +521,7 @@ class PullIndexData:
         )
 
         if data is None:
+            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -515,7 +529,10 @@ class PullIndexData:
 
         already_processed = IndexLiveData.backend.filter(date=date).count()
         if already_processed > 0:
+            self.tp.log_warning("Already Processed")
             return "Already Processed."
+
+        self.tp.log_message("Data pull completed.")
 
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
@@ -528,10 +545,10 @@ class PullIndexData:
     def pull_parse_live_open_interest_data(self):
         url_record = self.urls["live_spurts_oi"]
         url = url_record["url"]
-        self.logger.log_debug(f"Started with {url}.")
+        self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -540,7 +557,10 @@ class PullIndexData:
             record=url_record, headers=headers
         )
 
+        self.tp.log_message("Data pull completed.")
+
         if data is None:
+            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -548,6 +568,7 @@ class PullIndexData:
 
         already_processed = IndexLiveOpenInterest.backend.filter(date=date).count()
         if already_processed > 0:
+            self.tp.log_warning("Already Processed")
             return "Already Processed."
 
         for record in data["data"]:
@@ -562,7 +583,7 @@ class PullIndexData:
         url_records = self.urls["live_index_future_data"]
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
@@ -571,14 +592,17 @@ class PullIndexData:
         for url_record in url_records:
             url = url_record["url"]
             list_name = url_record["name"]
-            self.logger.log_debug(f"Started with {url}.")
+            self.tp.log_message(f"Started with {url}.")
 
             # pull csv containing all the listed equities from web
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers
             )
 
+            self.tp.log_message("Data pull completed.")
+
             if data is None:
+                self.tp.log_warning(f"{list_name} - Data is missing.")
                 continue
 
             date = dt.str_to_datetime(
@@ -589,6 +613,7 @@ class PullIndexData:
                 date=date, list_type__iexact=list_name
             ).count()
             if already_processed > 0:
+                self.tp.log_warning(f"{list_name} - Already processed.")
                 continue
 
             for record in data["data"]:
@@ -603,7 +628,7 @@ class PullIndexData:
         url_record = self.urls["live_index_option_chain"]
 
         if self.exchange is None:
-            self.logger.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return None
 
         headers = Configurations.get_header_values_config()
@@ -611,14 +636,17 @@ class PullIndexData:
         entities = []
         for arg in url_record["arg0_options"]:
             url = url_record["url"].replace("{0}", arg.upper().replace("&", "%26"))
-            self.logger.log_debug(f"Started with {url}.")
+            self.tp.log_message(f"Started with {url}.")
 
             # pull csv containing all the listed equities from web
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers, url=url
             )
 
+            self.tp.log_message("Data pull completed.")
+
             if data is None:
+                self.tp.log_warning(f"{arg} - Data is missing.")
                 continue
 
             records = data["records"]
@@ -631,6 +659,7 @@ class PullIndexData:
                 date=date, entity__symbol__iexact=arg
             ).count()
             if already_processed > 0:
+                self.tp.log_warning(f"{arg} - Already processed.")
                 continue
 
             strick_limit = Configurations.get_default_value_by_key(

@@ -21,28 +21,35 @@ from ontrack.ta.candles.cdl_recognization import recognize_candlestick
 from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
+from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations as conf
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
-from ontrack.utils.logger import ApplicationLogger
 from ontrack.utils.numbers import NumberHelper as nh
 
 
 class EndOfDayData(BaseLogic):
-    def __init__(self, exchange_symbol: str):
-        self.logger = ApplicationLogger()
+    def __init__(self, exchange_symbol: str, recorder=None):
         self.settings = SettingLogic()
         self.marketlookupdata = MarketLookupData(exchange_symbol)
+
+        tp = TaskProgressStatus(recorder)
+        self.tp = tp
+
+        ex = self.marketlookupdata.exchange()
+        eq = self.marketlookupdata.equity_dict()
+        inx = self.marketlookupdata.index_dict()
+
+        self.pull_equity_obj = PullEquityData(ex, eq, tp)
+        self.pull_index_obj = PullIndexData(ex, inx, tp)
+        self.pull_participant_obj = PullParticipantData(ex, tp)
 
     def load_equity_eod_data(self, date):
         already_processed = EquityEndOfDay.backend.filter(date=date).count()
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        eq = self.marketlookupdata.equity_dict()
-        obj = PullEquityData(ex, eq)
-        result = obj.pull_parse_eod_data(date)
+        result = self.pull_equity_obj.pull_parse_eod_data(date)
 
         return result
 
@@ -51,10 +58,7 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        eq = self.marketlookupdata.equity_dict()
-        obj = PullEquityData(ex, eq)
-        result = obj.pull_parse_derivative_eod_data(date)
+        result = self.pull_equity_obj.pull_parse_derivative_eod_data(date)
 
         return result
 
@@ -63,10 +67,7 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        inx = self.marketlookupdata.index_dict()
-        obj = PullIndexData(ex, inx)
-        result = obj.pull_parse_eod_data(date)
+        result = self.pull_index_obj.pull_parse_eod_data(date)
 
         return result
 
@@ -75,10 +76,7 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        inx = self.marketlookupdata.index_dict()
-        obj = PullIndexData(ex, inx)
-        result = obj.pull_parse_derivative_eod_data(date)
+        result = self.pull_index_obj.pull_parse_derivative_eod_data(date)
 
         return result
 
@@ -87,9 +85,7 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        obj = PullParticipantData(ex)
-        result = obj.pull_parse_eod_data(date)
+        result = self.pull_participant_obj.pull_parse_eod_data(date)
 
         return result
 
@@ -98,9 +94,7 @@ class EndOfDayData(BaseLogic):
         if already_processed > 0:
             return "Already Processed."
 
-        ex = self.marketlookupdata.exchange()
-        obj = PullParticipantData(ex)
-        result = obj.pull_parse_eod_stats(date)
+        result = self.pull_participant_obj.pull_parse_eod_stats(date)
 
         return result
 
@@ -111,6 +105,7 @@ class EndOfDayData(BaseLogic):
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             if self.marketlookupdata.exchange() is None:
+                self.tp.log_warning("Exchange is required.")
                 return "Exchange is required."
 
             date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
@@ -120,7 +115,7 @@ class EndOfDayData(BaseLogic):
                 cet = self.can_execute_task(date_key, pause_hour_key)
                 if not cet[0]:
                     message = cet[1]
-                    self.logger.log_info(message)
+                    self.tp.log_info(message)
                     return message
                 run_date = cet[2]
 
@@ -132,11 +127,11 @@ class EndOfDayData(BaseLogic):
             pause_hours = self.settings.get_by_key(pause_hour_key)
             pause_hours = nh.str_to_float(pause_hours)
 
-            self.logger.log_debug(f"End Date:{end_date}")
-            self.logger.log_debug(f"Date:{run_date}")
+            self.tp.log_debug(f"End Date:{end_date}")
+            self.tp.log_debug(f"Date:{run_date}")
 
             while dt.compare_date_time(run_date, end_date, "lte"):
-                self.logger.log_debug(f"Processing Date:{run_date}")
+                self.tp.log_debug(f"Processing Date:{run_date}")
                 run_date_str = dt.datetime_to_display_str(run_date)
 
                 if dt.is_holiday(run_date):
@@ -144,14 +139,14 @@ class EndOfDayData(BaseLogic):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "It a is holiday."
                     output.append(self.message_creator(run_date_str, message))
-                    self.logger.log_info(message)
+                    self.tp.log_info(message)
                     continue
 
                 if not dt.is_data_refreshed(run_date, end_date):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "Data is not refreshed yet."
                     output.append(self.message_creator(run_date_str, message))
-                    self.logger.log_info(message)
+                    self.tp.log_info(message)
                     continue
 
                 try:
@@ -167,14 +162,18 @@ class EndOfDayData(BaseLogic):
                                 self.settings.save_task_execution_time(
                                     date_key, run_date
                                 )
-
-                        output.append(self.message_creator(run_date_str, records_stats))
+                        stats = self.message_creator(run_date_str, records_stats)
+                        output.append(stats)
+                        self.tp.log_records_stats(stats)
                 except Exception as e:
                     message = f"Exception - `{format(e)}`."
-                    self.logger.log_critical(message=message)
+                    self.tp.log_error(message=message)
                     output.append(self.message_creator(run_date_str, message))
+                    raise
 
                 run_date = dt.get_future_date(run_date, hours=pause_hours)
+
+                self.tp.log_completed("Task Completed.")
             return output
 
     def stock_selection_hidden_move(self, date, index, avg_days):

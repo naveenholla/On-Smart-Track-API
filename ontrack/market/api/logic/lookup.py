@@ -72,18 +72,27 @@ class MarketLookupData(BaseLogic):
     @lru_cache(1)
     def equity_dict(self):
         exchange = self.exchange()
+        if not exchange:
+            return None
+
         qs = Equity.backend.filter(exchange_id=exchange.id)
         return qs
 
     @lru_cache(1)
     def index_dict(self):
         exchange = self.exchange()
+        if not exchange:
+            return None
+
         qs = Index.backend.filter(exchange_id=exchange.id)
         return qs
 
     @lru_cache(1)
     def equityindex_dict(self):
         exchange = self.exchange()
+        if not exchange:
+            return None
+
         qs = EquityIndex.backend.filter(equity__exchange_id=exchange.id)
         return qs
 

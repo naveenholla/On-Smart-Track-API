@@ -115,7 +115,7 @@ class EndOfDayData(BaseLogic):
                 cet = self.can_execute_task(date_key, pause_hour_key)
                 if not cet[0]:
                     message = cet[1]
-                    self.tp.log_info(message)
+                    self.tp.log_message(message)
                     return message
                 run_date = cet[2]
 
@@ -139,14 +139,14 @@ class EndOfDayData(BaseLogic):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "It a is holiday."
                     output.append(self.message_creator(run_date_str, message))
-                    self.tp.log_info(message)
+                    self.tp.log_message(message)
                     continue
 
                 if not dt.is_data_refreshed(run_date, end_date):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "Data is not refreshed yet."
                     output.append(self.message_creator(run_date_str, message))
-                    self.tp.log_info(message)
+                    self.tp.log_message(message)
                     continue
 
                 try:

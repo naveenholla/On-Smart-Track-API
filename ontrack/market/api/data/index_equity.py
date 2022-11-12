@@ -22,7 +22,6 @@ class PullEquityIndexData:
         tp: TaskProgressStatus = None,
     ):
         self.exchange = exchange
-        self.exchange_symbol = exchange.symbol
         self.timezone = exchange.timezone_name
         self.urls = Configurations.get_urls_config()
         self.settings = SettingLogic()
@@ -30,7 +29,7 @@ class PullEquityIndexData:
         self.index_dict = index_dict
         self.equity_dict = equity_dict
         self.equityindex_dict = equityindex_dict
-        self.taskprogress = tp
+        self.tp = tp
 
     def __get_name_from_label(self, label: str) -> str:
         # remove only the last instance of space

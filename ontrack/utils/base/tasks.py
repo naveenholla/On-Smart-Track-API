@@ -21,6 +21,10 @@ class TaskProgressStatus:
         self.logger.log_critical(message)
         print(message)
 
+    def log_critical(self, message):
+        self.logger.log_critical(message)
+        print(message)
+
     def log_start(self, message):
         self.logger.log_info(message)
         print(message)
@@ -35,8 +39,10 @@ class TaskProgressStatus:
     def log_records_stats(self, stats):
         if "message" in stats:
             message = stats["message"]
-        else:
+        elif "created" in stats:
             created = stats["created"]
-            updated = stats["created"]
+            updated = stats["updated"]
             message = f"created({created}), updated({updated})"
+        else:
+            message = "No stats."
         print(message)

@@ -1,12 +1,10 @@
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
-from ontrack.utils.logger import ApplicationLogger
 
 
 class BaseLogic:
     def __init__(self):
-        self.logger = ApplicationLogger()
         self.settings = SettingLogic()
 
     def can_execute_task(self, date_key, pause_hour_key, default_value_key=None):
@@ -18,7 +16,7 @@ class BaseLogic:
 
         if not result[0]:
             message = f"Task is paused for time being till {next_run_date_str}."
-            self.logger.log_info(message)
+            self.tp.log_message(message)
             return False, message, next_run_date
 
         return True, None, next_run_date

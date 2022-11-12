@@ -20,9 +20,9 @@ class TestLogicLookup:
     @pytest.mark.unittest
     def test_execute_market_lookup_data_task(self):
         obj = MarketLookupData("None")
-        obj.load_equity_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_index_data = MagicMock(return_value=(None, (1, 0)))
-        obj.load_equity_index_data = MagicMock(return_value=(None, (1, 0)))
+        obj.load_equity_data = MagicMock(return_value=None)
+        obj.load_index_data = MagicMock(return_value=None)
+        obj.load_equity_index_data = MagicMock(return_value=None)
         obj.settings.save_task_execution_time = MagicMock()
         obj.settings.can_execute_task = MagicMock(
             return_value=(False, dt.current_date_time())

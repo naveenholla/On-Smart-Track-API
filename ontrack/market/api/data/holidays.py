@@ -14,7 +14,7 @@ class HolidayData:
     ):
         self.exchange = exchange
         self.daytype_dict = daytype_dict
-        self.taskprogress = tp
+        self.tp = tp
 
     def __process_record(
         self, daytype: MarketDayType, category: MarketDayCategory, record
@@ -57,12 +57,12 @@ class HolidayData:
             e for e in self.daytype_dict if e.name.lower() == day_type_name.lower()
         ]
         if len(day_type) == 0:
-            self.tp.log_info(f"Holiday types '{day_type_name}' not exists.")
+            self.tp.log_message(f"Holiday types '{day_type_name}' not exists.")
             return None
         day_type = day_type[0]
 
         if not self.exchange.categories or len(self.exchange.categories) == 0:
-            self.tp.log_info("Categories doesn't exists.")
+            self.tp.log_message("Categories doesn't exists.")
             return None
 
         self.timezone = self.exchange.timezone_name

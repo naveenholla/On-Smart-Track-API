@@ -31,20 +31,9 @@ class MarketLookupData(BaseLogic):
         self.fixtureData = FixtureData()
 
         self.exchange_symbol = exchange_symbol
+        self.tp = TaskProgressStatus(recorder)
 
-        tp = TaskProgressStatus(recorder)
-        self.tp = tp
-
-        ex = self.exchange()
-        eq = self.equity_dict()
-        inx = self.index_dict()
-        eqinx = self.equityindex_dict()
-        dty = self.daytype_dict()
-
-        self.pull_equity_obj = PullEquityData(ex, eq, tp)
-        self.pull_index_obj = PullIndexData(ex, inx, tp)
-        self.pull_eqinx_obj = PullEquityIndexData(ex, eq, inx, eqinx, tp)
-        self.pull_holidays = HolidayData(ex, dty, tp)
+        self.refresh_cache()
 
     @lru_cache(1)
     def exchange(self):
@@ -101,6 +90,21 @@ class MarketLookupData(BaseLogic):
         qs = MarketDayType.backend.all()
         return qs
 
+    def refresh_cache(self):
+        ex = self.exchange()
+        if not ex:
+            return
+
+        eq = self.equity_dict()
+        inx = self.index_dict()
+        eqinx = self.equityindex_dict()
+        dty = self.daytype_dict()
+
+        self.pull_equity_obj = PullEquityData(ex, eq, self.tp)
+        self.pull_index_obj = PullIndexData(ex, inx, self.tp)
+        self.pull_eqinx_obj = PullEquityIndexData(ex, eq, inx, eqinx, self.tp)
+        self.pull_holidays = HolidayData(ex, dty, self.tp)
+
     def load_fixtures_all_data(self, temp_folder_path=None):
         fixtures = [
             "market.exchange",
@@ -117,18 +121,21 @@ class MarketLookupData(BaseLogic):
     def load_equity_data(self):
         result = self.pull_equity_obj.pull_and_parse_lookup_data()
         self.equity_dict.cache_clear()
+        self.refresh_cache()
         self.tp.log_message("Equity Pull Completed.")
         return result
 
     def load_index_data(self):
         result = self.pull_index_obj.pull_and_parse_lookup_data()
         self.index_dict.cache_clear()
+        self.refresh_cache()
         self.tp.log_message("Index Pull Completed.")
         return result
 
     def load_equity_index_data(self):
         result = self.pull_eqinx_obj.pull_and_parse_market_cap()
         self.equityindex_dict.cache_clear()
+        self.refresh_cache()
         self.tp.log_message("Equity Index Pull Completed.")
         return result
 
@@ -159,7 +166,7 @@ class MarketLookupData(BaseLogic):
             if not cet[0]:
                 message = cet[1]
                 self.tp.log_warning(message)
-                self.tp.log_info(message)
+                self.tp.log_message(message)
                 return message
 
             try:
@@ -197,7 +204,7 @@ class MarketLookupData(BaseLogic):
             if not cet[0]:
                 message = cet[1]
                 self.tp.log_warning(message)
-                self.tp.log_info(message)
+                self.tp.log_message(message)
                 return message
 
             result = self.load_holidays_data()

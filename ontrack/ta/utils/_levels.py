@@ -318,7 +318,7 @@ def _shrink_list_index(levels, ltp, items_count=10):
     return min_idx, max_idx
 
 
-def get_all_support_and_resistance(df_yearly, df_hourly, df_15m, df_5m):
+def get_eod_sr_levels(df_yearly, df_hourly):
     levels = []
 
     ml = all_time_levels(df_yearly)
@@ -339,31 +339,21 @@ def get_all_support_and_resistance(df_yearly, df_hourly, df_15m, df_5m):
     ml = _get_support_resistance(df_yearly)
     levels.extend(ml)
 
-    if not df_hourly.empty:
-        ml = _get_support_resistance(df_hourly)
-        levels.extend(ml)
+    ml = _get_support_resistance(df_hourly)
+    levels.extend(ml)
 
-    if not df_15m.empty:
-        ml = _get_support_resistance(df_15m)
-        levels.extend(ml)
+    return levels
+
+
+def get_intraday_sr_levels(eod_levels, df_intraday):
+    levels = eod_levels
+    ml = _get_support_resistance(df_intraday)
+    levels.extend(ml)
 
     sorted_levels = sorted(levels, key=itemgetter("level"), reverse=False)
 
-    df_mean = df_yearly
-    if not df_hourly.empty:
-        df_mean = df_hourly
-
-    if not df_15m.empty:
-        df_mean = df_15m
-
-    if not df_5m.empty:
-        df_mean = df_5m
-
-    price = df_mean.iloc[-1]["close"]
-
-    unique_levels = _mark_noise(df_mean, sorted_levels, price)
-
+    price = df_intraday.iloc[-1]["close"]
+    unique_levels = _mark_noise(df_intraday, sorted_levels, price)
     points = [x["point"] for x in unique_levels]
-
     min_, max_ = _shrink_list_index(points, price)
     return unique_levels[min_:max_]

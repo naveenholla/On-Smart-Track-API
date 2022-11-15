@@ -81,8 +81,3 @@ class TestLogicLookup:
             obj.settings.save_task_execution_time.assert_called_with(
                 AdminSettingKey.DATAPULL_HOLIDAYS_LOOKUP_LAST_PULL_DATE
             )
-
-    # @pytest.mark.unittest
-    # def test_calculated_eod_data(self):
-    #     obj = self.marketlookupdata
-    #     obj.calculated_eod_data()

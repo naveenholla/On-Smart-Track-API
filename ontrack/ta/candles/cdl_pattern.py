@@ -1,4 +1,5 @@
 from collections.abc import Sequence
+from itertools import compress
 from typing import Union
 
 from pandas import DataFrame, Series
@@ -74,6 +75,24 @@ ALL_PATTERNS = [
 ]
 
 
+def _add_consolidated(df, candle_names):
+    df["CDL_CONSOLIDATED"] = ""
+    for index, row in df.iterrows():
+        data = compress(row[candle_names].keys(), row[candle_names].values != 0)
+        patterns = list(data)
+        container = []
+        for pattern in patterns:
+            score = row[pattern]
+            container.append(f"{pattern}|{score}")
+
+        separator = ";"
+        df.loc[index, "CDL_CONSOLIDATED"] = separator.join(container)
+
+    # clean up candle columns
+    df.drop(candle_names, axis=1, inplace=True, errors="ignore")
+    return df
+
+
 def cdl_pattern(
     open_,
     high,
@@ -108,6 +127,7 @@ def cdl_pattern(
         import talib.abstract as tala
 
     result = {}
+    candle_names = []
     for n in name:
         if n not in ALL_PATTERNS:
             print(f"[X] There is no candle pattern named {n} available!")
@@ -118,6 +138,7 @@ def cdl_pattern(
                 open_, high, low, close, offset=offset, scalar=scalar, **kwargs
             )
             result[pattern_result.name] = pattern_result
+            candle_names.append(pattern_result.name)
         else:
             if not Imports["talib"]:
                 print(f"[X] Please install TA-Lib to use {n}. (pip install TA-Lib)")
@@ -140,12 +161,16 @@ def cdl_pattern(
                 pattern_result.fillna(method=kwargs["fill_method"], inplace=True)
 
             result[f"CDL_{n.upper()}"] = pattern_result
+            candle_names.append(f"CDL_{n.upper()}")
 
     if len(result) == 0:
         return
 
     # Prepare DataFrame to return
     df = DataFrame(result)
+    if "consolidated" in kwargs:
+        df = _add_consolidated(df, candle_names)
+
     df.name = "CDL_PATTERN"
     df.category = "candles"
     return df

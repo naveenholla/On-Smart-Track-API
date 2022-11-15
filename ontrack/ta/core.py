@@ -110,6 +110,57 @@ CommonStrategy = Strategy(
 )
 
 
+def sanitize(df, **kwargs):
+    if df.empty:
+        return
+    if len(df.columns) > 0:
+        common_names = {
+            "Date": "date",
+            "Time": "time",
+            "Timestamp": "timestamp",
+            "Datetime": "datetime",
+            "Open": "open",
+            "High": "high",
+            "Low": "low",
+            "Close": "close",
+            "Adj Close": "adj_close",
+            "Volume": "volume",
+            "Dividends": "dividends",
+            "Stock Splits": "split",
+            "open_price": "open",
+            "high_price": "high",
+            "low_price": "low",
+            "close_price": "close",
+            "traded_quantity": "volume",
+        }
+        # Preemptively drop the rows that are all NaNs
+        # Might need to be moved to AnalysisIndicators.__call__() to be
+        #   toggleable via kwargs.
+        # df.dropna(axis=0, inplace=True)
+        # Preemptively rename columns to lowercase
+        df.rename(columns=common_names, errors="ignore", inplace=True)
+
+        col_types = {
+            "open": float,
+            "high": float,
+            "low": float,
+            "close": float,
+        }
+
+        df = df.astype(col_types)
+
+        # Preemptively lowercase the index
+        index_name = df.index.name
+        if index_name is not None:
+            df.index.rename(index_name.lower(), inplace=True)
+        else:
+            df.set_index(pd.DatetimeIndex(df["date"]))
+
+        return df
+    else:
+        raise AttributeError(f"[X] No columns!")
+
+
 # Base Class for extending a Pandas DataFrame
 class BasePandasObject(PandasObject):
     """Simple PandasObject Extension
@@ -122,38 +173,7 @@ class BasePandasObject(PandasObject):
     """
 
     def __init__(self, df, **kwargs):
-        if df.empty:
-            return
-        if len(df.columns) > 0:
-            common_names = {
-                "Date": "date",
-                "Time": "time",
-                "Timestamp": "timestamp",
-                "Datetime": "datetime",
-                "Open": "open",
-                "High": "high",
-                "Low": "low",
-                "Close": "close",
-                "Adj Close": "adj_close",
-                "Volume": "volume",
-                "Dividends": "dividends",
-                "Stock Splits": "split",
-            }
-            # Preemptively drop the rows that are all NaNs
-            # Might need to be moved to AnalysisIndicators.__call__() to be
-            #   toggleable via kwargs.
-            # df.dropna(axis=0, inplace=True)
-            # Preemptively rename columns to lowercase
-            df.rename(columns=common_names, errors="ignore", inplace=True)
-
-            # Preemptively lowercase the index
-            index_name = df.index.name
-            if index_name is not None:
-                df.index.rename(index_name.lower(), inplace=True)
-
-            self._df = df
-        else:
-            raise AttributeError(f"[X] No columns!")
+        self._df = sanitize(df)
 
     def __call__(self, kind, *args, **kwargs):
         raise NotImplementedError()
@@ -357,8 +377,13 @@ class AnalysisIndicators(BasePandasObject):
         return self._df.iloc[::-1]
 
     @property
+    def last_record(self) -> pd.DataFrame:
+        """Last record from the DataFrame. Simply: df.iloc[-1]"""
+        return self._df.iloc[-1]
+
+    @property
     def time_range(self) -> float:
-        """Returns the time ranges of the DataFrame as a float. Default is in "years". help(ta.toal_time)"""
+        """Returns the time ranges of the DataFrame as a float. Default is in "years". help(ta.total_time)"""
         return total_time(self._df, self._time_range)
 
     @time_range.setter
@@ -927,6 +952,11 @@ class AnalysisIndicators(BasePandasObject):
         if strategy is not None:
             self.strategy(strategy, **kwargs)
         return df
+
+    def sanitize(self, **kwargs):
+        """santize the columns name, datatype and index"""
+
+        self._df = sanitize(self._df)
 
     # Public DataFrame Methods: Indicators and Utilities
     # Candles
@@ -1577,6 +1607,16 @@ class AnalysisIndicators(BasePandasObject):
             distribution_offset=distribution_offset,
             offset=offset,
             **kwargs,
+        )
+        return self._post_process(result, **kwargs)
+
+    def cpr(self, offset=None, **kwargs):
+        open_ = self._get_column(kwargs.pop("open", "open"))
+        high = self._get_column(kwargs.pop("high", "high"))
+        low = self._get_column(kwargs.pop("low", "low"))
+        close = self._get_column(kwargs.pop("close", "close"))
+        result = cpr(
+            open_=open_, high=high, low=low, close=close, offset=offset, **kwargs
         )
         return self._post_process(result, **kwargs)
 

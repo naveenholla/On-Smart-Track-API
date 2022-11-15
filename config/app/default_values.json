@@ -7,6 +7,6 @@
     "lookup_data_older_than_days_can_be_deleted": 5,
     "days_for_delete_equity_eod_data": 750,
     "days_for_delete_indices_eod_data": 750,
-    "default_average_count": 30,
+    "default_average_count": 20,
     "option_chain_strick_price_count": 20
 }

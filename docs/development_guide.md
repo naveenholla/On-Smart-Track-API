@@ -22,6 +22,9 @@
 				ggshield auth login
 	https://docs.docker.com/get-docker/#supported-platforms
     https://www.postgresql.org/download/windows/
+    https://www.anaconda.com/
+        Open Anaconda prompt cmd
+            RUN "conda install ipykernel"
 
 - Open Powershell
 - Run Following commands

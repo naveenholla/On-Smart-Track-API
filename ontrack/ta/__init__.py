@@ -1,13 +1,8 @@
 name = "ontrack.ta"
-"""
-.. moduleauthor:: Kevin Johnson
-"""
 from importlib.util import find_spec
 
-from pkg_resources import DistributionNotFound, get_distribution
-
+# from pkg_resources import DistributionNotFound, get_distribution
 # from pathlib import Path
-
 
 # _dist = get_distribution("ontrack.ta")
 # try:
@@ -90,6 +85,7 @@ Category = {
     # Overlap
     "overlap": [
         "alma",
+        "cpr",
         "dema",
         "ema",
         "fwma",

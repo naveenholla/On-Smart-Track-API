@@ -5,6 +5,7 @@ import talib
 from django.db import transaction
 from django.db.models import Avg, Max, OuterRef, Prefetch, Subquery
 
+import ontrack.ta  # noqa F401
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
@@ -17,7 +18,6 @@ from ontrack.market.models.participant import (
     ParticipantActivity,
     ParticipantStatsActivity,
 )
-from ontrack.ta.candles.cdl_recognization import recognize_candlestick
 from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
@@ -189,7 +189,7 @@ class EndOfDayData(BaseLogic):
             if not index:
                 index = "cnx750"
 
-            past_date = dt.get_past_date(date, days=avg_days)
+            past_date = dt.get_past_date(date, days=avg_days + 1)
 
             e_eod_qs = EquityEndOfDay.backend.values("entity_id")
             e_eod_qs = e_eod_qs.filter(date__gte=past_date, date__lt=date)
@@ -226,25 +226,42 @@ class EndOfDayData(BaseLogic):
                 if len(eod_data) == 0:
                     continue
 
+                record = {}
+                record["id"] = equity.id
+                record["symbol"] = equity.symbol
+                record["weightage"] = nh.roundOff(equity.weightage)
+                record["slug"] = equity.slug
+
                 df = pd.DataFrame(js_array)
                 df = df.drop(["_state"], axis=1, errors="ignore")
-                df.rename(
-                    columns={
-                        "open_price": "open",
-                        "high_price": "high",
-                        "low_price": "low",
-                        "close_price": "close",
-                        "entity__symbol": "symbol",
-                    },
-                    inplace=True,
-                )
+                df.ta.sanitize()
+                df.ta.cdl_pattern("all", consolidated=True, append=True)
+                row = df.ta.last_record
+
+                cdl_rows = []
+                cdl_string = row["CDL_CONSOLIDATED"].strip()
+                if cdl_string:
+                    for cdl in cdl_string.split(";"):
+                        cdl_rs = cdl.split("|")
+                        name = cdl_rs[0]
+                        score = nh.str_to_float(cdl_rs[1])
+
+                        cdl_row = {}
+                        cdl_row["rank"] = 0
+                        cdl_row["name"] = name
+                        cdl_row["sentiment"] = "BULLISH" if score > 0 else "BEARISH"
+                        cdl_row["score"] = score
+                        cdl_rows.append(cdl_row)
+
+                cdl_rows = sorted(cdl_rows, key=itemgetter("rank"), reverse=False)
+                record["candlestick"] = cdl_rows
 
                 key = "quantity_per_trade"
                 window = 20
                 df["qpt_avg"] = df[key].rolling(window=window).mean()
                 df["qpt_ratio"] = df[key].astype(float) / df["qpt_avg"]
 
-                key = "traded_quantity"
+                key = "volume"
                 df["vol_avg"] = df[key].rolling(window=window).mean()
                 df["vol_ratio"] = df[key].astype(float) / df["vol_avg"]
 
@@ -253,37 +270,16 @@ class EndOfDayData(BaseLogic):
                 df["del_ratio"] = df[key].astype(float) / df["del_avg"]
 
                 df["MA_10"] = talib.EMA(df["close"], timeperiod=10)
-                df = recognize_candlestick(df)
 
-                df = df.fillna(0)
                 row = df.iloc[-1]
-                record = {}
-                record["id"] = equity.id
-                record["symbol"] = equity.symbol
-                record["weightage"] = nh.roundOff(equity.weightage)
-                record["slug"] = equity.slug
+
                 record["qpt_ratio"] = nh.roundOff(row["qpt_ratio"])
                 record["vol_ratio"] = nh.roundOff(row["vol_ratio"])
                 record["del_ratio"] = nh.roundOff(row["del_ratio"])
 
-                cdl_rows = []
-                for cdl in row["candlestick"].split(";"):
-                    cdl_rs = cdl.split("|")
-                    cdl_row = {}
-                    cdl_row["rank"] = nh.str_to_float(cdl_rs[0])
-                    cdl_row["name"] = cdl_rs[1]
-                    cdl_row["sentiment"] = cdl_rs[2]
-                    cdl_row["score"] = nh.str_to_float(cdl_rs[3])
-                    cdl_rows.append(cdl_row)
-
-                cdl_rows = sorted(cdl_rows, key=itemgetter("rank"), reverse=False)
-                record["candlestick"] = cdl_rows
-                record["candlestick_pattern"] = row["candlestick_pattern"]
-                record["candlestick_rank"] = row["candlestick_rank"]
                 records.append(record)
 
             records = sorted(records, key=itemgetter("weightage"), reverse=True)
-            records = [d for d in records if d["candlestick_rank"] > 0]
             result = {
                 "date": date,
                 "count": len(records),

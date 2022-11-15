@@ -110,3 +110,9 @@ class TestLogicLookup:
             assert result is not None
             assert len(result) == 1
             assert obj.load_equity_eod_data.call_count == 1
+
+    # @pytest.mark.unittest
+    # def test_calculated_eod_data(self):
+    #     dt.get_date_time(2022, 11, 7)
+    #     obj =  obj = EndOfDayData(ExchangeType.NSE)
+    #     obj.stock_selection_hidden_move()

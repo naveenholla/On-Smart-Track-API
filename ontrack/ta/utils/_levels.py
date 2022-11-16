@@ -1,4 +1,5 @@
 import datetime as dt
+import sys
 from operator import itemgetter
 
 import numpy as np
@@ -15,21 +16,25 @@ def _create_level_object(row, type):
     level = {}
     level["type"] = f"{type}_O"
     level["level"] = np.round(open_, 2)
+    level["is_support"] = True
     levels.append(level)
 
     level = {}
     level["type"] = f"{type}_H"
     level["level"] = np.round(high)
+    level["is_support"] = False
     levels.append(level)
 
     level = {}
     level["type"] = f"{type}_L"
     level["level"] = np.round(low)
+    level["is_support"] = True
     levels.append(level)
 
     level = {}
     level["type"] = f"{type}_C"
     level["level"] = np.round(close)
+    level["is_support"] = False
     levels.append(level)
     return levels
 
@@ -72,11 +77,13 @@ def firty_two_week_levels(df):
     level = {}
     level["type"] = f"52W_H"
     level["level"] = np.round(df["52W H"].iloc[-1], 2)
+    level["is_support"] = False
     levels.append(level)
 
     level = {}
     level["type"] = f"52W_L"
     level["level"] = np.round(df["52W L"].iloc[-1], 2)
+    level["is_support"] = True
     levels.append(level)
 
     return levels
@@ -90,11 +97,13 @@ def all_time_levels(df):
     level = {}
     level["type"] = f"ATH"
     level["level"] = np.round(df["ATH"].iloc[-1], 2)
+    level["is_support"] = False
     levels.append(level)
 
     level = {}
     level["type"] = f"ATC"
     level["level"] = np.round(df["ATC"].iloc[-1], 2)
+    level["is_support"] = False
     levels.append(level)
 
     return levels
@@ -156,27 +165,26 @@ def _distance_from_mean(mean, level, unique_levels):
     return np.sum([abs(level - y) < mean for y in unique_levels]) == 0
 
 
-def _mark_noise(df, levels, price):
-    # Clean noise in data by discarding a level if it is near another
-    # (i.e. if distance to the next level is less than the average candle size for any given day - this will give a rough estimate on volatility)
-    mean = np.mean(df["high"] - df["low"])
-
+def _group_noise(levels, price, mean):
     unique_levels = []
     previous_number = None
 
     unique_level = {}
     unique_level["point"] = 0
-    unique_level["min_point"] = 0
+    unique_level["min_point"] = sys.maxsize
     unique_level["max_point"] = 0
     unique_level["levels"] = []
     unique_level["types"] = []
     unique_level["dates"] = []
+    unique_level["is_support"] = []
     for l in levels:
         level = l["level"]
         type_ = l["type"]
         date_ = l["date"] if "date" in l else None
+        is_support = l["is_support"]
         if not previous_number or abs(level - previous_number) < mean:
-            previous_number = level
+            if not previous_number:
+                previous_number = level
 
             min_ = min(level, unique_level["min_point"])
             max_ = max(level, unique_level["max_point"])
@@ -186,6 +194,7 @@ def _mark_noise(df, levels, price):
             unique_level["levels"].append(level)
             unique_level["types"].append(type_)
             unique_level["dates"].append(date_)
+            unique_level["is_support"].append(is_support)
 
             continue
 
@@ -205,26 +214,12 @@ def _mark_noise(df, levels, price):
         unique_level["dates"] = [
             date_,
         ]
+        unique_level["is_support"] = [
+            is_support,
+        ]
 
     unique_levels.append(unique_level)
     return unique_levels
-
-
-# method 1: fractal candlestick pattern
-def _fractal_candlestick_pattern_sr(df, remove_noise=False):
-    levels = []
-    indexes = list(df.index.values)
-    for i in range(2, df.shape[0] - 2):
-        index = Timestamp(indexes[i])
-        if _is_support(df, i):
-            l = df["low"][i]
-            if not remove_noise or _is_far_from_level(l, levels, df):
-                levels.append((index, l))
-        elif _is_resistance(df, i):
-            l = df["high"][i]
-            if not remove_noise or _is_far_from_level(l, levels, df):
-                levels.append((index, l))
-    return levels
 
 
 def _fractal_candlestick_pattern_sr_2(df, n1=2, n2=2, remove_noise=False):
@@ -235,11 +230,11 @@ def _fractal_candlestick_pattern_sr_2(df, n1=2, n2=2, remove_noise=False):
         if _support(df, i, n1, n2):
             l = df["low"][i]
             if not remove_noise or _is_far_from_level(l, levels, df):
-                levels.append((index, l))
+                levels.append((index, l, "support"))
         elif _resistance(df, i, n1, n2):
             l = df["high"][i]
             if not remove_noise or _is_far_from_level(l, levels, df):
-                levels.append((index, l))
+                levels.append((index, l, "resistance"))
     return levels
 
 
@@ -257,7 +252,7 @@ def _window_shifting_method_sr(df, window=5, remove_noise=False):
         if len(max_list) == window and (
             not remove_noise or _is_far_from_level(current_max, levels, df)
         ):
-            levels.append((high_range.idxmax(), current_max))
+            levels.append((high_range.idxmax(), current_max, "resistance"))
 
         low_range = df["low"][i - window : i + window]
         current_min = low_range.min()
@@ -267,11 +262,11 @@ def _window_shifting_method_sr(df, window=5, remove_noise=False):
         if len(min_list) == window and (
             not remove_noise or _is_far_from_level(current_min, levels, df)
         ):
-            levels.append((low_range.idxmin(), current_min))
+            levels.append((low_range.idxmin(), current_min, "support"))
     return levels
 
 
-def _get_support_resistance(df, n1=2, n2=2, window=5):
+def get_support_resistance(df, n1=2, n2=2, window=5):
     # n1 n2 before and after candle index
     all_pivots_dict = []
     levels = _fractal_candlestick_pattern_sr_2(df, n1, n2)
@@ -282,6 +277,7 @@ def _get_support_resistance(df, n1=2, n2=2, window=5):
         pivot["type"] = "SR_FCP"
         pivot["date"] = level[0].to_pydatetime()
         pivot["level"] = point
+        pivot["is_support"] = level[2] == "support"
         all_pivots_dict.append(pivot)
 
     levels = _window_shifting_method_sr(df, window)
@@ -292,6 +288,7 @@ def _get_support_resistance(df, n1=2, n2=2, window=5):
         pivot["type"] = "SR_WSM"
         pivot["date"] = level[0].to_pydatetime()
         pivot["level"] = point
+        pivot["is_support"] = level[2] == "support"
         all_pivots_dict.append(pivot)
 
     return all_pivots_dict
@@ -318,7 +315,7 @@ def _shrink_list_index(levels, ltp, items_count=10):
     return min_idx, max_idx
 
 
-def get_eod_sr_levels(df_yearly, df_hourly):
+def get_eod_sr_levels(df_yearly, dfs):
     levels = []
 
     ml = all_time_levels(df_yearly)
@@ -336,24 +333,60 @@ def get_eod_sr_levels(df_yearly, df_hourly):
     ml = daily_levels(df_yearly)
     levels.extend(ml)
 
-    ml = _get_support_resistance(df_yearly)
+    ml = get_support_resistance(df_yearly)
     levels.extend(ml)
 
-    ml = _get_support_resistance(df_hourly)
-    levels.extend(ml)
+    for df in dfs:
+        ml = get_support_resistance(df)
+        levels.extend(ml)
 
     return levels
 
 
-def get_intraday_sr_levels(eod_levels, df_intraday):
+def get_intraday_sr_levels(eod_levels, dfs, ltp, offset_mean=None):
     levels = eod_levels
-    ml = _get_support_resistance(df_intraday)
-    levels.extend(ml)
+
+    for df in dfs:
+        ml = get_support_resistance(df)
+        levels.extend(ml)
 
     sorted_levels = sorted(levels, key=itemgetter("level"), reverse=False)
 
-    price = df_intraday.iloc[-1]["close"]
-    unique_levels = _mark_noise(df_intraday, sorted_levels, price)
+    if not offset_mean:
+        # Clean noise in data by discarding a level if it is near another
+        # (i.e. if distance to the next level is less than the average
+        # candle size for any given day - this will give a rough estimate on volatility)
+        offset_mean = np.mean(dfs[0]["high"] - dfs[0]["low"])
+
+    unique_levels = _group_noise(sorted_levels, ltp, offset_mean)
     points = [x["point"] for x in unique_levels]
-    min_, max_ = _shrink_list_index(points, price)
+    min_, max_ = _shrink_list_index(points, ltp)
     return unique_levels[min_:max_]
+
+
+def analysis_market_structure(levels):
+    last_support = sys.maxsize
+    last_resistance = 0
+    swing_low = 0
+    swing_high = 0
+
+    for level in levels:
+        value = level["level"]
+        if last_support >= value:
+            # New Low, so upward swing is no longer valid
+            swing_low = 0
+
+        if last_resistance <= value:
+            # New High, so downward swing is no longer valid
+            swing_high = 0
+
+        if level["is_support"]:
+            if last_support < value and swing_low == 0:
+                swing_low = last_support
+            last_support = value
+        else:
+            if last_resistance > value and swing_high == 0:
+                swing_high = last_resistance
+            last_resistance = value
+
+    return last_support, last_resistance, swing_low, swing_high

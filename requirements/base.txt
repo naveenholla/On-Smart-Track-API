@@ -39,7 +39,7 @@ django-filter==22.1
 
 
 matplotlib==3.6.2
-yfinance==0.1.85
+yfinance==0.1.87
 alphaVantage-api==1.0.33
 mplfinance==0.12.9b5
 scipy==1.9.3

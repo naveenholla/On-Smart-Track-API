@@ -137,8 +137,11 @@ def cdl_pattern(
             pattern_result = pta_patterns[n](
                 open_, high, low, close, offset=offset, scalar=scalar, **kwargs
             )
-            result[pattern_result.name] = pattern_result
-            candle_names.append(pattern_result.name)
+            try:
+                result[pattern_result.name] = pattern_result
+                candle_names.append(pattern_result.name)
+            except:
+                pass
         else:
             if not Imports["talib"]:
                 print(f"[X] Please install TA-Lib to use {n}. (pip install TA-Lib)")

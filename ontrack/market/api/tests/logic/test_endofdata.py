@@ -113,6 +113,6 @@ class TestLogicLookup:
 
     # @pytest.mark.unittest
     # def test_calculated_eod_data(self):
-    #     dt.get_date_time(2022, 11, 7)
-    #     obj =  obj = EndOfDayData(ExchangeType.NSE)
-    #     obj.stock_selection_hidden_move()
+    #     d = dt.get_date_time(2022, 11, 7)
+    #     obj = obj = EndOfDayData(ExchangeType.NSE)
+    #     obj.stock_selection_hidden_move(d, 50)

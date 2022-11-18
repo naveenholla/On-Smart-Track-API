@@ -109,6 +109,42 @@ def all_time_levels(df):
     return levels
 
 
+def _add_indicator_levels(df, type_, is_support=True):
+    level = {}
+    level["type"] = type_
+    level["level"] = np.round(df[type_].iloc[-1], 2)
+    level["is_support"] = is_support
+    return level
+
+
+def get_all_indicator_levels(df):
+    levels = []
+
+    indicators = [
+        "SMA_200",
+        "SMA_100",
+        "SMA_50",
+        "EMA_200",
+        "EMA_100",
+        "EMA_50",
+        "CPR_TC",
+        "CPR_PIVOT",
+        "CPR_BC",
+        "CPR_R3",
+        "CPR_R2",
+        "CPR_R1",
+        "CPR_S3",
+        "CPR_S2",
+        "CPR_S1",
+    ]
+
+    for indicator in indicators:
+        if indicator in df.columns:
+            levels.append(_add_indicator_levels(df, indicator))
+
+    return levels
+
+
 def _support(df, index, n1, n2):
     # n1 n2 before and after candle index
     for i in range(index - n1 + 1, index + 1):
@@ -171,12 +207,14 @@ def _group_noise(levels, price, mean):
 
     unique_level = {}
     unique_level["point"] = 0
+    unique_level["is_below"] = True
     unique_level["min_point"] = sys.maxsize
     unique_level["max_point"] = 0
     unique_level["levels"] = []
     unique_level["types"] = []
     unique_level["dates"] = []
     unique_level["is_support"] = []
+    index = -100
     for l in levels:
         level = l["level"]
         type_ = l["type"]
@@ -188,7 +226,9 @@ def _group_noise(levels, price, mean):
 
             min_ = min(level, unique_level["min_point"])
             max_ = max(level, unique_level["max_point"])
-            unique_level["point"] = max_ if level < price else min_
+            point = max_ if level < price else min_
+            unique_level["point"] = point
+            unique_level["is_below"] = point < price
             unique_level["min_point"] = min_
             unique_level["max_point"] = max_
             unique_level["levels"].append(level)
@@ -203,6 +243,7 @@ def _group_noise(levels, price, mean):
 
         unique_level = {}
         unique_level["point"] = previous_number
+        unique_level["is_below"] = previous_number < price
         unique_level["min_point"] = level
         unique_level["max_point"] = level
         unique_level["levels"] = [
@@ -275,7 +316,7 @@ def get_support_resistance(df, n1=2, n2=2, window=5):
 
         pivot = {}
         pivot["type"] = "SR_FCP"
-        pivot["date"] = level[0].to_pydatetime()
+        pivot["date"] = level[0].to_pydatetime().strftime("%Y-%m-%dT%H:%M:%S.%f")
         pivot["level"] = point
         pivot["is_support"] = level[2] == "support"
         all_pivots_dict.append(pivot)
@@ -286,7 +327,7 @@ def get_support_resistance(df, n1=2, n2=2, window=5):
 
         pivot = {}
         pivot["type"] = "SR_WSM"
-        pivot["date"] = level[0].to_pydatetime()
+        pivot["date"] = level[0].to_pydatetime().strftime("%Y-%m-%dT%H:%M:%S.%f")
         pivot["level"] = point
         pivot["is_support"] = level[2] == "support"
         all_pivots_dict.append(pivot)
@@ -315,25 +356,25 @@ def _shrink_list_index(levels, ltp, items_count=10):
     return min_idx, max_idx
 
 
-def get_eod_sr_levels(df_yearly, dfs):
+def get_eod_sr_levels(df_daily, dfs):
     levels = []
 
-    ml = all_time_levels(df_yearly)
+    ml = all_time_levels(df_daily)
     levels.extend(ml)
 
-    ml = firty_two_week_levels(df_yearly)
+    ml = firty_two_week_levels(df_daily)
     levels.extend(ml)
 
-    ml = monthly_levels(df_yearly)
+    ml = monthly_levels(df_daily)
     levels.extend(ml)
 
-    ml = weekly_levels(df_yearly)
+    ml = weekly_levels(df_daily)
     levels.extend(ml)
 
-    ml = daily_levels(df_yearly)
+    ml = get_support_resistance(df_daily)
     levels.extend(ml)
 
-    ml = get_support_resistance(df_yearly)
+    ml = get_all_indicator_levels(df_daily)
     levels.extend(ml)
 
     for df in dfs:
@@ -343,8 +384,11 @@ def get_eod_sr_levels(df_yearly, dfs):
     return levels
 
 
-def get_intraday_sr_levels(eod_levels, dfs, ltp, offset_mean=None):
+def get_intraday_sr_levels(eod_levels, df_daily, dfs, ltp, offset_mean=None):
     levels = eod_levels
+
+    ml = daily_levels(df_daily)
+    levels.extend(ml)
 
     for df in dfs:
         ml = get_support_resistance(df)

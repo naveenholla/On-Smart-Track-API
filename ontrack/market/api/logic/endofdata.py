@@ -1,11 +1,10 @@
 from operator import itemgetter
 
 import pandas as pd
-import talib
 from django.db import transaction
 from django.db.models import Avg, Max, OuterRef, Prefetch, Subquery
 
-import ontrack.ta  # noqa F401
+import ontrack.ta as ta
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
@@ -176,7 +175,7 @@ class EndOfDayData(BaseLogic):
                 self.tp.log_completed("Task Completed.")
             return output
 
-    def stock_selection_hidden_move(self, date, index, avg_days):
+    def stock_selection_hidden_move(self, date, index=None, avg_days=None):
         with application_context(
             exchange=self.marketlookupdata.exchange(),
             holiday_category_name=HolidayCategoryType.EQUITIES,
@@ -226,57 +225,19 @@ class EndOfDayData(BaseLogic):
                 if len(eod_data) == 0:
                     continue
 
+                df = pd.DataFrame(js_array)
+                df = df.drop(["_state"], axis=1, errors="ignore")
+                result = self.populate_indicators(df)
+
+                df = result[0]
+                row = df.ta.last_record
+
                 record = {}
                 record["id"] = equity.id
                 record["symbol"] = equity.symbol
                 record["weightage"] = nh.roundOff(equity.weightage)
                 record["slug"] = equity.slug
-
-                df = pd.DataFrame(js_array)
-                df = df.drop(["_state"], axis=1, errors="ignore")
-                df.ta.sanitize()
-                df.ta.cdl_pattern("all", consolidated=True, append=True)
-                row = df.ta.last_record
-
-                cdl_rows = []
-                cdl_string = row["CDL_CONSOLIDATED"].strip()
-                if cdl_string:
-                    for cdl in cdl_string.split(";"):
-                        cdl_rs = cdl.split("|")
-                        name = cdl_rs[0]
-                        score = nh.str_to_float(cdl_rs[1])
-
-                        cdl_row = {}
-                        cdl_row["rank"] = 0
-                        cdl_row["name"] = name
-                        cdl_row["sentiment"] = "BULLISH" if score > 0 else "BEARISH"
-                        cdl_row["score"] = score
-                        cdl_rows.append(cdl_row)
-
-                cdl_rows = sorted(cdl_rows, key=itemgetter("rank"), reverse=False)
-                record["candlestick"] = cdl_rows
-
-                key = "quantity_per_trade"
-                window = 20
-                df["qpt_avg"] = df[key].rolling(window=window).mean()
-                df["qpt_ratio"] = df[key].astype(float) / df["qpt_avg"]
-
-                key = "volume"
-                df["vol_avg"] = df[key].rolling(window=window).mean()
-                df["vol_ratio"] = df[key].astype(float) / df["vol_avg"]
-
-                key = "delivery_percentage"
-                df["del_avg"] = df[key].rolling(window=window).mean()
-                df["del_ratio"] = df[key].astype(float) / df["del_avg"]
-
-                df["MA_10"] = talib.EMA(df["close"], timeperiod=10)
-
-                row = df.iloc[-1]
-
-                record["qpt_ratio"] = nh.roundOff(row["qpt_ratio"])
-                record["vol_ratio"] = nh.roundOff(row["vol_ratio"])
-                record["del_ratio"] = nh.roundOff(row["del_ratio"])
-
+                record["candlestick"] = row[1]
                 records.append(record)
 
             records = sorted(records, key=itemgetter("weightage"), reverse=True)
@@ -286,3 +247,71 @@ class EndOfDayData(BaseLogic):
                 "records": records,
             }
             return result
+
+    def populate_indicators(self, df):
+        strategy = ta.Strategy(
+            name="stock-selection",
+            description="SMA and EMA 200, 100, 50, BBANDS, CPR",
+            ta=[
+                {"kind": "sma", "length": 200},
+                {"kind": "sma", "length": 100},
+                {"kind": "sma", "length": 50},
+                {"kind": "ema", "length": 200},
+                {"kind": "ema", "length": 100},
+                {"kind": "ema", "length": 50},
+                {"kind": "ema", "length": 5},
+                {"kind": "ema", "length": 9},
+                {"kind": "ema", "length": 13},
+                {"kind": "bbands", "length": 20, "std": 1.5},
+                {"kind": "cpr"},
+                {
+                    "kind": "cdl_pattern",
+                    "name": "all",
+                    "consolidated": True,
+                    "append": True,
+                },
+                {
+                    "kind": "ratio",
+                    "close": "quantity_per_trade",
+                    "length": 20,
+                    "prefix": "QPT",
+                },
+                {"kind": "ratio", "close": "volume", "length": 20, "prefix": "VOL"},
+                {
+                    "kind": "ratio",
+                    "close": "delivery_percentage",
+                    "length": 20,
+                    "prefix": "DEL_P",
+                },
+                {
+                    "kind": "ratio",
+                    "close": "delivery_quantity",
+                    "length": 20,
+                    "prefix": "DEL_QTY",
+                },
+            ],
+        )
+        df.ta.cores = 0
+        df.ta.sanitize()
+        df.ta.strategy(strategy)
+
+        row = df.ta.last_record
+
+        cdl_rows = []
+        cdl_string = row["CDL_CONSOLIDATED"].strip()
+        if cdl_string:
+            for cdl in cdl_string.split(";"):
+                cdl_rs = cdl.split("|")
+                name = cdl_rs[0]
+                score = nh.str_to_float(cdl_rs[1])
+
+                cdl_row = {}
+                cdl_row["rank"] = 0
+                cdl_row["name"] = name
+                cdl_row["sentiment"] = "BULLISH" if score > 0 else "BEARISH"
+                cdl_row["score"] = score
+                cdl_rows.append(cdl_row)
+
+        cdl_rows = sorted(cdl_rows, key=itemgetter("rank"), reverse=False)
+
+        return df.ta.dataframe, cdl_rows

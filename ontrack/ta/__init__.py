@@ -126,6 +126,7 @@ Category = {
         "kurtosis",
         "mad",
         "median",
+        "ratio",
         "quantile",
         "skew",
         "stdev",

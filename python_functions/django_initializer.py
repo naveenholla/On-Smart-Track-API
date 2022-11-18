@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, BASE_DIR)
 
 # The DJANGO_SETTINGS_MODULE has to be set to allow us to access django imports
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "arcwebsite.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 
 #  Allow queryset filtering asynchronously when running in a Jupyter notebook
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"

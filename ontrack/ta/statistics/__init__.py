@@ -3,6 +3,7 @@ from .kurtosis import kurtosis
 from .mad import mad
 from .median import median
 from .quantile import quantile
+from .ratio import ratio
 from .skew import skew
 from .stdev import stdev
 from .tos_stdevall import tos_stdevall

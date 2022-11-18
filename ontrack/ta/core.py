@@ -377,9 +377,19 @@ class AnalysisIndicators(BasePandasObject):
         return self._df.iloc[::-1]
 
     @property
+    def dataframe(self) -> pd.DataFrame:
+        """The DataFrame. Simply: df"""
+        return self._df
+
+    @property
     def last_record(self) -> pd.DataFrame:
         """Last record from the DataFrame. Simply: df.iloc[-1]"""
         return self._df.iloc[-1]
+
+    @property
+    def second_last_record(self) -> pd.DataFrame:
+        """Last record from the DataFrame. Simply: df.iloc[-1]"""
+        return self._df.iloc[-2]
 
     @property
     def time_range(self) -> float:
@@ -1910,6 +1920,11 @@ class AnalysisIndicators(BasePandasObject):
     def median(self, length=None, offset=None, **kwargs):
         close = self._get_column(kwargs.pop("close", "close"))
         result = median(close=close, length=length, offset=offset, **kwargs)
+        return self._post_process(result, **kwargs)
+
+    def ratio(self, length=None, offset=None, **kwargs):
+        close = self._get_column(kwargs.pop("close", "close"))
+        result = ratio(close=close, length=length, offset=offset, **kwargs)
         return self._post_process(result, **kwargs)
 
     def quantile(self, length=None, q=None, offset=None, **kwargs):

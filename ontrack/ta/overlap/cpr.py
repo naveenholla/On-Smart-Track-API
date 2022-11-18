@@ -13,9 +13,9 @@ def cpr(open_, high, low, close, offset=None, **kwargs):
     offset = get_offset(offset)
 
     # Calculate Result
-    tc = (high / low) / 2
+    bc = (high + low) / 2
     pivot = (high + close + low) / 3
-    bc = (pivot - tc) + pivot
+    tc = (pivot - bc) + pivot
 
     r3 = high + (2 * (pivot - low))
     r2 = pivot + (high - low)
@@ -25,7 +25,7 @@ def cpr(open_, high, low, close, offset=None, **kwargs):
     s2 = pivot - (high - low)
     s3 = low - (2 * (high - pivot))
 
-    cpr = abs((((high + low) / 2) - pivot) * 2)
+    cpr = abs((tc - pivot) * 2)
 
     # Offset
     if offset != 0:
@@ -86,7 +86,7 @@ def cpr(open_, high, low, close, offset=None, **kwargs):
     s2.name = f"CPR_S2"
     s1.name = f"CPR_S1"
 
-    cpr.name = f"CPR_TC"
+    cpr.name = f"CPR"
 
     cpr.category = "volatility"
     tc.category = pivot.category = bc.category = cpr.category

@@ -264,6 +264,7 @@ class EndOfDayData(BaseLogic):
                 {"kind": "ema", "length": 13},
                 {"kind": "bbands", "length": 20, "std": 1.5},
                 {"kind": "cpr"},
+                {"kind": "amat"},
                 {
                     "kind": "cdl_pattern",
                     "name": "all",

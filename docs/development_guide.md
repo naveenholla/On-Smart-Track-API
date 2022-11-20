@@ -26,6 +26,11 @@
         Open Anaconda prompt cmd
             RUN "conda install ipykernel"
 
+
+For Redis
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+
+
 - Open Powershell
 - Run Following commands
     virtualenv venv

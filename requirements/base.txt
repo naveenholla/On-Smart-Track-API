@@ -51,4 +51,6 @@ vectorbt==0.24.2
 pandas_datareader==0.10.0
 nbformat==5.7.0
 djangorestframework-simplejwt==5.2.2
+channels==4.0.0
+channels-redis==4.0.0
 pandas-ta==0.3.14b0

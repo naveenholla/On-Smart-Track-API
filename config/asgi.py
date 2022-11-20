@@ -27,14 +27,26 @@ django_application = get_asgi_application()
 # from helloworld.asgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
 
-# Import websocket application here, so apps from django_application are loaded first
-from config.websocket import websocket_application  # noqa isort:skip
+from channels.auth import AuthMiddlewareStack  # noqa isort:skip
 
+# from channels.security.websocket import AllowedHostsOriginValidator
+from channels.routing import ProtocolTypeRouter, URLRouter  # noqa isort:skip
+from ontrack.market.urls import websocket_urlpatterns  # noqa isort:skip
 
-async def application(scope, receive, send):
-    if scope["type"] == "http":
-        await django_application(scope, receive, send)
-    elif scope["type"] == "websocket":
-        await websocket_application(scope, receive, send)
-    else:
-        raise NotImplementedError(f"Unknown scope type {scope['type']}")
+application = ProtocolTypeRouter(
+    {
+        "http": django_application,
+        "websocket": AuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
+    }
+)
+
+# # Import websocket application here, so apps from django_application are loaded first
+# from config.websocket import websocket_application  # noqa isort:skip
+
+# async def application(scope, receive, send):
+#     if scope["type"] == "http":
+#         await django_application(scope, receive, send)
+#     elif scope["type"] == "websocket":
+#         await websocket_application(scope, receive, send)
+#     else:
+#         raise NotImplementedError(f"Unknown scope type {scope['type']}")

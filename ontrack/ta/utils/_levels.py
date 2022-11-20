@@ -384,7 +384,9 @@ def get_eod_sr_levels(df_daily, dfs):
     return levels
 
 
-def get_intraday_sr_levels(eod_levels, df_daily, dfs, ltp, offset_mean=None):
+def get_intraday_sr_levels(
+    eod_levels, df_daily, dfs, ltp, offset_mean=None, item_count=10
+):
     levels = eod_levels
 
     ml = daily_levels(df_daily)
@@ -404,7 +406,7 @@ def get_intraday_sr_levels(eod_levels, df_daily, dfs, ltp, offset_mean=None):
 
     unique_levels = _group_noise(sorted_levels, ltp, offset_mean)
     points = [x["point"] for x in unique_levels]
-    min_, max_ = _shrink_list_index(points, ltp)
+    min_, max_ = _shrink_list_index(points, ltp, item_count)
     return unique_levels[min_:max_]
 
 

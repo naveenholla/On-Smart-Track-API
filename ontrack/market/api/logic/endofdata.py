@@ -264,6 +264,7 @@ class EndOfDayData(BaseLogic):
                 {"kind": "ema", "length": 13},
                 {"kind": "bbands", "length": 20, "std": 1.5},
                 {"kind": "cpr"},
+                {"kind": "sma", "close": "CPR", "length": 20, "prefix": "CPR"},
                 {"kind": "amat"},
                 {
                     "kind": "cdl_pattern",
@@ -271,25 +272,25 @@ class EndOfDayData(BaseLogic):
                     "consolidated": True,
                     "append": True,
                 },
-                {
-                    "kind": "ratio",
-                    "close": "quantity_per_trade",
-                    "length": 20,
-                    "prefix": "QPT",
-                },
-                {"kind": "ratio", "close": "volume", "length": 20, "prefix": "VOL"},
-                {
-                    "kind": "ratio",
-                    "close": "delivery_percentage",
-                    "length": 20,
-                    "prefix": "DEL_P",
-                },
-                {
-                    "kind": "ratio",
-                    "close": "delivery_quantity",
-                    "length": 20,
-                    "prefix": "DEL_QTY",
-                },
+                # {
+                #     "kind": "ratio",
+                #     "close": "quantity_per_trade",
+                #     "length": 20,
+                #     "prefix": "QPT",
+                # },
+                # {"kind": "ratio", "close": "volume", "length": 20, "prefix": "VOL"},
+                # {
+                #     "kind": "ratio",
+                #     "close": "delivery_percentage",
+                #     "length": 20,
+                #     "prefix": "DEL_P",
+                # },
+                # {
+                #     "kind": "ratio",
+                #     "close": "delivery_quantity",
+                #     "length": 20,
+                #     "prefix": "DEL_QTY",
+                # },
             ],
         )
         df.ta.cores = 0

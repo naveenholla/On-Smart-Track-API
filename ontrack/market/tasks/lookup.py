@@ -1,3 +1,5 @@
+from time import sleep
+
 from config import celery_app
 from ontrack.market.api.logic.lookup import MarketLookupData
 from ontrack.utils.base.enum import ExchangeType
@@ -19,6 +21,7 @@ def execute_holidays_lookup_data_task(self) -> str:
 @celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
 def execute_market_lookup_data_task(self) -> str:
     """This task is used to pull the indices data from the website"""
+    sleep(1)
     recorder = TaskProgressRecorder(self)
     return MarketLookupData(
         ExchangeType.NSE, recorder

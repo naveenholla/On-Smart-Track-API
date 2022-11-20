@@ -1,6 +1,8 @@
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 
+from ontrack.utils.datetime import DateTimeHelper as dt
+
 
 class TaskProgressConsumer(JsonWebsocketConsumer):
     def connect(self):
@@ -11,7 +13,14 @@ class TaskProgressConsumer(JsonWebsocketConsumer):
         # Join task group
         async_to_sync(self.channel_layer.group_add)(self.task_name, self.channel_name)
         super().connect()
-        super().send(text_data=f"Starting monitoring task id: {self.task_id}")
+        message = {
+            "type": "info",
+            "title": "Connected",
+            "message": f"Starting monitoring task id: {self.task_id}",
+            "date": dt.current_dt_display_str(),
+        }
+
+        super().send_json(message)
 
     def disconnect(self, close_code):
         # Leave task group

@@ -166,7 +166,6 @@ class MarketLookupData(BaseLogic):
             if not cet[0]:
                 message = cet[1]
                 self.tp.log_warning(message)
-                self.tp.log_message(message)
                 return message
 
             try:

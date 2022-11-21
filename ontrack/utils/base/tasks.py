@@ -55,41 +55,77 @@ class TaskProgressStatus:
         self.logger = ApplicationLogger()
         self.recorder = recorder
 
-    def log_debug(self, message):
+    def log_debug(self, message, title=None):
         self.logger.log_debug(message)
-        self.recorder.send_message("info", "Debug Message", message)
 
-    def log_message(self, message):
+        if not title:
+            title = "Debug Message"
+        if self.recorder:
+            self.recorder.send_message("info", title, message)
+
+    def log_message(self, message, title=None):
         self.logger.log_info(message)
-        self.recorder.send_message("info", "Information", message)
 
-    def log_warning(self, message):
+        if not title:
+            title = "Information"
+
+        if self.recorder:
+            self.recorder.send_message("info", title, message)
+
+    def log_warning(self, message, title=None):
         self.logger.log_warning(message)
-        self.recorder.send_message("warning", "Warning", message)
 
-    def log_error(self, message):
+        if not title:
+            title = "Warning"
+
+        if self.recorder:
+            self.recorder.send_message("warning", title, message)
+
+    def log_error(self, message, title=None):
         self.logger.log_critical(message)
-        self.recorder.send_message("danger", "Error", message)
-        print(message)
 
-    def log_critical(self, message):
+        if not title:
+            title = "Error"
+
+        if self.recorder:
+            self.recorder.send_message("danger", title, message)
+
+    def log_critical(self, message, title=None):
         self.logger.log_critical(message)
-        self.recorder.send_message("danger", "Critical Error", message)
-        print(message)
 
-    def log_start(self, message):
+        if not title:
+            title = "Critical Error"
+
+        if self.recorder:
+            self.recorder.send_message("danger", title, message)
+
+    def log_start(self, message, title=None):
         self.logger.log_info(message)
-        self.recorder.send_message("secondary", "Started", message)
-        print(message)
 
-    def log_completed(self, message):
+        if not title:
+            title = "Started"
+
+        if self.recorder:
+            self.recorder.send_message("secondary", title, message)
+
+    def log_completed(self, message, title=None):
         self.logger.log_info(message)
-        self.recorder.send_message("success", "Completed", message)
 
-    def log_progress(self, index, total):
-        self.recorder.send_progress("Progress", index)
+        if not title:
+            title = "Completed"
 
-    def log_records_stats(self, stats):
+        if self.recorder:
+            self.recorder.send_message("success", title, message)
+
+    def log_progress(self, index, total, title=None):
+
+        if not title:
+            title = "Progress"
+
+        if self.recorder:
+            self.recorder.send_progress(title, total, index)
+
+    def log_records_stats(self, stats, title=None):
         if "message" in stats:
             message = stats["message"]
         elif "created" in stats:
@@ -98,4 +134,11 @@ class TaskProgressStatus:
             message = f"created({created}), updated({updated})"
         else:
             message = "No stats."
-        self.recorder.send_message("success", "Stats", message)
+
+        self.logger.log_info(message)
+
+        if not title:
+            title = "Stats"
+
+        if self.recorder:
+            self.recorder.send_message("success", title, message)

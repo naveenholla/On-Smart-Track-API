@@ -1,7 +1,7 @@
 import logging
 
-from ontrack.trading.ordermgmt.BaseOrderManager import BaseOrderManager
-from ontrack.trading.ordermgmt.params.Order import Order
+from ontrack.trading.base.orderManager import BaseOrderManager
+from ontrack.trading.contracts.Order import Order
 from ontrack.utils.base.enum import (
     DirectionType,
     OrderStatusType,

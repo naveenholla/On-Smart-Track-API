@@ -37,36 +37,19 @@ class Order:
 
     def __str__(self):
         return (
-            "orderId="
-            + str(self.orderId)
-            + ", "
-            + "orderStatus="
-            + str(self.orderStatus)
-            + ", "
-            + "symbol="
-            + str(self.tradingSymbol)
-            + ", "
-            + "productType="
-            + str(self.productType)
-            + ", "
-            + "orderType="
-            + str(self.orderType)
-            + ", "
-            + "price="
-            + str(self.price)
-            + ", "
-            + "triggerPrice="
-            + str(self.triggerPrice)
-            + ", "
-            + "qty="
-            + str(self.qty)
-            + ", "
-            + "filledQty="
-            + str(self.filledQty)
-            + ", "
-            + "pendingQty="
-            + str(self.pendingQty)
-            + ", "
-            + "averagePrice="
-            + str(self.averagePrice)
+            f"orderId={self.orderId}, "
+            f"orderStatus={self.orderStatus}, "
+            f"tradingSymbol={self.tradingSymbol}, "
+            f"exchange={self.exchange}, "
+            f"productType={self.productType}, "
+            f"orderType={self.orderType}, "
+            f"price={self.price}, "
+            f"triggerPrice={self.triggerPrice}, "
+            f"qty={self.qty}, "
+            f"pendingQty={self.pendingQty}, "
+            f"filledQty={self.filledQty}, "
+            f"averagePrice={self.averagePrice}, "
+            f"orderPlaceTimestamp={self.orderPlaceTimestamp}, "
+            f"lastOrderUpdateTimestamp={self.lastOrderUpdateTimestamp}, "
+            f"message={self.message}"
         )

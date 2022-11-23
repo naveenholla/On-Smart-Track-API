@@ -1,6 +1,6 @@
 from kiteconnect import KiteConnect
 
-from ontrack.trading.login.BaseLogin import BaseLogin
+from ontrack.trading.base.login import BaseLogin
 from ontrack.utils.logger import ApplicationLogger
 
 

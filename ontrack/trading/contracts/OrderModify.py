@@ -7,12 +7,8 @@ class OrderModify:
 
     def __str__(self):
         return (
-            "newPrice="
-            + str(self.newPrice)
-            + ", newTriggerPrice="
-            + str(self.newTriggerPrice)
-            + ", newQty="
-            + str(self.newQty)
-            + ", newOrderType="
-            + str(self.newOrderType)
+            f"newPrice={self.newPrice}, "
+            f"newTriggerPrice={self.newTriggerPrice}, "
+            f"newQty={self.newQty}, "
+            f"newOrderType={self.newOrderType}"
         )

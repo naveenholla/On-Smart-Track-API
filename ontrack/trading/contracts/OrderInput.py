@@ -16,24 +16,13 @@ class OrderInput:
 
     def __str__(self):
         return (
-            "symbol="
-            + str(self.tradingSymbol)
-            + ", exchange="
-            + self.exchange
-            + ", productType="
-            + self.productType
-            + ", segment="
-            + self.segment
-            + ", direction="
-            + self.direction
-            + ", orderType="
-            + self.orderType
-            + ", qty="
-            + str(self.qty)
-            + ", price="
-            + str(self.price)
-            + ", triggerPrice="
-            + str(self.triggerPrice)
-            + ", isFnO="
-            + str(self.isFnO)
+            f"symbol={self.tradingSymbol}, "
+            f"exchange={self.exchange}, "
+            f"productType={self.productType}, "
+            f"segment={self.segment}, "
+            f"direction={self.direction}, "
+            f"orderType={self.orderType}, "
+            f"price={self.price}, "
+            f"triggerPrice={self.triggerPrice}, "
+            f"isFnO={self.isFnO}"
         )

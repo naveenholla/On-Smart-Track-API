@@ -52,6 +52,23 @@
                     </ul>
                 </div>
             </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#market-tasks" aria-expanded="false" aria-controls="market-tasks" class="side-nav-link">
+                    <i class="uil-home-alt"></i>
+                    <span> Tasks </span>
+                </a>
+                <div class="collapse" id="market-tasks">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{% url 'market:task-execution' 'equity_lookup'%}">Equity Lookup</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'market:task-execution' 'equity_eod' %}">Equity End Of Day</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
 
         <!-- Help Box -->

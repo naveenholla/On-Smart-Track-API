@@ -284,3 +284,4 @@ ontrack/logfiles/temp/**
 .cache_ggshield
 packages/pandas-ta/**
 packages/pandas-ta-main.zip
+ontrack/_trading/**

@@ -37,7 +37,8 @@
       "symbol": "INDIAVIX",
       "ordinal": 1,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^INDIAVIX"
     },
     {
       "name": "Nifty 50",
@@ -46,7 +47,8 @@
       "ordinal": 1,
       "is_sector": false,
       "is_active": true,
-      "lot_size": 50
+      "lot_size": 50,
+      "ticker_symbol": "^NSEI"
     },
     {
       "name": "Nifty Next 50",
@@ -54,7 +56,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20NEXT%2050.js",
       "ordinal": 2,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^NSMIDCP"
     },
     {
       "name": "Nifty 100",
@@ -62,7 +65,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20100.js",
       "ordinal": 3,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNX100"
     },
     {
       "name": "Nifty 200",
@@ -70,7 +74,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20200.js",
       "ordinal": 4,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNX200"
     },
     {
       "name": "Nifty 500",
@@ -78,7 +83,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20500.js",
       "ordinal": 5,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CRSLDX"
     },
     {
       "name": "Nifty Total Market",
@@ -86,7 +92,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20TOTAL%20MARKET.js",
       "ordinal": 6,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_TOTAL_MKT.NS"
     },
     {
       "name": "Nifty Midcap 50",
@@ -94,7 +101,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%2050.js",
       "ordinal": 7,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^NSEMDCP50"
     },
     {
       "name": "NIFTY Midcap 100",
@@ -102,7 +110,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%20100.js",
       "ordinal": 8,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_MIDCAP_100.NS"
     },
     {
       "name": "Nifty Midcap 150",
@@ -110,7 +119,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDCAP%20150.js",
       "ordinal": 9,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTYMIDCAP150.NS"
     },
     {
       "name": "Nifty Midcap Select",
@@ -120,7 +130,8 @@
       "ordinal": 10,
       "is_sector": false,
       "is_active": true,
-      "lot_size": 75
+      "lot_size": 75,
+      "ticker_symbol": "NIFTY_MID_SELECT.NS"
     },
     {
       "name": "NIFTY Smallcap 50",
@@ -128,7 +139,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%2050.js",
       "ordinal": 11,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTYSMLCAP50.NS"
     },
     {
       "name": "NIFTY Smallcap 100",
@@ -136,7 +148,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%20100.js",
       "ordinal": 12,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXSC"
     },
     {
       "name": "NIFTY Smallcap 250",
@@ -144,7 +157,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SMALLCAP%20250.js",
       "ordinal": 13,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTYSMLCAP250.NS"
     },
     {
       "name": "Nifty Microcap 250",
@@ -152,7 +166,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MICROCAP%20250.js",
       "ordinal": 14,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_MICROCAP250.NS"
     },
     {
       "name": "NIFTY LargeMidcap 250",
@@ -160,7 +175,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20LARGEMIDCAP%20250.js",
       "ordinal": 15,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_LARGEMID250.NS"
     },
     {
       "name": "Nifty MidSmallcap 400",
@@ -168,7 +184,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MIDSMALLCAP%20400.js",
       "ordinal": 16,
       "is_sector": false,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTYMIDSML400.NS"
     },
     {
       "name": "Nifty Auto",
@@ -176,7 +193,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20AUTO.js",
       "ordinal": 17,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXAUTO"
     },
     {
       "name": "Nifty Bank",
@@ -185,7 +203,8 @@
       "ordinal": 18,
       "is_sector": true,
       "is_active": true,
-      "lot_size": 25
+      "lot_size": 25,
+      "ticker_symbol": "^NSEBANK"
     },
     {
       "name": "Nifty Financial Services",
@@ -195,7 +214,8 @@
       "ordinal": 19,
       "is_sector": true,
       "is_active": true,
-      "lot_size": 40
+      "lot_size": 40,
+      "ticker_symbol": "^CNXFIN"
     },
     {
       "name": "Nifty FMCG",
@@ -203,7 +223,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20FMCG.js",
       "ordinal": 20,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXFMCG"
     },
     {
       "name": "Nifty Healthcare Index",
@@ -211,7 +232,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20HEALTHCARE%20INDEX.js",
       "ordinal": 21,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_HEALTHCARE.NS"
     },
     {
       "name": "Nifty IT",
@@ -219,7 +241,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20IT.js",
       "ordinal": 22,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXIT"
     },
     {
       "name": "Nifty Media",
@@ -227,7 +250,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MEDIA.js",
       "ordinal": 23,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXMEDIA"
     },
     {
       "name": "Nifty Metal",
@@ -235,7 +259,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20METAL.js",
       "ordinal": 24,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXMETAL"
     },
     {
       "name": "Nifty Pharma",
@@ -243,7 +268,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PHARMA.js",
       "ordinal": 25,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXPHARMA"
     },
     {
       "name": "Nifty Private Bank",
@@ -251,7 +277,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PRIVATE%20BANK.js",
       "ordinal": 26,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_PVT_BANK.NS"
     },
     {
       "name": "Nifty PSU Bank",
@@ -259,7 +286,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PSU%20BANK.js",
       "ordinal": 27,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXPSUBANK"
     },
     {
       "name": "Nifty Realty",
@@ -267,7 +295,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20REALTY.js",
       "ordinal": 28,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXREALTY"
     },
     {
       "name": "Nifty Consumer Durables",
@@ -275,7 +304,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20CONSUMER%20DURABLES.js",
       "ordinal": 29,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_CONSR_DURBL.NS"
     },
     {
       "name": "Nifty Commodities",
@@ -283,7 +313,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20COMMODITIES.js",
       "ordinal": 30,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXCMDT"
     },
     {
       "name": "Nifty Energy",
@@ -291,7 +322,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20ENERGY.js",
       "ordinal": 31,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXENERGY"
     },
     {
       "name": "Nifty India Consumption",
@@ -299,7 +331,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20INDIA%20CONSUMPTION.js",
       "ordinal": 32,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXCONSUM"
     },
     {
       "name": "Nifty Infrastructure",
@@ -307,7 +340,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20INFRASTRUCTURE.js",
       "ordinal": 33,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXINFRA"
     },
     {
       "name": "Nifty MNC",
@@ -315,7 +349,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20MNC.js",
       "ordinal": 34,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXMNC"
     },
     {
       "name": "Nifty PSE",
@@ -323,7 +358,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20PSE.js",
       "ordinal": 35,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXPSE"
     },
     {
       "name": "Nifty Services Sector",
@@ -331,7 +367,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20SERVICES%20SECTOR.js",
       "ordinal": 36,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "^CNXSERVICE"
     },
     {
       "name": "Nifty Oil & Gas",
@@ -339,7 +376,8 @@
       "url": "https://blob.niftyindices.com/jsonfiles/SectorialIndex/SectorialIndexDataNIFTY%20OIL%20&%20GAS.js",
       "ordinal": 37,
       "is_sector": true,
-      "is_active": true
+      "is_active": true,
+      "ticker_symbol": "NIFTY_OIL_AND_GAS.NS"
     }
   ],
   "equity_bhavcopy": {

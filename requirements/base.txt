@@ -54,3 +54,4 @@ djangorestframework-simplejwt==5.2.2
 channels==4.0.0
 channels-redis==4.0.0
 pandas-ta==0.3.14b0
+kiteconnect==4.1.0

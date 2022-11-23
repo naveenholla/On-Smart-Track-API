@@ -175,6 +175,17 @@ class EndOfDayData(BaseLogic):
                 self.tp.log_completed("Task Completed.")
             return output
 
+    def get_all_fno_stocks(self, index=None):
+        qs = Equity.backend.filter(lot_size__gt=0)
+
+        if index:
+            qs = qs.filter(equity_indices__index__symbol__iexact=index)
+
+        qs = qs.prefetch_related("equity")
+        qs = qs.prefetch_related("index")
+
+        return qs
+
     def stock_selection_hidden_move(self, date, index=None, avg_days=None):
         with application_context(
             exchange=self.marketlookupdata.exchange(),

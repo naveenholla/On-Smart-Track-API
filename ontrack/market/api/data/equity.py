@@ -7,7 +7,7 @@ from ontrack.market.models.equity import (
     EquityLiveOpenInterest,
     EquityLiveOptionChain,
 )
-from ontrack.market.models.lookup import Exchange
+from ontrack.market.models.lookup import Equity, Exchange
 from ontrack.utils.base.enum import InstrumentType, OptionType
 from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.config import Configurations
@@ -47,11 +47,23 @@ class PullEquityData:
             record["strike_difference"] if "strike_difference" in record else 0
         )
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
+        ticker_symbol = (
+            record["ticker_symbol"]
+            if "ticker_symbol" in record
+            else f"{symbol.upper()}.NS"
+        )
 
         pk = None
         existing_entity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(existing_entity) > 0:
-            pk = existing_entity[0].id
+            existing_entity = existing_entity[0]
+            pk = existing_entity.id
+
+            if existing_entity.chart_symbol:
+                chart_symbol = existing_entity.chart_symbol
+
+            if existing_entity.ticker_symbol:
+                ticker_symbol = existing_entity.ticker_symbol
 
         lot_size = 0
         mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
@@ -69,6 +81,7 @@ class PullEquityData:
         entity["symbol"] = symbol
         entity["lot_size"] = lot_size
         entity["chart_symbol"] = chart_symbol
+        entity["ticker_symbol"] = ticker_symbol
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")
         entity["strike_difference"] = strike_diff
         entity["date"] = dt.current_date_time()
@@ -89,8 +102,16 @@ class PullEquityData:
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
             self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
-            return None
-        equity = equity[0]
+            equity = Equity(
+                name=symbol,
+                symbol=symbol,
+                chart_symbol=symbol,
+                ticker_symbol=f"{symbol.upper()}.NS",
+                exchange=self.exchange,
+            )
+            equity.save()
+        else:
+            equity = equity[0]
 
         open_price = nh.str_to_float(record["OPEN_PRICE"])
         high_price = nh.str_to_float(record["HIGH_PRICE"])

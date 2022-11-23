@@ -111,6 +111,13 @@ class TestLogicLookup:
             assert len(result) == 1
             assert obj.load_equity_eod_data.call_count == 1
 
+    @pytest.mark.unittest
+    def test_get_all_fno_stocks(self):
+        obj = obj = EndOfDayData(ExchangeType.NSE)
+        qs = obj.get_all_fno_stocks()
+        assert qs.count() > 0
+        assert qs.count() < 250
+
     # @pytest.mark.unittest
     # def test_calculated_eod_data(self):
     #     d = dt.get_date_time(2022, 11, 7)

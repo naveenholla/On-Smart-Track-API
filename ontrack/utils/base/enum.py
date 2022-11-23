@@ -84,6 +84,13 @@ class SegmentType(models.TextChoices):
     COMMADITY = "COMMADITY"
 
 
+class BrokerSegmentType(models.TextChoices):
+    EQUITY = "EQUITY"
+    FNO = "FNO"
+    CURRENCY = "CURRENCY"
+    COMMADITY = "COMMADITY"
+
+
 class InstrumentType(models.TextChoices):
     FUTSTK = "FUTSTK"
     FUTIDX = "FUTIDX"

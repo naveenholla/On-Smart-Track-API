@@ -17,6 +17,7 @@ class MarketEntity(BaseModel):
     name = models.CharField(max_length=200)
     symbol = models.CharField(max_length=200, unique=True)
     chart_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    ticker_symbol = models.CharField(max_length=200, unique=True, null=True, blank=True)
     slug = models.SlugField(blank=True, null=True)
     lot_size = models.IntegerField(default=0, null=True, blank=True)
     strike_difference = models.IntegerField(null=True, blank=True)

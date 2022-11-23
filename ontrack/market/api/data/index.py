@@ -47,11 +47,23 @@ class PullIndexData:
             record["strike_difference"] if "strike_difference" in record else 0
         )
         chart_symbol = record["chart_symbol"] if "chart_symbol" in record else symbol
+        ticker_symbol = (
+            record["ticker_symbol"]
+            if "ticker_symbol" in record
+            else f"^{symbol.upper()}"
+        )
 
         pk = None
         existing_entity = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(existing_entity) > 0:
-            pk = existing_entity[0].id
+            existing_entity = existing_entity[0]
+            pk = existing_entity.id
+
+            if existing_entity.chart_symbol:
+                chart_symbol = existing_entity.chart_symbol
+
+            if existing_entity.ticker_symbol:
+                ticker_symbol = existing_entity.ticker_symbol
 
         lot_size = 0
         mcr = [x for x in self.market_cap_records if x["symbol"] == symbol]
@@ -69,6 +81,7 @@ class PullIndexData:
         entity["symbol"] = symbol
         entity["lot_size"] = lot_size
         entity["chart_symbol"] = chart_symbol
+        entity["ticker_symbol"] = ticker_symbol
 
         entity["ordinal"] = record["ordinal"]
         entity["slug"] = slugify(f"{self.exchange_symbol}_{symbol}")

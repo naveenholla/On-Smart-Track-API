@@ -102,9 +102,10 @@ class EndOfDayData(BaseLogic):
         return result
 
     def __save_equity_eod(self, result, modeltype, run_date):
+        class_name = modeltype.__class__
         records_stats = self.create_or_update(result, modeltype)
         run_date_str = dt.datetime_to_display_str(run_date)
-        stats = self.message_creator(run_date_str, records_stats)
+        stats = self.message_creator(f"{class_name}-{run_date_str}", records_stats)
         self.output.append(stats)
         self.tp.log_records_stats(stats)
 
@@ -267,6 +268,7 @@ class EndOfDayData(BaseLogic):
                 try:
                     re = self.load_equity_eod_data(run_date)
                     reca = self.load_equity_corporate_action(run_date)
+                    red = self.load_equity_derivative_eod_data(run_date)
 
                     if isinstance(re, str):
                         self.output.append(self.message_creator(run_date_str, re))
@@ -275,12 +277,12 @@ class EndOfDayData(BaseLogic):
                             self.__save_equity_eod(
                                 re,
                                 EquityEndOfDay,
-                                end_date_provided,
-                                date_key,
                                 run_date,
                             )
                             self.__update_company_action(reca)
-
+                            self.__save_equity_eod(
+                                red, EquityDerivativeEndOfDay, run_date
+                            )
                             if not end_date_provided:
                                 self.settings.save_task_execution_time(
                                     date_key, run_date

@@ -285,3 +285,5 @@ ontrack/logfiles/temp/**
 packages/pandas-ta/**
 packages/pandas-ta-main.zip
 ontrack/_trading/**
+packages/fyers-apiv2/**
+ontrack/packages/fyers_api/tesapi.py

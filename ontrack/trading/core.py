@@ -1,5 +1,5 @@
 from ontrack.trading.contracts.BrokerAppDetails import BrokerAppDetails
-from ontrack.trading.login.ZerodhaLogin import ZerodhaLogin
+from ontrack.trading.zerodha.login import ZerodhaLogin
 from ontrack.utils.logger import ApplicationLogger
 
 

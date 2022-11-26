@@ -52,6 +52,10 @@ class EndOfDayData(BaseLogic):
 
         return result
 
+    def load_equity_corporate_action(self, date):
+        result = self.pull_equity_obj.pull_parse_corporate_action(date)
+        return result
+
     def load_equity_derivative_eod_data(self, date):
         already_processed = EquityDerivativeEndOfDay.backend.filter(date=date).count()
         if already_processed > 0:
@@ -97,8 +101,119 @@ class EndOfDayData(BaseLogic):
 
         return result
 
+    def __save_equity_eod(self, result, modeltype, run_date):
+        records_stats = self.create_or_update(result, modeltype)
+        run_date_str = dt.datetime_to_display_str(run_date)
+        stats = self.message_creator(run_date_str, records_stats)
+        self.output.append(stats)
+        self.tp.log_records_stats(stats)
+
+    def __update_company_action(self, results):
+        for action in results:
+            subject = action["subject"]
+            symbol = action["symbol"]
+            exDate = action["exDate"]
+            entry_type = action["entry_type"]
+            values = action["values"]
+
+            multiplier = 0
+            if entry_type == "bonus":
+                multiplier = values[0] + values[1]
+            elif entry_type == "split":
+                multiplier = values[0] / values[1]
+            else:
+                continue
+
+            self.tp.log_message(f"{symbol} - {exDate} - {entry_type} - {subject}")
+            self.tp.log_message(f"Multiplier: {multiplier}")
+
+            updated_records = []
+            records = EquityEndOfDay.backend.filter(
+                entity__symbol__iexact=symbol, date__lt=exDate
+            )
+            record_exdate = EquityEndOfDay.backend.filter(
+                entity__symbol__iexact=symbol, date=exDate
+            ).first()
+
+            if record_exdate:
+                close = float(record_exdate.close_price)
+                preclose = float(record_exdate.prev_close) / multiplier
+                pointchanged = close - preclose
+                record_exdate.prev_close = nh.round_to_market_Price(preclose)
+                record_exdate.point_changed = nh.round_to_market_Price(pointchanged)
+                record_exdate.percentage_changed = nh.round_to_market_Price(
+                    pointchanged / close * 100
+                )
+                updated_records.append(record_exdate)
+
+            for record in records:
+                price = float(record.prev_close)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.prev_close = converted
+
+                price = float(record.open_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.open_price = converted
+
+                price = float(record.high_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.high_price = converted
+
+                price = float(record.low_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.low_price = converted
+
+                price = float(record.last_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.last_price = converted
+
+                price = float(record.close_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.close_price = converted
+
+                price = float(record.avg_price)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.avg_price = converted
+
+                price = float(record.point_changed)
+                converted = nh.round_to_market_Price(price / multiplier)
+                record.point_changed = converted
+
+                price = float(record.traded_quantity)
+                converted = nh.round_to_market_Price(price * multiplier)
+                record.traded_quantity = converted
+
+                price = float(record.delivery_quantity)
+                converted = nh.round_to_market_Price(price * multiplier)
+                record.delivery_quantity = converted
+
+                price = record.traded_quantity / float(record.number_of_trades)
+                record.quantity_per_trade = price
+
+                updated_records.append(record)
+
+            EquityEndOfDay.backend.bulk_update(
+                updated_records,
+                [
+                    "prev_close",
+                    "open_price",
+                    "high_price",
+                    "low_price",
+                    "last_price",
+                    "close_price",
+                    "avg_price",
+                    "point_changed",
+                    "percentage_changed",
+                    "traded_quantity",
+                    "quantity_per_trade",
+                    "delivery_quantity",
+                ],
+            )
+
+            self.tp.log_message(f"Updated: {len(updated_records)}")
+
     def execute_equity_eod_data_task(self, run_date=None, end_date=None):
-        output = []
+        self.output = []
         with application_context(
             exchange=self.marketlookupdata.exchange(),
             holiday_category_name=HolidayCategoryType.EQUITIES,
@@ -109,9 +224,10 @@ class EndOfDayData(BaseLogic):
 
             date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
             pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
+            default_start_key = sk.DEFAULT_START_DATE_EQUITY_DATA_PULL
 
             if not run_date:
-                cet = self.can_execute_task(date_key, pause_hour_key)
+                cet = self.can_execute_task(date_key, pause_hour_key, default_start_key)
                 if not cet[0]:
                     message = cet[1]
                     self.tp.log_message(message)
@@ -137,43 +253,49 @@ class EndOfDayData(BaseLogic):
                     self.settings.save_task_execution_time(date_key, run_date)
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "It a is holiday."
-                    output.append(self.message_creator(run_date_str, message))
+                    self.output.append(self.message_creator(run_date_str, message))
                     self.tp.log_message(message)
                     continue
 
                 if not dt.is_data_refreshed(run_date, end_date):
                     run_date = dt.get_future_date(run_date, hours=pause_hours)
                     message = "Data is not refreshed yet."
-                    output.append(self.message_creator(run_date_str, message))
+                    self.output.append(self.message_creator(run_date_str, message))
                     self.tp.log_message(message)
                     continue
 
                 try:
-                    result = self.load_equity_eod_data(run_date)
-                    if isinstance(result, str):
-                        output.append(self.message_creator(run_date_str, result))
+                    re = self.load_equity_eod_data(run_date)
+                    reca = self.load_equity_corporate_action(run_date)
+
+                    if isinstance(re, str):
+                        self.output.append(self.message_creator(run_date_str, re))
                     else:
                         with transaction.atomic():
-                            records_stats = self.create_or_update(
-                                result, EquityEndOfDay
+                            self.__save_equity_eod(
+                                re,
+                                EquityEndOfDay,
+                                end_date_provided,
+                                date_key,
+                                run_date,
                             )
+                            self.__update_company_action(reca)
+
                             if not end_date_provided:
                                 self.settings.save_task_execution_time(
                                     date_key, run_date
                                 )
-                        stats = self.message_creator(run_date_str, records_stats)
-                        output.append(stats)
-                        self.tp.log_records_stats(stats)
+
                 except Exception as e:
                     message = f"Exception - `{format(e)}`."
                     self.tp.log_error(message=message)
-                    output.append(self.message_creator(run_date_str, message))
+                    self.output.append(self.message_creator(run_date_str, message))
                     raise
 
                 run_date = dt.get_future_date(run_date, hours=pause_hours)
 
                 self.tp.log_completed("Task Completed.")
-            return output
+            return self.output
 
     def get_all_fno_stocks(self, index=None):
         qs = Equity.backend.filter(lot_size__gt=0)

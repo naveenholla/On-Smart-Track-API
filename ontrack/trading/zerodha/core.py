@@ -1,2 +1,0 @@
-class BrokerHandler:
-    pass

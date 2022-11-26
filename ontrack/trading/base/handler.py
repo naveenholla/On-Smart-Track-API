@@ -1,23 +1,17 @@
 class BaseHandler:
-    def __init__(self, brokerAppDetails):
-        self.brokerAppDetails = brokerAppDetails
-        self.broker = brokerAppDetails.broker
-
-    # Derived class should implement login function and return redirect url
-    def login(self, args):
+    def __init__(self):
         pass
 
-    def setBrokerHandle(self, brokerHandle):
-        self.brokerHandle = brokerHandle
+    # Derived class should implement login function and return redirect url
+    def get_login_url(self):
+        return self.get_broker_login_url()
 
-    def setAccessToken(self, accessToken):
-        self.accessToken = accessToken
+    def set_access_token(self, args):
+        self.accessToken = self.set_broker_access_token(self, args)
+        # TODO: Save Access Token
 
-    def getBrokerAppDetails(self):
-        return self.brokerAppDetails
+    def get_handler(self):
+        return self.get_broker_handler()
 
-    def getAccessToken(self):
-        return self.accessToken
-
-    def getBrokerHandle(self):
-        return self.brokerHandle
+    def get_funds(self):
+        return self.get_broker_funds()

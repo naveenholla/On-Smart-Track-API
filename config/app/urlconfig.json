@@ -466,7 +466,7 @@
     "url": "https://www.nseindia.com/api/option-chain-indices?symbol={0}",
     "website": "https://www.nseindia.com/option-chain",
     "parent_website": "https://www.nseindia.com/",
-    "arg0_options":[
+    "arg0_options": [
       "NIFTY",
       "BANKNIFTY"
     ]
@@ -475,19 +475,26 @@
     "url": "https://www.nseindia.com/api/option-chain-equities?symbol={0}",
     "website": "https://www.nseindia.com/option-chain",
     "parent_website": "https://www.nseindia.com/",
-    "arg0_options":["AXISBANK",
-    "HDFC",
-    "HDFCBANK",
-    "HINDUNILVR",
-    "ICICIBANK",
-    "INFY",
-    "ITC",
-    "KOTAKBANK",
-    "RELIANCE",
-    "TCS"]
+    "arg0_options": [
+      "AXISBANK",
+      "HDFC",
+      "HDFCBANK",
+      "HINDUNILVR",
+      "ICICIBANK",
+      "INFY",
+      "ITC",
+      "KOTAKBANK",
+      "RELIANCE",
+      "TCS"
+    ]
   },
   "corporates_pit": {
     "url": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y",
+    "parent_website": "https://www.nseindia.com/"
+  },
+  "corporates_actions": {
+    "url": "https://www.nseindia.com/api/corporates-corporateActions?index=equities&from_date=%d-%m-%Y&to_date=%d-%m-%Y",
+    "website": "https://www.nseindia.com/companies-listing/corporate-filings-actions",
     "parent_website": "https://www.nseindia.com/"
   },
   "fortnightly_sector_wise_fii": {

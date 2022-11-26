@@ -1,3 +1,5 @@
+import re
+
 from django.utils.text import slugify
 
 from ontrack.lookup.api.logic.settings import SettingLogic
@@ -102,14 +104,16 @@ class PullEquityData:
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
             self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
-            equity = Equity(
-                name=symbol,
-                symbol=symbol,
-                chart_symbol=symbol,
-                ticker_symbol=f"{symbol.upper()}.NS",
-                exchange=self.exchange,
-            )
-            equity.save()
+            equity = Equity.backend.unique_search(symbol).first()
+            if not equity:
+                equity = Equity(
+                    name=symbol,
+                    symbol=symbol,
+                    chart_symbol=symbol,
+                    ticker_symbol=f"{symbol.upper()}.NS",
+                    exchange=self.exchange,
+                )
+                equity.save()
         else:
             equity = equity[0]
 
@@ -210,6 +214,57 @@ class PullEquityData:
         entity["value_of_contracts"] = value_of_contracts
         entity["open_interest"] = open_interest
         entity["change_in_open_interest"] = change_in_open_interest
+
+        entity["date"] = date
+        entity["pull_date"] = dt.current_date_time()
+        entity["updated_at"] = dt.current_date_time()
+
+        return entity
+
+    def __parse_corporate_action_data(self, record, date):
+        symbol = record["symbol"].strip().lower()
+        series = record["series"].strip().lower() if "series" in record else "-"
+
+        if series != "eq":
+            return None
+
+        equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
+        if len(equity) == 0:
+            self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
+            return None
+        equity = equity[0]
+
+        subject = record["subject"]
+        exDate = dt.str_to_datetime(record["exDate"], "%d-%b-%Y")
+        record_Date = dt.str_to_datetime(record["recDate"], "%d-%b-%Y")
+        book_closure_sDate = dt.str_to_datetime(record["bcStartDate"], "%d-%b-%Y")
+        book_closure_eDate = dt.str_to_datetime(record["bcEndDate"], "%d-%b-%Y")
+        faceVal = nh.str_to_float(record["faceVal"])
+        entry_type = "None"
+
+        if subject.lower().__contains__("split"):
+            entry_type = "split"
+        elif subject.lower().__contains__("bonus"):
+            entry_type = "bonus"
+        elif subject.lower().__contains__("dividend"):
+            entry_type = "dividend"
+        else:
+            return None
+
+        values = [float(s) for s in re.findall(r"-?\d+\.?\d*", subject)]
+
+        entity = {}
+        entity["id"] = None
+        entity["entity"] = equity
+        entity["symbol"] = symbol
+        entity["subject"] = subject
+        entity["exDate"] = exDate
+        entity["record_Date"] = record_Date
+        entity["book_closure_sDate"] = book_closure_sDate
+        entity["book_closure_eDate"] = book_closure_eDate
+        entity["faceVal"] = faceVal
+        entity["entry_type"] = entry_type
+        entity["values"] = values
 
         entity["date"] = date
         entity["pull_date"] = dt.current_date_time()
@@ -536,6 +591,36 @@ class PullEquityData:
         entities = []
         for _, record in data.iterrows():
             entity = self.__parse_derivative_eod_data(record)
+
+            if entity is not None:
+                entities.append(entity)
+
+        return entities
+
+    def pull_parse_corporate_action(self, date):
+        url_record = self.urls["corporates_actions"]
+        url = StringHelper.format_url(url_record, date)
+        self.tp.log_message(f"Started with {url}.")
+
+        if self.exchange is None:
+            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
+            return "Exchange is missing."
+
+        # pull csv containing all the listed equities from web
+        headers = Configurations.get_header_values_config()
+        data = LogicHelper.pull_data_from_external_api(
+            record=url_record, headers=headers, url=url
+        )
+
+        if data is None:
+            self.tp.log_warning("No Data Available")
+            return "No Data Available."
+
+        entities = []
+        self.tp.log_message("Data pull completed.")
+
+        for record in data:
+            entity = self.__parse_corporate_action_data(record, date)
 
             if entity is not None:
                 entities.append(entity)

@@ -34,6 +34,8 @@ class TestLogicLookup:
         last_excution_date = dt.get_date_time(2022, 8, 1, 0, 0, 0)
         current_date = dt.get_date_time(2022, 8, 2, 0, 0, 0)
         obj.load_equity_eod_data = MagicMock(return_value=None)
+        obj.load_equity_corporate_action = MagicMock(return_value=None)
+        obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
         result = obj.execute_equity_eod_data_task(last_excution_date, current_date)
         assert result is not None
 
@@ -41,6 +43,8 @@ class TestLogicLookup:
     def test_execute_market_lookup_data_task_Exchange_None(self):
         obj = EndOfDayData("Not-Existing-Exchange")
         obj.load_equity_eod_data = MagicMock(return_value=None)
+        obj.load_equity_corporate_action = MagicMock(return_value=None)
+        obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
         result = obj.execute_equity_eod_data_task()
         assert result is not None
 
@@ -58,6 +62,8 @@ class TestLogicLookup:
                 return_value=(True, None, last_excution_date)
             )
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task(None, end_date)
             assert result is not None
             assert len(result) == 2
@@ -66,6 +72,8 @@ class TestLogicLookup:
 
             obj = EndOfDayData(ExchangeType.NSE)
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task()
             assert result is not None
             assert len(result) == 1
@@ -74,6 +82,8 @@ class TestLogicLookup:
 
             obj = EndOfDayData(ExchangeType.NSE)
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task(last_excution_date, end_date)
             assert result is not None
             assert len(result) == 2
@@ -85,6 +95,8 @@ class TestLogicLookup:
                 return_value=(True, None, last_excution_date)
             )
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task()
             assert result is not None
             assert len(result) == 9
@@ -96,6 +108,8 @@ class TestLogicLookup:
 
             obj = EndOfDayData(ExchangeType.NSE)
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task()
             assert result is not None
             assert len(result) == 1
@@ -106,6 +120,8 @@ class TestLogicLookup:
         with freeze_time(current_date):
             obj = EndOfDayData(ExchangeType.NSE)
             obj.load_equity_eod_data = MagicMock(return_value=None)
+            obj.load_equity_corporate_action = MagicMock(return_value=None)
+            obj.load_equity_derivative_eod_data = MagicMock(return_value=None)
             result = obj.execute_equity_eod_data_task()
             assert result is not None
             assert len(result) == 1

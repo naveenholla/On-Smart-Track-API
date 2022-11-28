@@ -101,15 +101,17 @@ class EndOfDayData(BaseLogic):
 
         return result
 
-    def __save_equity_eod(self, result, modeltype, run_date):
+    def __save_equity_eod(self, result, modeltype):
         class_name = modeltype.__class__
         records_stats = self.create_or_update(result, modeltype)
-        run_date_str = dt.datetime_to_display_str(run_date)
-        stats = self.message_creator(f"{class_name}-{run_date_str}", records_stats)
-        self.output.append(stats)
-        self.tp.log_records_stats(stats)
+        stats = self.message_creator(f"{class_name}", records_stats)
+        self.tp.log_records_stats(stats, f"{class_name} - Stats")
+        return stats
 
     def __update_company_action(self, results):
+        if results is None:
+            return
+
         for action in results:
             subject = action["subject"]
             symbol = action["symbol"]
@@ -232,7 +234,8 @@ class EndOfDayData(BaseLogic):
                 if not cet[0]:
                     message = cet[1]
                     self.tp.log_message(message)
-                    return message
+                    self.output.append(self.message_creator("EOD", message))
+                    return self.output
                 run_date = cet[2]
 
             end_date_provided = True
@@ -274,15 +277,16 @@ class EndOfDayData(BaseLogic):
                         self.output.append(self.message_creator(run_date_str, re))
                     else:
                         with transaction.atomic():
-                            self.__save_equity_eod(
-                                re,
-                                EquityEndOfDay,
-                                run_date,
-                            )
+                            e_stats = self.__save_equity_eod(re, EquityEndOfDay)
                             self.__update_company_action(reca)
-                            self.__save_equity_eod(
-                                red, EquityDerivativeEndOfDay, run_date
+                            d_stats = self.__save_equity_eod(
+                                red, EquityDerivativeEndOfDay
                             )
+
+                            stats = self.message_creator(
+                                run_date_str, [e_stats, d_stats]
+                            )
+                            self.output.append(stats)
                             if not end_date_provided:
                                 self.settings.save_task_execution_time(
                                     date_key, run_date

@@ -27,6 +27,10 @@ class BaseLogic:
         if result is not None:
             if isinstance(result, str):
                 output["message"] = result
+            elif isinstance(result, list):
+                output["records"] = []
+                for record in result:
+                    output["records"].append(record)
             else:
                 output["created"] = result[0]
                 output["updated"] = result[1]

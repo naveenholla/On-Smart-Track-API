@@ -287,3 +287,4 @@ packages/pandas-ta-main.zip
 ontrack/_trading/**
 packages/fyers-apiv2/**
 ontrack/packages/fyers_api/tesapi.py
+packages/AutoTrader-main/**

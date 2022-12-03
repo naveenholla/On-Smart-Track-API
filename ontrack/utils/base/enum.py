@@ -136,8 +136,14 @@ class OrderType(models.TextChoices):
 
 
 class DirectionType(models.TextChoices):
+    NEUTRAL = "NEUTRAL"
     LONG = "LONG"
     SHORT = "SHORT"
+
+
+class OperatorType(models.TextChoices):
+    AND = "AND"
+    OR = "OR"
 
 
 class OrderTriggerType(models.TextChoices):

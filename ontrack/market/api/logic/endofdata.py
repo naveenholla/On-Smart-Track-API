@@ -101,11 +101,10 @@ class EndOfDayData(BaseLogic):
 
         return result
 
-    def __save_equity_eod(self, result, modeltype):
-        class_name = modeltype.__class__
+    def __save_equity_eod(self, result, modeltype, title):
         records_stats = self.create_or_update(result, modeltype)
-        stats = self.message_creator(f"{class_name}", records_stats)
-        self.tp.log_records_stats(stats, f"{class_name} - Stats")
+        stats = self.message_creator(f"{title}", records_stats)
+        self.tp.log_records_stats(stats, f"{title} - Stats")
         return stats
 
     def __update_company_action(self, results):
@@ -277,10 +276,12 @@ class EndOfDayData(BaseLogic):
                         self.output.append(self.message_creator(run_date_str, re))
                     else:
                         with transaction.atomic():
-                            e_stats = self.__save_equity_eod(re, EquityEndOfDay)
+                            e_stats = self.__save_equity_eod(
+                                re, EquityEndOfDay, "Equities"
+                            )
                             self.__update_company_action(reca)
                             d_stats = self.__save_equity_eod(
-                                red, EquityDerivativeEndOfDay
+                                red, EquityDerivativeEndOfDay, "Derivatives"
                             )
 
                             stats = self.message_creator(
@@ -300,7 +301,7 @@ class EndOfDayData(BaseLogic):
 
                 run_date = dt.get_future_date(run_date, hours=pause_hours)
 
-                self.tp.log_completed("Task Completed.")
+            self.tp.log_completed("Task Completed.")
             return self.output
 
     def get_all_fno_stocks(self, index=None):

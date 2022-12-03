@@ -12,6 +12,7 @@ from ontrack.market.managers.lookup import (
 )
 from ontrack.market.models.base import MarketEntity
 from ontrack.utils.base.enum import (
+    DirectionType,
     HolidayCategoryType,
     HolidayParentCategoryType,
     MarketDayTypeEnum,
@@ -230,6 +231,56 @@ class MarketTradingStrategySymbol(BaseModel):
 
     def __str__(self):
         return self.symbol
+
+
+class MarketScreenerCategory(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    parent = models.ForeignKey(
+        "MarketScreenerCategory",
+        related_name="sub_catgeories",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    code = models.CharField(max_length=100, unique=True)
+    description = models.CharField(max_length=500, blank=True, null=True)
+    enabled = models.BooleanField(default=True)
+
+    @property
+    def display_name(self):
+        if self.parent:
+            return f"{self.parent.name.replace(' Scans', '')} - {self.name}"
+        return self.name
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+        verbose_name = "Market Screener Category"
+        verbose_name_plural = "Market Screener Categories"
+
+    def __str__(self):
+        return self.display_name
+
+
+class MarketScreener(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    code = models.CharField(max_length=100, unique=True)
+    category = models.ForeignKey(
+        MarketScreenerCategory, related_name="screener", on_delete=models.CASCADE
+    )
+    description = models.TextField(blank=True, null=True)
+    direction = models.CharField(
+        max_length=50, choices=DirectionType.choices, default=DirectionType.NEUTRAL
+    )
+    params = models.JSONField(blank=True, null=True)
+    enabled = models.BooleanField(default=True)
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+        verbose_name = "Market Screener"
+        verbose_name_plural = "Market Screeners"
+
+    def __str__(self):
+        return self.name
 
 
 class Equity(MarketEntity):

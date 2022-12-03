@@ -15,6 +15,8 @@ from ontrack.market.models.lookup import (
     MarketDay,
     MarketDayCategory,
     MarketDayType,
+    MarketScreener,
+    MarketScreenerCategory,
     MarketSector,
     MarketTradingStrategy,
     MarketTradingStrategySymbol,
@@ -219,6 +221,47 @@ class EquityIndexAdmin(admin.ModelAdmin, ExportCsvMixin):
         return obj.index.ordinal
 
     ordinal.admin_order_field = "index__ordinal"
+
+
+@admin.register(MarketScreenerCategory)
+class MarketScreenerCategoryAdmin(admin.ModelAdmin):
+    list_display = ("category_name", "parent_name", "code", "enabled")
+    search_fields = (
+        "name__icontains",
+        "code__icontains",
+    )
+
+    @admin.display(ordering="parent__name")
+    def parent_name(self, obj):
+        if obj.parent:
+            return obj.parent.display_name
+        return "-"
+
+    @admin.display(ordering="name")
+    def category_name(self, obj):
+        return obj.display_name
+
+    ordering = [
+        "-parent__name",
+        "name",
+    ]
+
+
+@admin.register(MarketScreener)
+class MarketScreenerAdmin(admin.ModelAdmin):
+    list_display = ("name", "category_name", "code", "direction", "enabled")
+    search_fields = (
+        "name__icontains",
+        "code__icontains",
+    )
+
+    list_filter = ("category",)
+
+    @admin.display(ordering="category__name")
+    def category_name(self, obj):
+        if obj.category:
+            return obj.category.display_name
+        return "-"
 
 
 admin.site.register(MarketBroker)

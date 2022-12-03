@@ -2,9 +2,9 @@ from django.db import models
 from django_cryptography.fields import encrypt
 
 from ontrack.lookup.models import Currency
-from ontrack.market.models.lookup import MarketBroker
+from ontrack.market.models.lookup import Equity, MarketBroker, MarketScreener
 from ontrack.users.models.user import User
-from ontrack.utils.base.enum import FrequencyType
+from ontrack.utils.base.enum import FrequencyType, OperatorType
 from ontrack.utils.base.model import BaseModel
 
 
@@ -148,6 +148,37 @@ class AccountInterestRate(BaseModel):
 
     def __str__(self):
         return self.account.name
+
+
+class StockScreener(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+    enabled = models.BooleanField(default=True)
+
+
+class StockScreenerSection(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    operator = models.CharField(
+        max_length=50, choices=OperatorType.choices, default=OperatorType.AND
+    )
+    weightage = models.IntegerField(default=1)
+    enabled = models.BooleanField(default=True)
+
+
+class StockScreenerSectionItem(BaseModel):
+    screener = models.ForeignKey(MarketScreener, on_delete=models.CASCADE)
+    operator = models.CharField(
+        max_length=50, choices=OperatorType.choices, default=OperatorType.AND
+    )
+    weightage = models.IntegerField(default=1)
+    enabled = models.BooleanField(default=True)
+
+
+class StockWatchlist(BaseModel):
+    name = models.CharField(max_length=100, unique=True)
+    equity = models.ForeignKey(Equity, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
+    enabled = models.BooleanField(default=True)
 
 
 # class AccountField(BaseModel):

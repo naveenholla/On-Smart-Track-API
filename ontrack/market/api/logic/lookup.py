@@ -122,21 +122,21 @@ class MarketLookupData(BaseLogic):
         result = self.pull_equity_obj.pull_and_parse_lookup_data()
         self.equity_dict.cache_clear()
         self.refresh_cache()
-        self.tp.log_message("Equity Pull Completed.")
+        self.tp.log_message("Equity Pull Completed.", "Equity Data")
         return result
 
     def load_index_data(self):
         result = self.pull_index_obj.pull_and_parse_lookup_data()
         self.index_dict.cache_clear()
         self.refresh_cache()
-        self.tp.log_message("Index Pull Completed.")
+        self.tp.log_message("Index Pull Completed.", "Index Data")
         return result
 
     def load_equity_index_data(self):
         result = self.pull_eqinx_obj.pull_and_parse_market_cap()
         self.equityindex_dict.cache_clear()
         self.refresh_cache()
-        self.tp.log_message("Equity Index Pull Completed.")
+        self.tp.log_message("Equity Index Pull Completed.", "Equity Index Data")
         return result
 
     def pull_indices_market_cap(self, record):
@@ -150,12 +150,11 @@ class MarketLookupData(BaseLogic):
     def load_holidays_data(self):
         return self.pull_holidays.pull_parse_exchange_holidays()
 
-    def __save_market_lookup(self, result, modeltype):
-        class_name = modeltype.__class__
+    def __save_market_lookup(self, result, modeltype, title):
         records_stats = self.create_or_update(result, modeltype)
-        stats = self.message_creator(class_name, records_stats)
+        stats = self.message_creator(title, records_stats)
         self.output.append(stats)
-        self.tp.log_records_stats(stats)
+        self.tp.log_records_stats(stats, f"{title} - Stats")
 
     def execute_market_lookup_data_task(self):
         self.output = []
@@ -174,9 +173,9 @@ class MarketLookupData(BaseLogic):
                 rei = self.load_equity_index_data()
 
                 with transaction.atomic():
-                    self.__save_market_lookup(re, Equity)
-                    self.__save_market_lookup(ri, Index)
-                    self.__save_market_lookup(rei, EquityIndex)
+                    self.__save_market_lookup(re, Equity, "Equity")
+                    self.__save_market_lookup(ri, Index, "Index")
+                    self.__save_market_lookup(rei, EquityIndex, "Equity Index")
             except Exception as e:
                 message = f"Exception - `{format(e)}`."
                 self.tp.log_error(message)
@@ -207,7 +206,7 @@ class MarketLookupData(BaseLogic):
                 return message
 
             result = self.load_holidays_data()
-            self.tp.log_message("Holiday Pull Completed.")
+            self.tp.log_message("Holiday Pull Completed.", "Holidays Data")
 
             records_stats = self.create_or_update(result, MarketDay)
             stats = self.message_creator("Holidays", records_stats)

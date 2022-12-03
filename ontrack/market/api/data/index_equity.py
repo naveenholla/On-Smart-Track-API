@@ -130,7 +130,7 @@ class PullEquityIndexData:
         sector_name_file_name = index_name.replace(" ", "_")
         url_temp = f"{temp_folder}/{sector_name_file_name}_temp.json"
 
-        self.tp.log_message(f"Started with {index_name}, {index_url}.")
+        self.tp.log_message(f"Started with {index_name}, {index_url}.", index_name)
 
         try:
             with urlopen(index_url) as webpage:

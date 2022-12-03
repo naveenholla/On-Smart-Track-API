@@ -236,6 +236,8 @@ class EntityLiveOptionChain(BaseModel):
     total_traded_volume = models.DecimalField(**numeric_field_values)
     implied_volatility = models.DecimalField(**numeric_field_values)
     last_traded_price = models.DecimalField(**numeric_field_values)
+    last_traded_quantity = models.DecimalField(**numeric_field_values)
+    last_traded_time = models.DateTimeField(null=True, blank=True)
     change = models.DecimalField(**numeric_field_values)
     percentage_change = models.DecimalField(**numeric_field_values)
     total_buy_quantity = models.DecimalField(**numeric_field_values)

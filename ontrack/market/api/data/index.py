@@ -101,7 +101,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.name.lower() == index_name]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
             return None
         index = index[0]
 
@@ -504,7 +504,7 @@ class PullIndexData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas(path=path)
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Index EOD Derivative Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -545,7 +545,7 @@ class PullIndexData:
             self.tp.log_warning("Already Processed")
             return "Already Processed."
 
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Index Live Data")
 
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
@@ -570,7 +570,7 @@ class PullIndexData:
             record=url_record, headers=headers
         )
 
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Index Live Open Interest Data")
 
         if data is None:
             self.tp.log_warning("No Data Available")
@@ -612,7 +612,7 @@ class PullIndexData:
                 record=url_record, headers=headers
             )
 
-            self.tp.log_message("Data pull completed.")
+            self.tp.log_message("Data pull completed.", "Index Live Derivative Data")
 
             if data is None:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
@@ -656,7 +656,7 @@ class PullIndexData:
                 record=url_record, headers=headers, url=url
             )
 
-            self.tp.log_message("Data pull completed.")
+            self.tp.log_message("Data pull completed.", "Index Live Option Chain Data")
 
             if data is None:
                 self.tp.log_warning(f"{arg} - Data is missing.")

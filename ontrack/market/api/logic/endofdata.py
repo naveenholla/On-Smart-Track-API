@@ -101,12 +101,6 @@ class EndOfDayData(BaseLogic):
 
         return result
 
-    def __save_equity_eod(self, result, modeltype, title):
-        records_stats = self.create_or_update(result, modeltype)
-        stats = self.message_creator(f"{title}", records_stats)
-        self.tp.log_records_stats(stats, f"{title} - Stats")
-        return stats
-
     def __update_company_action(self, results):
         if results is None:
             return
@@ -214,7 +208,22 @@ class EndOfDayData(BaseLogic):
 
             self.tp.log_message(f"Updated: {len(updated_records)}")
 
-    def execute_equity_eod_data_task(self, run_date=None, end_date=None):
+    def __save_record(self, result, modeltype, title):
+        records_stats = self.create_or_update(result, modeltype)
+        stats = self.message_creator(f"{title}", records_stats)
+        self.tp.log_records_stats(stats, f"{title} - Stats")
+        return stats
+
+    def __execute_eod_data_task(
+        self,
+        run_date,
+        end_date,
+        date_key,
+        pause_hour_key,
+        default_start_key,
+        execute_method,
+    ):
+
         self.output = []
         with application_context(
             exchange=self.marketlookupdata.exchange(),
@@ -223,10 +232,6 @@ class EndOfDayData(BaseLogic):
             if self.marketlookupdata.exchange() is None:
                 self.tp.log_warning("Exchange is required.")
                 return "Exchange is required."
-
-            date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
-            pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
-            default_start_key = sk.DEFAULT_START_DATE_EQUITY_DATA_PULL
 
             if not run_date:
                 cet = self.can_execute_task(date_key, pause_hour_key, default_start_key)
@@ -268,30 +273,7 @@ class EndOfDayData(BaseLogic):
                     continue
 
                 try:
-                    re = self.load_equity_eod_data(run_date)
-                    reca = self.load_equity_corporate_action(run_date)
-                    red = self.load_equity_derivative_eod_data(run_date)
-
-                    if isinstance(re, str):
-                        self.output.append(self.message_creator(run_date_str, re))
-                    else:
-                        with transaction.atomic():
-                            e_stats = self.__save_equity_eod(
-                                re, EquityEndOfDay, "Equities"
-                            )
-                            self.__update_company_action(reca)
-                            d_stats = self.__save_equity_eod(
-                                red, EquityDerivativeEndOfDay, "Derivatives"
-                            )
-
-                            stats = self.message_creator(
-                                run_date_str, [e_stats, d_stats]
-                            )
-                            self.output.append(stats)
-                            if not end_date_provided:
-                                self.settings.save_task_execution_time(
-                                    date_key, run_date
-                                )
+                    execute_method(run_date, end_date_provided)
 
                 except Exception as e:
                     message = f"Exception - `{format(e)}`."
@@ -303,6 +285,109 @@ class EndOfDayData(BaseLogic):
 
             self.tp.log_completed("Task Completed.")
             return self.output
+
+    def __execute_equity_eod(self, run_date, end_date_provided):
+        date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
+        run_date_str = dt.datetime_to_display_str(run_date)
+
+        re = self.load_equity_eod_data(run_date)
+        reca = self.load_equity_corporate_action(run_date)
+        red = self.load_equity_derivative_eod_data(run_date)
+
+        if isinstance(re, str):
+            self.output.append(self.message_creator(run_date_str, re))
+            return
+
+        with transaction.atomic():
+            e_stats = self.__save_record(re, EquityEndOfDay, "Equities")
+            d_stats = self.__save_record(red, EquityDerivativeEndOfDay, "Derivatives")
+            self.__update_company_action(reca)
+
+            stats = self.message_creator(run_date_str, [e_stats, d_stats])
+            self.output.append(stats)
+            if not end_date_provided:
+                self.settings.save_task_execution_time(date_key, run_date)
+
+    def execute_equity_eod_data_task(self, run_date=None, end_date=None):
+        date_key = sk.DATAPULL_EQUITY_EOD_LAST_PULL_DATE
+        pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
+        default_start_key = sk.DEFAULT_START_DATE_EQUITY_DATA_PULL
+        return self.__execute_eod_data_task(
+            run_date,
+            end_date,
+            date_key,
+            pause_hour_key,
+            default_start_key,
+            self.__execute_equity_eod,
+        )
+
+    def __execute_index_eod(self, run_date, end_date_provided):
+        date_key = sk.DATAPULL_INDICES_EOD_LAST_PULL_DATE
+        run_date_str = dt.datetime_to_display_str(run_date)
+
+        re = self.load_index_eod_data(run_date)
+        red = self.load_index_derivative_eod_data(run_date)
+
+        if isinstance(re, str):
+            self.output.append(self.message_creator(run_date_str, re))
+            return
+
+        with transaction.atomic():
+            e_stats = self.__save_record(re, IndexEndOfDay, "Index")
+            d_stats = self.__save_record(red, IndexDerivativeEndOfDay, "Derivatives")
+
+            stats = self.message_creator(run_date_str, [e_stats, d_stats])
+            self.output.append(stats)
+            if not end_date_provided:
+                self.settings.save_task_execution_time(date_key, run_date)
+
+    def execute_index_eod_data_task(self, run_date=None, end_date=None):
+        date_key = sk.DATAPULL_INDICES_EOD_LAST_PULL_DATE
+        pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
+        default_start_key = sk.DEFAULT_START_DATE_INDEX_DATA_PULL
+        return self.__execute_eod_data_task(
+            run_date,
+            end_date,
+            date_key,
+            pause_hour_key,
+            default_start_key,
+            self.__execute_index_eod,
+        )
+
+    def __execute_participant_eod(self, run_date, end_date_provided):
+        date_key = sk.DATAPULL_PARTICIPANT_EOD_LAST_PULL_DATE
+        run_date_str = dt.datetime_to_display_str(run_date)
+
+        pt = self.load_participant_eod_data(run_date)
+        pts = self.load_participant_stats_eod_data(run_date)
+
+        if isinstance(pt, str):
+            self.output.append(self.message_creator(run_date_str, pt))
+            return
+
+        with transaction.atomic():
+            e_stats = self.__save_record(pt, ParticipantActivity, "Participant")
+            d_stats = self.__save_record(
+                pts, ParticipantStatsActivity, "Participant Stats"
+            )
+
+            stats = self.message_creator(run_date_str, [e_stats, d_stats])
+            self.output.append(stats)
+            if not end_date_provided:
+                self.settings.save_task_execution_time(date_key, run_date)
+
+    def execute_participant_eod_data_task(self, run_date=None, end_date=None):
+        date_key = sk.DATAPULL_PARTICIPANT_EOD_LAST_PULL_DATE
+        pause_hour_key = sk.DATAPULL_EOD_DATA_PAUSE_HOURS
+        default_start_key = sk.DEFAULT_START_DATE_PARTICIPANT_DATA_PULL
+        return self.__execute_eod_data_task(
+            run_date,
+            end_date,
+            date_key,
+            pause_hour_key,
+            default_start_key,
+            self.__execute_participant_eod,
+        )
 
     def get_all_fno_stocks(self, index=None):
         qs = Equity.backend.filter(lot_size__gt=0)

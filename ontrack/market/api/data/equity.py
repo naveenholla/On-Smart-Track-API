@@ -535,7 +535,7 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=listing_url)
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity Lookup Data")
         entities = []
         for _, record in data.iterrows():
             entity = self.__parse_lookup_data(record)
@@ -554,7 +554,7 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity EOD Equity Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -583,7 +583,7 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas(path=path)
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity EOD Derivative Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -617,7 +617,7 @@ class PullEquityData:
             return "No Data Available."
 
         entities = []
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity Corporate Action Data")
 
         for record in data:
             entity = self.__parse_corporate_action_data(record, date)
@@ -654,7 +654,7 @@ class PullEquityData:
             self.tp.log_warning("Already Processed")
             return "Already Processed."
 
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity Live Data")
 
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
@@ -679,7 +679,7 @@ class PullEquityData:
             record=url_record, headers=headers
         )
 
-        self.tp.log_message("Data pull completed.")
+        self.tp.log_message("Data pull completed.", "Equity Live Open Interest Data")
 
         if data is None:
             self.tp.log_warning("No Data Available")
@@ -721,7 +721,7 @@ class PullEquityData:
                 record=url_record, headers=headers
             )
 
-            self.tp.log_message("Data pull completed.")
+            self.tp.log_message("Data pull completed.", "Equity Live Derivative Data")
 
             if data is None:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
@@ -765,7 +765,7 @@ class PullEquityData:
                 record=url_record, headers=headers, url=url
             )
 
-            self.tp.log_message("Data pull completed.")
+            self.tp.log_message("Data pull completed.", "Equity Live Option Chain Data")
 
             if data is None:
                 self.tp.log_warning(f"{arg} - Data is missing.")

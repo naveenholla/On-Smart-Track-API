@@ -164,7 +164,7 @@ class MarketLookupData(BaseLogic):
             cet = self.can_execute_task(date_key, pause_hour_key)
             if not cet[0]:
                 message = cet[1]
-                self.tp.log_warning(message)
+                self.tp.log_warning(message, is_completed=True)
                 return message
 
             try:
@@ -201,8 +201,7 @@ class MarketLookupData(BaseLogic):
             cet = self.can_execute_task(date_key, pause_hour_key)
             if not cet[0]:
                 message = cet[1]
-                self.tp.log_warning(message)
-                self.tp.log_message(message)
+                self.tp.log_warning(message, is_completed=True)
                 return message
 
             result = self.load_holidays_data()

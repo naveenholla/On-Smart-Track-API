@@ -57,20 +57,152 @@
                 <a data-bs-toggle="collapse" href="#market-tasks" aria-expanded="false" aria-controls="market-tasks" class="side-nav-link">
                     <i class="uil-home-alt"></i>
                     <span> Tasks </span>
+                    <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="market-tasks">
                     <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{% url 'market:task-execution' 'equity_lookup'%}">Equity Lookup</a>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#market-tasks-lookup-task" aria-expanded="false" aria-controls="market-tasks-lookup-task">
+                                <span> Lookup </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="market-tasks-lookup-task">
+                                <ul class="side-nav-third-level">
+                                    <li>
+                                        <a href="{% url 'market:task-execution' 'equity_lookup'%}">Equity Lookup</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li>
-                            <a href="{% url 'market:task-execution' 'equity_eod' %}">Equity End Of Day</a>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#market-tasks-eod-task" aria-expanded="false" aria-controls="market-tasks-eod-task">
+                                <span> End Of Day Tasks </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="market-tasks-eod-task">
+                                <ul class="side-nav-third-level">
+                                    <li>
+                                        <a href="{% url 'market:task-execution' 'equity_eod' %}">Equity</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'market:task-execution' 'index_eod' %}">Index</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'market:task-execution' 'participant_eod' %}">Participant</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li>
-                            <a href="{% url 'market:task-execution' 'index_eod' %}">Index End Of Day</a>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#market-tasks-live-task" aria-expanded="false" aria-controls="market-tasks-live-task">
+                                <span> Live Task </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="market-tasks-live-task">
+                                <ul class="side-nav-third-level">
+                                    <li class="side-nav-item">
+                                        <a data-bs-toggle="collapse" href="#market-tasks-equity-live-task" aria-expanded="false" aria-controls="market-tasks-equity-live-task">
+                                            <span> Equity </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="market-tasks-equity-live-task">
+                                            <ul class="side-nav-forth-level">
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'equity_live' %}">Live Data</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'equity_open_interest' %}">Open Interest</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'equity_derivative' %}">Derivative</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'equity_option_chain' %}">Option Chain</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a data-bs-toggle="collapse" href="#market-tasks-index-live-task" aria-expanded="false" aria-controls="market-tasks-index-live-task">
+                                            <span> Index </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="market-tasks-index-live-task">
+                                            <ul class="side-nav-forth-level">
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'index_live' %}">Live Data</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'index_open_interest' %}">Open Interest</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'index_derivative' %}">Derivative</a>
+                                                </li>
+                                                <li>
+                                                    <a href="{% url 'market:task-execution' 'index_option_chain' %}">Option Chain</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
-                        <li>
-                            <a href="{% url 'market:task-execution' 'participant_eod' %}">Participant End Of Day</a>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarMultiLevel" aria-expanded="false" aria-controls="sidebarMultiLevel" class="side-nav-link">
+                    <i class="uil-folder-plus"></i>
+                    <span> Multi Level </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarMultiLevel">
+                    <ul class="side-nav-second-level">
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarSecondLevel" aria-expanded="false" aria-controls="sidebarSecondLevel">
+                                <span> Second Level </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarSecondLevel">
+                                <ul class="side-nav-third-level">
+                                    <li>
+                                        <a href="javascript: void(0);">Item 1</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0);">Item 2</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#sidebarThirdLevel" aria-expanded="false" aria-controls="sidebarThirdLevel">
+                                <span> Third Level </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarThirdLevel">
+                                <ul class="side-nav-third-level">
+                                    <li>
+                                        <a href="javascript: void(0);">Item 1</a>
+                                    </li>
+                                    <li class="side-nav-item">
+                                        <a data-bs-toggle="collapse" href="#sidebarFourthLevel" aria-expanded="false" aria-controls="sidebarFourthLevel">
+                                            <span> Item 2 </span>
+                                            <span class="menu-arrow"></span>
+                                        </a>
+                                        <div class="collapse" id="sidebarFourthLevel">
+                                            <ul class="side-nav-forth-level">
+                                                <li>
+                                                    <a href="javascript: void(0);">Item 2.1</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript: void(0);">Item 2.2</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>

@@ -11,3 +11,12 @@ class SettingQuerySet(models.QuerySet):
         key = str(query["key"]).strip()
         lookups = Q(key=key)
         return self.filter(lookups)
+
+
+class TaskQuerySet(models.QuerySet):
+    def unique_search(self, task_id=None):
+        if task_id is None:
+            return self.none()
+
+        lookups = Q(task_id=task_id)
+        return self.filter(lookups)

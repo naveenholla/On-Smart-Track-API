@@ -1,30 +1,61 @@
-from time import sleep
-
 from config import celery_app
 from ontrack.market.api.logic.endofdata import EndOfDayData
+from ontrack.market.api.logic.livedata import LiveData
+from ontrack.market.tasks.base import execute_task
 from ontrack.utils.base.enum import ExchangeType
 from ontrack.utils.base.tasks import TaskProgressRecorder
-from ontrack.utils.context import memcache_lock
 
 
 @celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
-def execute_equity_eod_data_task(self) -> str:
-    """This task is used to pull_equity_eod_data from the website"""
-    lock_id = f"{self.name}-lock"
-    print(lock_id)
-    print(self.app.oid)
+def execute_equity_eod_data_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
 
-    recorder = TaskProgressRecorder(self)
-    with memcache_lock(lock_id, self.app.oid) as acquired:
-        if acquired:
-            sleep(1)
-            ex = ExchangeType.NSE
-            obj = EndOfDayData(ex, recorder)
-            return obj.execute_equity_eod_data_task()
+    ex = ExchangeType.NSE
+    obj = EndOfDayData(ex, recorder)
+    method = obj.execute_equity_eod_data_task
 
-    return f"Task {self.name} is already being running by another worker."
+    return execute_task(self, method)
 
 
 @celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
-def execute_equity_option_chain_task(self, x, y) -> str:
-    return x + y
+def execute_equity_live_data_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
+
+    ex = ExchangeType.NSE
+    obj = LiveData(ex, recorder)
+    method = obj.execute_equity_live_data_task
+
+    return execute_task(self, method)
+
+
+@celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
+def execute_equity_live_derivative_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
+
+    ex = ExchangeType.NSE
+    obj = LiveData(ex, recorder)
+    method = obj.execute_equity_live_derivative_task
+
+    return execute_task(self, method)
+
+
+@celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
+def execute_equity_option_chain_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
+
+    ex = ExchangeType.NSE
+    obj = LiveData(ex, recorder)
+    method = obj.execute_equity_option_chain_task
+
+    return execute_task(self, method)
+
+
+@celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
+def execute_equity_open_interest_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
+
+    ex = ExchangeType.NSE
+    obj = LiveData(ex, recorder)
+    method = obj.execute_equity_open_interest_task
+
+    return execute_task(self, method)

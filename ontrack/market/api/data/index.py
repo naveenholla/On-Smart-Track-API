@@ -164,7 +164,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -217,7 +217,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.name.lower() == index_name]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{index_name}' doesn't exists.")
             return None
         index = index[0]
 
@@ -240,14 +240,25 @@ class PullIndexData:
         advances = nh.str_to_float(record["advances"] if "advances" in record else 0)
         unchanged = nh.str_to_float(record["unchanged"] if "unchanged" in record else 0)
 
-        price_change_month_ago = nh.str_to_float(record["perChange30d"])
-        date_month_ago = dt.str_to_datetime(
-            record["date30dAgo"], "%d-%b-%Y", self.timezone
-        )
-        price_change_year_ago = nh.str_to_float(record["perChange365d"])
-        date_year_ago = dt.str_to_datetime(
-            record["date365dAgo"], "%d-%b-%Y", self.timezone
-        )
+        price_change_month_ago = None
+        if "perChange30d" in record:
+            price_change_month_ago = nh.str_to_float(record["perChange30d"])
+
+        date_month_ago = None
+        if "date30dAgo" in record:
+            date_month_ago = dt.str_to_datetime(
+                record["date30dAgo"], "%d-%b-%Y", self.timezone
+            )
+
+        price_change_year_ago = None
+        if "perChange365d" in record:
+            price_change_year_ago = nh.str_to_float(record["perChange365d"])
+
+        date_year_ago = None
+        if "date365dAgo" in record:
+            date_year_ago = dt.str_to_datetime(
+                record["date365dAgo"], "%d-%b-%Y", self.timezone
+            )
 
         entity = {}
         entity["id"] = None
@@ -291,7 +302,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -342,7 +353,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -413,7 +424,7 @@ class PullIndexData:
 
         index = [e for e in self.index_dict if e.symbol.lower() == symbol]
         if len(index) == 0:
-            self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Index '{symbol}' doesn't exists.")
             return None
         index = index[0]
 
@@ -476,6 +487,7 @@ class PullIndexData:
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
         data.fillna("0")
+        self.tp.log_message("Data pull completed.", "Index EOD Index Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -533,7 +545,7 @@ class PullIndexData:
             record=url_record, headers=headers
         )
 
-        if data is None:
+        if data is None or "timestamp" not in data or "data" not in data:
             self.tp.log_warning("No Data Available")
             return "No Data Available."
 
@@ -572,7 +584,7 @@ class PullIndexData:
 
         self.tp.log_message("Data pull completed.", "Index Live Open Interest Data")
 
-        if data is None:
+        if data is None or "timestamp" not in data or "data" not in data:
             self.tp.log_warning("No Data Available")
             return "No Data Available."
 
@@ -614,7 +626,7 @@ class PullIndexData:
 
             self.tp.log_message("Data pull completed.", "Index Live Derivative Data")
 
-            if data is None:
+            if data is None or "timestamp" not in data or "data" not in data:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
                 continue
 
@@ -658,7 +670,7 @@ class PullIndexData:
 
             self.tp.log_message("Data pull completed.", "Index Live Option Chain Data")
 
-            if data is None:
+            if data is None or "records" not in data:
                 self.tp.log_warning(f"{arg} - Data is missing.")
                 continue
 

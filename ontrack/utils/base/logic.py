@@ -16,7 +16,6 @@ class BaseLogic:
 
         if not result[0]:
             message = f"Task is paused for time being till {next_run_date_str}."
-            self.tp.log_message(message)
             return False, message, next_run_date
 
         return True, None, next_run_date

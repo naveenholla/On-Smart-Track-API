@@ -1,6 +1,6 @@
 from ontrack.utils.base.manager import BackendManagerAbstarct
 
-from .queryset import SettingQuerySet
+from .queryset import SettingQuerySet, TaskQuerySet
 
 
 class SettingBackendManager(BackendManagerAbstarct):
@@ -19,3 +19,8 @@ class SettingBackendManager(BackendManagerAbstarct):
             return None
 
         return setting.value
+
+
+class TaskBackendManager(BackendManagerAbstarct):
+    def get_queryset(self):
+        return TaskQuerySet(self.model, using=self._db)

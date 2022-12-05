@@ -281,7 +281,7 @@ class PullEquityData:
 
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
-            self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
             return None
         equity = equity[0]
 
@@ -314,14 +314,25 @@ class PullEquityData:
         near_week_high = nh.str_to_float(record["nearWKH"])
         near_week_low = nh.str_to_float(record["nearWKL"])
 
-        price_change_month_ago = nh.str_to_float(record["perChange30d"])
-        date_month_ago = dt.str_to_datetime(
-            record["date30dAgo"], "%d-%b-%Y", self.timezone
-        )
-        price_change_year_ago = nh.str_to_float(record["perChange365d"])
-        date_year_ago = dt.str_to_datetime(
-            record["date365dAgo"], "%d-%b-%Y", self.timezone
-        )
+        price_change_month_ago = None
+        if "perChange30d" in record:
+            price_change_month_ago = nh.str_to_float(record["perChange30d"])
+
+        date_month_ago = None
+        if "date30dAgo" in record:
+            date_month_ago = dt.str_to_datetime(
+                record["date30dAgo"], "%d-%b-%Y", self.timezone
+            )
+
+        price_change_year_ago = None
+        if "perChange365d" in record:
+            price_change_year_ago = nh.str_to_float(record["perChange365d"])
+
+        date_year_ago = None
+        if "date365dAgo" in record:
+            date_year_ago = dt.str_to_datetime(
+                record["date365dAgo"], "%d-%b-%Y", self.timezone
+            )
 
         entity = {}
         entity["id"] = None
@@ -366,7 +377,7 @@ class PullEquityData:
 
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
-            self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
             return None
         equity = equity[0]
 
@@ -417,7 +428,7 @@ class PullEquityData:
 
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
-            self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
             return None
         equity = equity[0]
 
@@ -488,7 +499,7 @@ class PullEquityData:
 
         equity = [e for e in self.equity_dict if e.symbol.lower() == symbol]
         if len(equity) == 0:
-            self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
+            # self.tp.log_warning(f"Equity '{symbol}' doesn't exists.")
             return None
         equity = equity[0]
 
@@ -642,7 +653,7 @@ class PullEquityData:
             record=url_record, headers=headers
         )
 
-        if data is None:
+        if data is None or "timestamp" not in data or "data" not in data:
             self.tp.log_warning("No Data Available")
             return "No Data Available."
 
@@ -681,7 +692,7 @@ class PullEquityData:
 
         self.tp.log_message("Data pull completed.", "Equity Live Open Interest Data")
 
-        if data is None:
+        if data is None or "timestamp" not in data or "data" not in data:
             self.tp.log_warning("No Data Available")
             return "No Data Available."
 
@@ -723,7 +734,7 @@ class PullEquityData:
 
             self.tp.log_message("Data pull completed.", "Equity Live Derivative Data")
 
-            if data is None:
+            if data is None or "timestamp" not in data or "data" not in data:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
                 continue
 
@@ -767,7 +778,7 @@ class PullEquityData:
 
             self.tp.log_message("Data pull completed.", "Equity Live Option Chain Data")
 
-            if data is None:
+            if data is None or "records" not in data:
                 self.tp.log_warning(f"{arg} - Data is missing.")
                 continue
 

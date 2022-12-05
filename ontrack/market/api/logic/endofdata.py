@@ -230,15 +230,15 @@ class EndOfDayData(BaseLogic):
             holiday_category_name=HolidayCategoryType.EQUITIES,
         ):
             if self.marketlookupdata.exchange() is None:
-                self.tp.log_warning("Exchange is required.")
+                self.tp.log_error("Exchange is required.")
                 return "Exchange is required."
 
             if not run_date:
                 cet = self.can_execute_task(date_key, pause_hour_key, default_start_key)
                 if not cet[0]:
                     message = cet[1]
-                    self.tp.log_message(message)
                     self.output.append(self.message_creator("EOD", message))
+                    self.tp.log_completed(message)
                     return self.output
                 run_date = cet[2]
 

@@ -3,7 +3,7 @@ from django.db import models
 from ontrack.utils.base.enum import AdminSettingKey, SettingKeyType
 from ontrack.utils.base.model import BaseModel
 
-from .manager import SettingBackendManager
+from .manager import SettingBackendManager, TaskBackendManager
 
 
 # Create your models here.
@@ -32,6 +32,37 @@ class Setting(BaseModel):
 
     def __str__(self):
         return self.key
+
+
+class Task(BaseModel):
+    task_id = models.CharField(max_length=100, blank=True, null=True)
+    task_name = models.CharField(max_length=100, blank=True, null=True)
+    status = models.CharField(max_length=100, blank=True, null=True)
+    total_count = models.IntegerField(null=True, blank=True)
+    processed_count = models.IntegerField(null=True, blank=True)
+
+    backend = TaskBackendManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.task_name
+
+
+class TaskLog(BaseModel):
+    task = models.ForeignKey(Task, related_name="logs", on_delete=models.CASCADE)
+    message_type = models.CharField(max_length=50, blank=True, null=True)
+    title = models.CharField(max_length=200, blank=True, null=True)
+    message = models.CharField(max_length=200, blank=True, null=True)
+
+    backend = TaskBackendManager()
+
+    class Meta(BaseModel.Meta):
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.task.id}-{self.message}"
 
 
 # class FieldDataType(BaseModel):

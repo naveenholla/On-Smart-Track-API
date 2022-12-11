@@ -63,6 +63,7 @@ class LiveData(BaseLogic):
 
     def __execute_live_data(self, name, module_type, method):
         r = method()
+        self.tp.log_message(f"{name} - Data pull completed.", name)
 
         if isinstance(r, str):
             self.output.append(self.message_creator(name, r))
@@ -71,7 +72,7 @@ class LiveData(BaseLogic):
 
         with transaction.atomic():
             records_stats = self.create_or_update(r, module_type)
-            stats = self.message_creator(name, [records_stats])
+            stats = self.message_creator(name, records_stats)
             self.output.append(stats)
             self.tp.log_records_stats(stats, is_completed=True)
 

@@ -132,6 +132,15 @@ def sanitize(df, **kwargs):
             "low_price": "low",
             "close_price": "close",
             "traded_quantity": "volume",
+            "quantity_per_trade": "qpt",
+            "prev_close": "prev",
+            "last_price": "last",
+            "avg_price": "avg",
+            "percentage_changed": "p_change",
+            "point_changed": "changed",
+            "delivery_quantity": "delivery",
+            "delivery_percentage": "p_delivery",
+            "entity__symbol": "symbol",
         }
         # Preemptively drop the rows that are all NaNs
         # Might need to be moved to AnalysisIndicators.__call__() to be
@@ -159,6 +168,11 @@ def sanitize(df, **kwargs):
         return df
     else:
         raise AttributeError(f"[X] No columns!")
+
+
+def apply_strategy(x, strategy):
+    x.ta.strategy(strategy)
+    return x
 
 
 # Base Class for extending a Pandas DataFrame

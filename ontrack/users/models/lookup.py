@@ -2,7 +2,14 @@ from django.db import models
 from django_cryptography.fields import encrypt
 
 from ontrack.lookup.models import Currency
-from ontrack.market.models.lookup import Equity, MarketBroker, MarketScreener
+from ontrack.market.models.lookup import (
+    Equity,
+    Index,
+    MarketBroker,
+    MarketScreener,
+    MarketScreenerCategory,
+)
+from ontrack.users.managers.manager import StockScreenerManager, StockWatchlistManager
 from ontrack.users.models.user import User
 from ontrack.utils.base.enum import FrequencyType, OperatorType
 from ontrack.utils.base.model import BaseModel
@@ -155,30 +162,97 @@ class StockScreener(BaseModel):
     description = models.TextField(blank=True, null=True)
     enabled = models.BooleanField(default=True)
 
+    backend = StockScreenerManager()
+
+    def __str__(self):
+        return self.name
+
 
 class StockScreenerSection(BaseModel):
+    screener = models.ForeignKey(
+        StockScreener, on_delete=models.CASCADE, related_name="sections"
+    )
     name = models.CharField(max_length=100, unique=True)
     operator = models.CharField(
         max_length=50, choices=OperatorType.choices, default=OperatorType.AND
     )
-    weightage = models.IntegerField(default=1)
+    weightage = models.IntegerField(default=3)
     enabled = models.BooleanField(default=True)
+
+    backend = StockScreenerManager()
+
+    def __str__(self):
+        return f"{self.screener.name} - {self.name}"
 
 
 class StockScreenerSectionItem(BaseModel):
-    screener = models.ForeignKey(MarketScreener, on_delete=models.CASCADE)
+    section = models.ForeignKey(
+        StockScreenerSection, on_delete=models.CASCADE, related_name="items"
+    )
+    item = models.ForeignKey(
+        MarketScreener, on_delete=models.CASCADE, blank=True, null=True
+    )
+    item_category = models.ForeignKey(
+        MarketScreenerCategory, on_delete=models.CASCADE, blank=True, null=True
+    )
     operator = models.CharField(
         max_length=50, choices=OperatorType.choices, default=OperatorType.AND
     )
-    weightage = models.IntegerField(default=1)
+    level = models.IntegerField(default=3)
+    weightage = models.IntegerField(default=3)
     enabled = models.BooleanField(default=True)
+
+    backend = StockScreenerManager()
+
+    @property
+    def section_name(self):
+        return f"{self.section.name}"
+
+    @property
+    def screener_name(self):
+        return f"{self.section.screener.name}"
+
+    @property
+    def display_name(self):
+        if self.item:
+            return f"{self.section} - {self.item}"
+
+        if self.item_category:
+            return f"{self.section} - {self.item_category}"
+
+    def __str__(self):
+        return self.display_name
 
 
 class StockWatchlist(BaseModel):
     name = models.CharField(max_length=100, unique=True)
-    equity = models.ForeignKey(Equity, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     enabled = models.BooleanField(default=True)
+
+    backend = StockWatchlistManager()
+
+    def __str__(self):
+        return self.name
+
+
+class StockWatchlistItem(BaseModel):
+    watchlist = models.ForeignKey(
+        StockWatchlist, on_delete=models.CASCADE, related_name="items"
+    )
+    equity = models.ForeignKey(Equity, on_delete=models.CASCADE, blank=True, null=True)
+    index = models.ForeignKey(Index, on_delete=models.CASCADE, blank=True, null=True)
+    date = models.DateTimeField(auto_now=True)
+    enabled = models.BooleanField(default=True)
+
+    backend = StockWatchlistManager()
+
+    def __str__(self):
+        if self.equity:
+            return f"{self.watchlist} - {self.equity.symbol.upper()}"
+        elif self.index:
+            return f"{self.watchlist} - {self.index.symbol.upper()}"
+
+        return self.watchlist
 
 
 # class AccountField(BaseModel):

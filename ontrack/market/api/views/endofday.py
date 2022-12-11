@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.lookup import MarketLookupData
+from ontrack.market.api.logic.screener import Screener
 from ontrack.market.models.equity import EquityEndOfDay
 from ontrack.market.models.lookup import Equity, EquityIndex
 from ontrack.ta.candles.cdl_recognization import recognize_candlestick
@@ -54,8 +55,8 @@ class StockSelectionAPIView(SuperAdminPermissionMixin, APIView):
         if not exchange:
             return Response(None)
 
-        obj = EndOfDayData(exchange)
-        result = obj.stock_selection_hidden_move(date, index, avg_days)
+        obj = Screener(exchange)
+        result = obj.stock_screener_hidden_move(date, index, avg_days)
 
         return Response(result)
 

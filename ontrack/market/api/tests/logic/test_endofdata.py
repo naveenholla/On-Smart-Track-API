@@ -6,9 +6,11 @@ from freezegun import freeze_time
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.market.api.logic.endofdata import EndOfDayData
 from ontrack.market.api.logic.lookup import MarketLookupData
+from ontrack.market.api.logic.screener import Screener
 from ontrack.market.models.lookup import Equity, Exchange, Index
 from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import ExchangeType, SettingKeyType
+from ontrack.utils.config import Configurations as conf
 from ontrack.utils.datetime import DateTimeHelper as dt
 
 
@@ -128,14 +130,16 @@ class TestLogicLookup:
             assert obj.load_equity_eod_data.call_count == 1
 
     @pytest.mark.unittest
-    def test_get_all_fno_stocks(self):
-        obj = obj = EndOfDayData(ExchangeType.NSE)
-        qs = obj.get_all_fno_stocks()
+    def test_get_queryset_stocks_by_index(self):
+        index = conf.get_default_value_by_key("default_index_symbol")
+
+        obj = obj = Screener(ExchangeType.NSE)
+        qs = obj.get_queryset_stocks_by_index(index, only_fno=True)
         assert qs.count() > 0
         assert qs.count() < 250
 
     # @pytest.mark.unittest
     # def test_calculated_eod_data(self):
     #     d = dt.get_date_time(2022, 11, 7)
-    #     obj = obj = EndOfDayData(ExchangeType.NSE)
-    #     obj.stock_selection_hidden_move(d, 50)
+    #     obj = obj = Screener(ExchangeType.NSE)
+    #     obj.stock_screener_hidden_move(d, 50)

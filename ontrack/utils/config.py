@@ -13,7 +13,6 @@ class Configurations:
     @staticmethod
     def __get_config(fileName: str):
         path = f"{str(settings.CONFIG_DIR)}/{fileName}.json"
-        Configurations.logger.log_debug(f"Reading configuration [{path}].")
 
         # read all the file content
         with open(path) as config:

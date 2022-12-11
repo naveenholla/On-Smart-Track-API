@@ -468,7 +468,8 @@
     "parent_website": "https://www.nseindia.com/",
     "arg0_options": [
       "NIFTY",
-      "BANKNIFTY"
+      "BANKNIFTY",
+      "FINNIFTY"
     ]
   },
   "live_equity_option_chain": {
@@ -485,7 +486,8 @@
       "ITC",
       "KOTAKBANK",
       "RELIANCE",
-      "TCS"
+      "TCS",
+      "IDFCFIRSTB"
     ]
   },
   "corporates_pit": {

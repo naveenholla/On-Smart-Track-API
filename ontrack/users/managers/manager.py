@@ -1,6 +1,13 @@
-from django.db import models
+from ontrack.utils.base.manager import UserBackendManagerAbstract
 
 
-class UserManager(models.Manager):
-    def myfunction(self):
-        return super().all()
+class UserManager(UserBackendManagerAbstract):
+    pass
+
+
+class StockScreenerManager(UserBackendManagerAbstract):
+    pass
+
+
+class StockWatchlistManager(UserBackendManagerAbstract):
+    pass

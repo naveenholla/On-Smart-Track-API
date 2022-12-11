@@ -249,13 +249,26 @@ class MarketScreenerCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(MarketScreener)
 class MarketScreenerAdmin(admin.ModelAdmin):
-    list_display = ("name", "category_name", "code", "direction", "enabled")
+    list_display = (
+        "name",
+        "category_name",
+        "code",
+        "weigtage",
+        "rank",
+        "direction",
+        "enabled",
+    )
     search_fields = (
         "name__icontains",
         "code__icontains",
     )
 
-    list_filter = ("category",)
+    list_filter = (
+        "category",
+        "weigtage",
+        "direction",
+        "enabled",
+    )
 
     @admin.display(ordering="category__name")
     def category_name(self, obj):

@@ -22,7 +22,7 @@ def ratio(close, length=None, offset=None, **kwargs):
 
     # Calculate Result
     mean = close.rolling(length, min_periods=min_periods).mean()
-    ratio = np.round(close / mean)
+    ratio = np.round(close / mean, 2)
 
     # Offset
     if offset != 0:

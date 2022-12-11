@@ -61,3 +61,5 @@ kiteconnect>=4.1.0
 websockets>=10.4
 asyncio>=3.4.3
 websocket-client>=1.4.2
+py_vollib>=1.0.1
+xlwings>=0.28.5

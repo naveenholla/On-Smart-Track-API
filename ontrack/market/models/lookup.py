@@ -249,7 +249,7 @@ class MarketScreenerCategory(BaseModel):
     @property
     def display_name(self):
         if self.parent:
-            return f"{self.parent.name.replace(' Scans', '')} - {self.name}"
+            return f"{self.parent.display_name.replace(' Scans', '')} - {self.name}"
         return self.name
 
     class Meta(BaseModel.Meta):
@@ -273,6 +273,8 @@ class MarketScreener(BaseModel):
     )
     params = models.JSONField(blank=True, null=True)
     enabled = models.BooleanField(default=True)
+    weigtage = models.IntegerField(default=3)
+    rank = models.IntegerField(default=1)
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

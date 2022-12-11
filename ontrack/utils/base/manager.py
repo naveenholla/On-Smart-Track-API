@@ -26,3 +26,7 @@ class BackendManagerAbstarct(models.Manager):
 
 class EndOfDayBackendManagerAbstract(BackendManagerAbstarct):
     pass
+
+
+class UserBackendManagerAbstract(BackendManagerAbstarct):
+    pass

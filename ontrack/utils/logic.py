@@ -77,7 +77,6 @@ class LogicHelper:
 
             if res.status_code == 200:
                 data = res.json()
-                LogicHelper.logger.log_debug("Got the Data.")
         finally:
             session.close()
 

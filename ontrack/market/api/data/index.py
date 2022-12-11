@@ -487,7 +487,6 @@ class PullIndexData:
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
         data.fillna("0")
-        self.tp.log_message("Data pull completed.", "Index EOD Index Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -516,7 +515,6 @@ class PullIndexData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas(path=path)
-        self.tp.log_message("Data pull completed.", "Index EOD Derivative Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -536,7 +534,6 @@ class PullIndexData:
         self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -546,7 +543,6 @@ class PullIndexData:
         )
 
         if data is None or "timestamp" not in data or "data" not in data:
-            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -554,10 +550,7 @@ class PullIndexData:
 
         already_processed = IndexLiveData.backend.filter(date=date).count()
         if already_processed > 0:
-            self.tp.log_warning("Already Processed")
             return "Already Processed."
-
-        self.tp.log_message("Data pull completed.", "Index Live Data")
 
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
@@ -573,7 +566,6 @@ class PullIndexData:
         self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -582,10 +574,7 @@ class PullIndexData:
             record=url_record, headers=headers
         )
 
-        self.tp.log_message("Data pull completed.", "Index Live Open Interest Data")
-
         if data is None or "timestamp" not in data or "data" not in data:
-            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -593,7 +582,6 @@ class PullIndexData:
 
         already_processed = IndexLiveOpenInterest.backend.filter(date=date).count()
         if already_processed > 0:
-            self.tp.log_warning("Already Processed")
             return "Already Processed."
 
         for record in data["data"]:
@@ -608,7 +596,6 @@ class PullIndexData:
         url_records = self.urls["live_index_future_data"]
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
@@ -623,8 +610,6 @@ class PullIndexData:
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers
             )
-
-            self.tp.log_message("Data pull completed.", "Index Live Derivative Data")
 
             if data is None or "timestamp" not in data or "data" not in data:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
@@ -653,8 +638,7 @@ class PullIndexData:
         url_record = self.urls["live_index_option_chain"]
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
 
@@ -667,8 +651,6 @@ class PullIndexData:
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers, url=url
             )
-
-            self.tp.log_message("Data pull completed.", "Index Live Option Chain Data")
 
             if data is None or "records" not in data:
                 self.tp.log_warning(f"{arg} - Data is missing.")

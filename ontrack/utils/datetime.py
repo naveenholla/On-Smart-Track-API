@@ -360,10 +360,6 @@ class DateTimeHelper:
         now = DateTimeHelper.current_date_time()
         if not end_date:
             end_date = now
-
-        DateTimeHelper.logger.log_debug(
-            f"refresh:{market_refresh_time}, date:{dateTimeObj}, end_dt: {end_date}, current_dt: {now}"
-        )
         return DateTimeHelper.compare_date_time(end_date, market_refresh_time, "gte")
 
     @staticmethod

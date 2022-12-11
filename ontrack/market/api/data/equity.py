@@ -546,7 +546,6 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=listing_url)
-        self.tp.log_message("Data pull completed.", "Equity Lookup Data")
         entities = []
         for _, record in data.iterrows():
             entity = self.__parse_lookup_data(record)
@@ -565,7 +564,6 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas_web(url=url)
-        self.tp.log_message("Data pull completed.", "Equity EOD Equity Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -594,7 +592,6 @@ class PullEquityData:
 
         # pull csv containing all the listed equities from web
         data = LogicHelper.reading_csv_pandas(path=path)
-        self.tp.log_message("Data pull completed.", "Equity EOD Derivative Data")
 
         # remove extra spaces from the column names and data
         StringHelper.whitespace_remover(data)
@@ -614,7 +611,6 @@ class PullEquityData:
         self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -624,12 +620,9 @@ class PullEquityData:
         )
 
         if data is None:
-            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
-        self.tp.log_message("Data pull completed.", "Equity Corporate Action Data")
-
         for record in data:
             entity = self.__parse_corporate_action_data(record, date)
 
@@ -644,7 +637,6 @@ class PullEquityData:
         self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -654,7 +646,6 @@ class PullEquityData:
         )
 
         if data is None or "timestamp" not in data or "data" not in data:
-            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -662,10 +653,7 @@ class PullEquityData:
 
         already_processed = EquityLiveData.backend.filter(date=date).count()
         if already_processed > 0:
-            self.tp.log_warning("Already Processed")
             return "Already Processed."
-
-        self.tp.log_message("Data pull completed.", "Equity Live Data")
 
         for record in data["data"]:
             entity = self.__parse_live_data(record, date)
@@ -681,7 +669,6 @@ class PullEquityData:
         self.tp.log_message(f"Started with {url}.")
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         # pull csv containing all the listed equities from web
@@ -690,10 +677,7 @@ class PullEquityData:
             record=url_record, headers=headers
         )
 
-        self.tp.log_message("Data pull completed.", "Equity Live Open Interest Data")
-
         if data is None or "timestamp" not in data or "data" not in data:
-            self.tp.log_warning("No Data Available")
             return "No Data Available."
 
         entities = []
@@ -701,7 +685,6 @@ class PullEquityData:
 
         already_processed = EquityLiveOpenInterest.backend.filter(date=date).count()
         if already_processed > 0:
-            self.tp.log_warning("Already Processed")
             return "Already Processed."
 
         for record in data["data"]:
@@ -716,7 +699,6 @@ class PullEquityData:
         url_records = self.urls["live_equity_future_data"]
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
             return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
@@ -731,8 +713,6 @@ class PullEquityData:
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers
             )
-
-            self.tp.log_message("Data pull completed.", "Equity Live Derivative Data")
 
             if data is None or "timestamp" not in data or "data" not in data:
                 self.tp.log_warning(f"{list_name} - Data is missing.")
@@ -761,8 +741,7 @@ class PullEquityData:
         url_record = self.urls["live_equity_option_chain"]
 
         if self.exchange is None:
-            self.tp.log_warning(f"Exchange '{self.exchange_symbol}' doesn't exists")
-            return None
+            return "Exchange is missing."
 
         headers = Configurations.get_header_values_config()
 
@@ -775,8 +754,6 @@ class PullEquityData:
             data = LogicHelper.pull_data_from_external_api(
                 record=url_record, headers=headers, url=url
             )
-
-            self.tp.log_message("Data pull completed.", "Equity Live Option Chain Data")
 
             if data is None or "records" not in data:
                 self.tp.log_warning(f"{arg} - Data is missing.")

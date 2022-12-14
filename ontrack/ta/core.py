@@ -132,15 +132,20 @@ def sanitize(df, **kwargs):
             "low_price": "low",
             "close_price": "close",
             "traded_quantity": "volume",
+            "avg_traded_quantity": "avg_volume",
             "quantity_per_trade": "qpt",
+            "avg_quantity_per_trade": "avg_qpt",
             "prev_close": "prev",
             "last_price": "last",
             "avg_price": "avg",
             "percentage_changed": "p_change",
             "point_changed": "changed",
             "delivery_quantity": "delivery",
+            "avg_delivery_quantity": "avg_delivery",
             "delivery_percentage": "p_delivery",
+            "avg_delivery_percentage": "avg_p_delivery",
             "entity__symbol": "symbol",
+            "equity_weightage": "weightage",
         }
         # Preemptively drop the rows that are all NaNs
         # Might need to be moved to AnalysisIndicators.__call__() to be

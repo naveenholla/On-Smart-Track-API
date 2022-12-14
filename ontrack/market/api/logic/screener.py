@@ -1,6 +1,8 @@
 from operator import itemgetter
 
+import numpy as np
 import pandas as pd
+from django.db import connection
 from django.db.models import Avg, Max, OuterRef, Prefetch, Subquery
 
 import ontrack.ta as ta
@@ -87,13 +89,163 @@ class Screener(BaseLogic):
             ]
 
             e_eod_qs = EquityEndOfDay.backend
-            e_eod_qs = e_eod_qs.filter(date__gte=past_date, date__lt=date).order_by(
+            e_eod_qs = e_eod_qs.filter(date__gt=past_date, date__lte=date).order_by(
                 "date"
             )
             e_eod_qs = e_eod_qs.filter(entity_id__in=sub_query_e_qs)
 
             df = pd.DataFrame(list(e_eod_qs.values(*columns)))
             return sanitize(df)
+
+    def dictfetchall(self, cursor):
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def calculate_ratio(self, df, a_name, b_name):
+        a = np.array(df[a_name], dtype=float)
+        b = np.array(df[b_name], dtype=float)
+        r = np.divide(a, b, out=np.zeros_like(a), where=b != 0)
+        return np.round(r, 2)
+
+    def stock_screener_big_player(
+        self, date=None, index=None, length=None, only_fno=False
+    ):
+        with application_context(
+            exchange=self.marketlookupdata.exchange(),
+            holiday_category_name=HolidayCategoryType.EQUITIES,
+        ):
+            if not length:
+                length = conf.get_default_value_by_key("default_length_count")
+
+            if not index:
+                index = conf.get_default_value_by_key("default_index_symbol")
+
+            date = dt.get_last_working_day(date)
+            past_date = dt.get_past_date(date, days=length * 2)
+
+            cursor = connection.cursor()
+            cursor.execute(
+                f"""
+            SELECT
+                eeod.entity_id,
+                e.symbol,
+                eeod.date,
+                eeod.prev_close,
+                eeod.open_price,
+                eeod.high_price,
+                eeod.low_price,
+                eeod.last_price,
+                eeod.close_price,
+                eeod.avg_price,
+                eeod.point_changed,
+                eeod.percentage_changed,
+                eeod.traded_quantity,
+                coalesce
+                (
+                    avg(eeod.traded_quantity)
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), eeod.traded_quantity
+                ) as avg_traded_quantity,
+                eeod.quantity_per_trade,
+                coalesce
+                (
+                    avg(eeod.quantity_per_trade)
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), eeod.quantity_per_trade
+                ) as avg_quantity_per_trade,
+                eeod.delivery_quantity,
+                coalesce
+                (
+                    avg(eeod.delivery_quantity)
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), eeod.delivery_quantity
+                ) as avg_delivery_quantity,
+                eeod.delivery_percentage,
+                coalesce
+                (
+                    avg(eeod.delivery_percentage)
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), eeod.delivery_percentage
+                ) as avg_delivery_percentage,
+                SUM(edeod.open_interest) oi,
+                coalesce
+                (
+                    avg(SUM(edeod.open_interest))
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), SUM(edeod.open_interest)
+                ) as avg_oi,
+                SUM(edeod.change_in_open_interest) change_oi,
+                coalesce
+                (
+                    avg(SUM(edeod.change_in_open_interest))
+                    over
+                    (
+                        partition by e.symbol order by eeod.date rows between {length} preceding AND 1 preceding
+                    ), SUM(edeod.change_in_open_interest)
+                ) as avg_change_oi,
+                ei.equity_weightage,
+                e.lot_size
+                FROM public.market_equityendofday eeod
+                LEFT JOIN public.market_equityderivativeendofday edeod
+                on edeod.entity_id = eeod.entity_id
+                AND edeod.date = eeod.date
+                INNER JOIN public.market_equity e
+                ON e.id = eeod.entity_id
+                INNER JOIN public.market_equityindex ei
+                on ei.equity_id = e.id
+                INNER JOIN public.market_index i
+                ON ei.index_id = i.id
+                WHERE eeod.date > '{dt.datetime_to_str(past_date, "%Y-%m-%dT%H:%M:%S.%f%z")}'::timestamptz
+                AND eeod.date <= '{dt.datetime_to_str(date, "%Y-%m-%dT%H:%M:%S.%f%z")}'::timestamptz
+                {" AND e.lot_size > 0 " if only_fno else " "}
+                AND UPPER(i.symbol) = UPPER('{index}')
+                GROUP BY
+                    eeod.entity_id,
+                    e.symbol,
+                    e.lot_size,
+                    ei.equity_weightage,
+                    eeod.date,
+                    eeod.prev_close,
+                    eeod.open_price,
+                    eeod.high_price,
+                    eeod.low_price,
+                    eeod.last_price,
+                    eeod.close_price,
+                    eeod.avg_price,
+                    eeod.point_changed,
+                    eeod.percentage_changed,
+                    eeod.traded_quantity,
+                    eeod.quantity_per_trade,
+                    eeod.delivery_quantity,
+                    eeod.delivery_percentage
+                Order By ei.equity_weightage desc, symbol, eeod.date asc
+            """
+            )
+            data = self.dictfetchall(cursor)
+
+            df = pd.DataFrame(list(data))
+            df = sanitize(df)
+
+            df["QPT_RATIO"] = self.calculate_ratio(df, "qpt", "avg_qpt")
+            df["VOL_RATIO"] = self.calculate_ratio(df, "volume", "avg_volume")
+            df["DEL_RATIO"] = self.calculate_ratio(df, "delivery", "avg_delivery")
+            df["P_DEL_RATIO"] = self.calculate_ratio(df, "p_delivery", "avg_p_delivery")
+            df["OI_RATIO"] = self.calculate_ratio(df, "oi", "avg_oi")
+            df["CHANGE_OI_RATIO"] = self.calculate_ratio(
+                df, "change_oi", "avg_change_oi"
+            )
+
+            return df
 
     def stock_screener(
         self, screener_id, date=None, index=None, length=None, only_fno=False

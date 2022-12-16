@@ -87,9 +87,13 @@ class Person(BaseModel):
 
 class Account(BaseModel):
     user = models.ForeignKey(User, related_name="accounts", on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=200)
     parent = models.ForeignKey(
-        "self", related_name="parent_record", on_delete=models.CASCADE
+        "self",
+        related_name="parent_record",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     account_type = models.ForeignKey(
         AccountType, related_name="accounts", on_delete=models.CASCADE

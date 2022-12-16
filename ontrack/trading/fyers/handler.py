@@ -6,10 +6,11 @@ from ontrack.utils.logger import ApplicationLogger
 
 
 class BrokerHandler(BaseHandler):
+    brokerName = "Fyers"
+
     def __init__(self, brokerConfig, accountConfig):
         self.logger = ApplicationLogger()
 
-        self.brokerName = "Fyers"
         self.brokerConfig = brokerConfig
         self.accountConfig = accountConfig
         self.clientId = self.accountConfig.clientId
@@ -17,7 +18,7 @@ class BrokerHandler(BaseHandler):
         self.appSecret = self.accountConfig.appSecret
         self.accessToken = self.accountConfig.accessToken
         self.redirectUrl = self.accountConfig.redirectUrl
-        self.log_folder = settings.LOGS_DIR / self.brokerName
+        self.log_folder = settings.LOGS_DIR / BrokerHandler.brokerName
 
         # This value must always be “code”
         self.responseType = "code"
@@ -64,23 +65,23 @@ class BrokerHandler(BaseHandler):
     def get_broker_login_url(self):
         session = self.session()
         loginUrl = session.generate_authcode()
-        self.logger.log_info(f"{self.brokerName} login url = {loginUrl}")
+        self.logger.log_info(f"{BrokerHandler.brokerName} login url = {loginUrl}")
         return loginUrl
 
     def get_broker_access_token(self, args):
         self.logger.log_info(
-            f"Getting {self.brokerName} access token with args => {args}"
+            f"Getting {BrokerHandler.brokerName} access token with args => {args}"
         )
         if "auth_code" in args:
             auth_code = args["auth_code"]
-            self.logger.log_info(f"{self.brokerName} auth_code = {auth_code}")
+            self.logger.log_info(f"{BrokerHandler.brokerName} auth_code = {auth_code}")
 
             session = self.__get_session(auth_code)
             response = session.generate_token()
 
             accessToken = response["access_token"]
             self.logger.log_info(
-                f"{self.brokerName} Login successful. accessToken = {accessToken}"
+                f"{BrokerHandler.brokerName} Login successful. accessToken = {accessToken}"
             )
 
             return accessToken

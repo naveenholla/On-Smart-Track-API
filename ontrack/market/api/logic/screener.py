@@ -1,6 +1,5 @@
 from operator import itemgetter
 
-import numpy as np
 import pandas as pd
 from django.db import connection
 from django.db.models import Avg, Max, OuterRef, Prefetch, Subquery
@@ -39,6 +38,7 @@ class Screener(BaseLogic):
         self.pull_equity_obj = PullEquityData(ex, eq, tp)
         self.pull_index_obj = PullIndexData(ex, inx, tp)
         self.pull_participant_obj = PullParticipantData(ex, tp)
+        self.basicLogic = BaseLogic()
 
     def get_queryset_stocks_by_index(self, index, only_fno=False):
         qs = None
@@ -96,16 +96,6 @@ class Screener(BaseLogic):
 
             df = pd.DataFrame(list(e_eod_qs.values(*columns)))
             return sanitize(df)
-
-    def dictfetchall(self, cursor):
-        columns = [col[0] for col in cursor.description]
-        return [dict(zip(columns, row)) for row in cursor.fetchall()]
-
-    def calculate_ratio(self, df, a_name, b_name):
-        a = np.array(df[a_name], dtype=float)
-        b = np.array(df[b_name], dtype=float)
-        r = np.divide(a, b, out=np.zeros_like(a), where=b != 0)
-        return np.round(r, 2)
 
     def stock_screener_big_player(
         self, date=None, index=None, length=None, only_fno=False
@@ -231,17 +221,23 @@ class Screener(BaseLogic):
                 Order By ei.equity_weightage desc, symbol, eeod.date asc
             """
             )
-            data = self.dictfetchall(cursor)
+            data = self.basicLogic.dictfetchall(cursor)
 
             df = pd.DataFrame(list(data))
             df = sanitize(df)
 
-            df["QPT_RATIO"] = self.calculate_ratio(df, "qpt", "avg_qpt")
-            df["VOL_RATIO"] = self.calculate_ratio(df, "volume", "avg_volume")
-            df["DEL_RATIO"] = self.calculate_ratio(df, "delivery", "avg_delivery")
-            df["P_DEL_RATIO"] = self.calculate_ratio(df, "p_delivery", "avg_p_delivery")
-            df["OI_RATIO"] = self.calculate_ratio(df, "oi", "avg_oi")
-            df["CHANGE_OI_RATIO"] = self.calculate_ratio(
+            df["QPT_RATIO"] = self.basicLogic.calculate_ratio(df, "qpt", "avg_qpt")
+            df["VOL_RATIO"] = self.basicLogic.calculate_ratio(
+                df, "volume", "avg_volume"
+            )
+            df["DEL_RATIO"] = self.basicLogic.calculate_ratio(
+                df, "delivery", "avg_delivery"
+            )
+            df["P_DEL_RATIO"] = self.basicLogic.calculate_ratio(
+                df, "p_delivery", "avg_p_delivery"
+            )
+            df["OI_RATIO"] = self.basicLogic.calculate_ratio(df, "oi", "avg_oi")
+            df["CHANGE_OI_RATIO"] = self.basicLogic.calculate_ratio(
                 df, "change_oi", "avg_change_oi"
             )
 

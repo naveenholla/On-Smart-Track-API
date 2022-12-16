@@ -1,3 +1,5 @@
+import numpy as np
+
 from ontrack.lookup.api.logic.settings import SettingLogic
 from ontrack.utils.context import application_context
 from ontrack.utils.datetime import DateTimeHelper as dt
@@ -74,3 +76,16 @@ class BaseLogic:
         )
 
         return len(records_to_create), len(records_to_update)
+
+    def dictfetchall(self, cursor):
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+    def calculate_ratio(self, df, a_name, b_name, b_isSum=False):
+        a = np.array(df[a_name], dtype=float)
+        if not b_isSum:
+            b = np.array(df[b_name], dtype=float)
+        else:
+            b = np.array(df[a_name] + df[b_name], dtype=float)
+        r = np.divide(a, b, out=np.zeros_like(a), where=b != 0)
+        return np.round(r, 2)

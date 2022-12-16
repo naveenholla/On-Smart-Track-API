@@ -11,7 +11,7 @@ from django.urls import reverse
 from ontrack.users.forms import UserAdminChangeForm
 from ontrack.users.models.user import User
 from ontrack.users.tests.factories import UserFactory
-from ontrack.users.views import UserRedirectView, UserUpdateView, user_detail_view
+from ontrack.users.views.user import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 

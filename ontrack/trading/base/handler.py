@@ -8,6 +8,7 @@ class BaseHandler:
 
     def set_access_token(self, args):
         self.accessToken = self.set_broker_access_token(self, args)
+        print(self.accessToken)
         # TODO: Save Access Token
 
     def get_handler(self):

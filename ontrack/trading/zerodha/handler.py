@@ -44,8 +44,9 @@ class BrokerHandler(BaseHandler):
         return session
 
     def get_broker_handler(self):
-        handler = KiteConnect(api_key=self.appkey)
-        handler.set_access_token(self.accessToken)
+        handler = KiteConnect(api_key=self.appKey)
+        if self.accessToken:
+            handler.set_access_token(self.accessToken)
         return handler
 
     def get_broker_login_url(self):

@@ -25,6 +25,8 @@
         <link href="{% static 'css/project.css' %}" rel="stylesheet">
       {% endblock %}
     {% endcompress %}
+
+    <script src="https://unpkg.com/htmx.org@1.8.4" integrity="sha384-wg5Y/JwF7VxGk4zLsJEcAojRtlVp1FKKdGy1qN+OMtdq72WRvX/EdRdqg/LOhYeV" crossorigin="anonymous"></script>
   </head>
 
   <body {% block body_extra %}{% endblock %}>
@@ -38,6 +40,12 @@
         <!-- bundle -->
         <script src="{% static 'js/vendor.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
+        <script>
+          document.body.addEventListener('htmx:configRequest', (event) => {
+              event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}'
+          });
+        </script>
+
       {% endblock javascript %}
       {% block extra_javascript %}{% endblock %}
     {% endcompress %}

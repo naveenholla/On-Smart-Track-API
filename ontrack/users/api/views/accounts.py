@@ -13,3 +13,8 @@ class DematAccountAPIView(APIView):
         obj = AccountLogic(request.user)
         result = obj.get_all_demat_accounts()
         return Response(result)
+
+    def post(self, request, *args, **kwargs):
+        obj = AccountLogic(request.user)
+        result = obj.get_all_demat_accounts()
+        return Response(result)

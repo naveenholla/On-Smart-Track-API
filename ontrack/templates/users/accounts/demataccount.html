@@ -12,7 +12,6 @@
 {% endblock %}
 
 {% block content %}
-
     <!-- Start Content-->
     <div class="container-fluid">
 
@@ -37,30 +36,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-centered table-nowrap mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Account Name</th>
-                                        <th>Institute</th>
-                                        <th>Client Id</th>
-                                        <th style="width: 125px;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for data in object_list %}
-                                    <tr>
-                                        <td>{{data.account.name}}</td>
-                                        <td>{{data.institute.name}}</td>
-                                        <td>{{data.client_id}}</td>
-                                        <td>
-                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                            <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="table-responsive" id="demat-account-list">
+                            {% include 'users/accounts/partials/demat-list.html' %}
                         </div>
                     </div> <!-- end card-body-->
                 </div> <!-- end card-->

@@ -41,7 +41,7 @@ class BrokerHandler(BaseHandler):
 
     def __get_session(self, auth_code):
         session = accessToken.SessionModel(
-            client_id=self.client_id,
+            client_id=self.appKey,
             secret_key=self.appSecret,
             redirect_uri=self.redirectUrl,
             response_type=self.responseType,
@@ -50,7 +50,8 @@ class BrokerHandler(BaseHandler):
             scope=self.scope,
             nonce=self.nonce,
         )
-        session.set_token(auth_code)
+        if auth_code:
+            session.set_token(auth_code)
         return session
 
     def get_broker_handler(self):
@@ -63,7 +64,7 @@ class BrokerHandler(BaseHandler):
         return handler
 
     def get_broker_login_url(self):
-        session = self.session()
+        session = self.__get_session(None)
         loginUrl = session.generate_authcode()
         self.logger.log_info(f"{BrokerHandler.brokerName} login url = {loginUrl}")
         return loginUrl

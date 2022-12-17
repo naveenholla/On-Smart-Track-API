@@ -1,8 +1,9 @@
-from django.db import models
 from django.db.models import Q
 
+from ontrack.market.querysets.base import BaseQuerySet
 
-class SettingQuerySet(models.QuerySet):
+
+class SettingQuerySet(BaseQuerySet):
     def unique_search(self, query=None):
         if query is None:
             return self.none()
@@ -13,7 +14,7 @@ class SettingQuerySet(models.QuerySet):
         return self.filter(lookups)
 
 
-class TaskQuerySet(models.QuerySet):
+class TaskQuerySet(BaseQuerySet):
     def unique_search(self, task_id=None):
         if task_id is None:
             return self.none()

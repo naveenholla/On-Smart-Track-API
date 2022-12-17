@@ -1,5 +1,7 @@
-from django.db import transaction
+from django.db import connection, transaction
 
+from ontrack.lookup.api.logic.settings import SettingLogic
+from ontrack.lookup.models import Task
 from ontrack.market.api.data.equity import PullEquityData
 from ontrack.market.api.data.index import PullIndexData
 from ontrack.market.api.logic.lookup import MarketLookupData
@@ -15,15 +17,18 @@ from ontrack.market.models.index import (
     IndexLiveOpenInterest,
     IndexLiveOptionChain,
 )
+from ontrack.utils.base.enum import AdminSettingKey as sk
 from ontrack.utils.base.enum import HolidayCategoryType
 from ontrack.utils.base.logic import BaseLogic
 from ontrack.utils.base.tasks import TaskProgressStatus
 from ontrack.utils.context import application_context
 from ontrack.utils.logger import ApplicationLogger
+from ontrack.utils.numbers import NumberHelper as nh
 
 
 class LiveData(BaseLogic):
     def __init__(self, exchange_symbol, recorder=None):
+        self.settings = SettingLogic()
         self.logger = ApplicationLogger()
         self.marketlookupdata = MarketLookupData(exchange_symbol)
 
@@ -159,3 +164,49 @@ class LiveData(BaseLogic):
         method = self.load_index_live_option_chain_data
 
         return self.__execute_live_data_task(name, module_type, method)
+
+    def execute_delete_old_data_task(self):
+        with application_context(exchange=self.marketlookupdata.exchange()):
+            key = sk.LIVE_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
+            days_count = nh.str_to_float(self.settings.get_by_key(key))
+            self.tp.log_message(f"Deleting records older than {days_count} days...")
+
+            items = [
+                EquityLiveData.backend,
+                EquityLiveDerivativeData.backend,
+                EquityLiveOpenInterest.backend,
+                EquityLiveOptionChain.backend,
+                IndexLiveData.backend,
+                IndexLiveDerivativeData.backend,
+                IndexLiveOpenInterest.backend,
+                IndexLiveOptionChain.backend,
+                Task.backend,
+            ]
+
+            try:
+                for item in items:
+                    table_name = item.model._meta.db_table
+                    model_name = item.model.__name__
+                    result = item.delete_old_records(days_count)
+                    self.tp.log_records_stats({"deleted": result}, model_name)
+
+                    cursor = connection.cursor()
+                    cursor.execute(
+                        f"""
+                    BEGIN;
+                    SELECT
+                        setval('"{table_name}_id_seq"', coalesce(max("id"), 1), max("id") IS NOT null)
+                    FROM "{table_name}";
+                    COMMIT;
+                    """
+                    )
+
+            except Exception as e:
+                message = f"Exception - `{format(e)}`."
+                self.tp.log_critical(message=message)
+                raise
+
+            self.tp.log_message(f"Deleted records older than {days_count} days.")
+            self.tp.log_completed("Task Completed.")
+
+        return "Task Completed."

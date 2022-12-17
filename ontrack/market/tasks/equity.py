@@ -59,3 +59,14 @@ def execute_equity_open_interest_task(self, websocket_enabled=False) -> str:
     method = obj.execute_equity_open_interest_task
 
     return execute_task(self, method)
+
+
+@celery_app.task(bind=True, soft_time_limit=10000, time_limit=15000)
+def execute_delete_old_data_task(self, websocket_enabled=False) -> str:
+    recorder = TaskProgressRecorder(self, websocket_enabled)
+
+    ex = ExchangeType.NSE
+    obj = LiveData(ex, recorder)
+    method = obj.execute_delete_old_data_task
+
+    return execute_task(self, method)

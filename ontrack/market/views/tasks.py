@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from ontrack.market.tasks.equity import (
+    execute_delete_old_data_task,
     execute_equity_eod_data_task,
     execute_equity_live_data_task,
     execute_equity_live_derivative_task,
@@ -55,6 +56,9 @@ def task_execution_view(request, task_name):
 
     if task_name == "index_option_chain":
         new_celery_task = execute_index_option_chain_task.delay(True)
+
+    if task_name == "delete_old_live_data":
+        new_celery_task = execute_delete_old_data_task.delay(True)
 
     if not new_celery_task:
         return render(request, "404.html")

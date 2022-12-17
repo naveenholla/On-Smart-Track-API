@@ -18,10 +18,10 @@ class BackendManagerAbstarct(models.Manager):
         return self.get_queryset().get_records_after_date(query=query)
 
     def delete_old_records(self, days_count):
-        self.get_queryset().search_old_records(days_count).delete()
+        return self.get_queryset().search_old_records(days_count).delete()
 
     def delete_records_after_date(self, date):
-        self.get_queryset().search_records_after_date(date).delete()
+        return self.get_queryset().search_records_after_date(date).delete()
 
 
 class EndOfDayBackendManagerAbstract(BackendManagerAbstarct):

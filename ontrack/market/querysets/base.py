@@ -4,7 +4,13 @@ from django.db.models import Q
 from ontrack.utils.datetime import DateTimeHelper as dt
 
 
-class BaseEntityQuerySet(models.QuerySet):
+class BaseQuerySet(models.QuerySet):
+    def search_old_records(self, days_count):
+        threshold = dt.get_past_date(days=days_count)
+        return self.filter(updated_at__lt=threshold)
+
+
+class BaseEntityQuerySet(BaseQuerySet):
     def unique_entity(self, uid):
         if uid is None:
             return self.none()

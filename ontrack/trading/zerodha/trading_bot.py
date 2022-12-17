@@ -59,7 +59,7 @@ def get_access_token():
             access_token = kite.generate_session(
                 request_token=request_token, api_secret=api_secret
             )["access_token"]
-            os.makedirs("AcessToken", exist_ok=True)
+            os.makedirs("AccessToken", exist_ok=True)
             with open(token_file_path, "w") as f:
                 json.dump(access_token, f)
             print("Login sucessful ...")

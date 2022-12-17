@@ -185,9 +185,8 @@ class MarketLookupData(BaseLogic):
 
             key = sk.LOOKUP_DATA_OLDER_THAN_DAYS_CAN_BE_DELETED
             days_count = nh.str_to_float(self.settings.get_by_key(key))
-            EquityIndex.backend.delete_old_records(days_count)
-            self.tp.log_message(f"Deleted records older than {days_count} days.")
-
+            records = EquityIndex.backend.delete_old_records(days_count)
+            self.tp.log_records_stats({"deleted": records}, "EquityIndex")
             self.settings.save_task_execution_time(date_key)
             self.tp.log_completed("Task Completed.")
 

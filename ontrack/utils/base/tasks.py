@@ -163,6 +163,9 @@ class TaskProgressStatus:
             created = stats["created"]
             updated = stats["updated"]
             message = f"created({created}), updated({updated})"
+        elif "deleted" in stats:
+            deleted = stats["deleted"]
+            message = f"deleted({deleted})"
         else:
             message = "No stats."
 

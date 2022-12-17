@@ -31,6 +31,7 @@ urlpatterns = [
     path("dashboard/", include("ontrack.dashboard.urls", namespace="dashboard")),
     path("market/", include("ontrack.market.urls", namespace="market")),
     path("api/market/", include("ontrack.market.api.urls")),
+    path("api/users/", include("ontrack.users.api.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

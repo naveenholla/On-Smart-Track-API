@@ -9,9 +9,13 @@ from ontrack.market.models.lookup import (
     MarketScreener,
     MarketScreenerCategory,
 )
-from ontrack.users.managers.manager import StockScreenerManager, StockWatchlistManager
+from ontrack.users.managers.manager import (
+    StockScreenerManager,
+    StockWatchlistManager,
+    UserManager,
+)
 from ontrack.users.models.user import User
-from ontrack.utils.base.enum import FrequencyType, OperatorType
+from ontrack.utils.base.enum import DematAccountAccessType, FrequencyType, OperatorType
 from ontrack.utils.base.model import BaseModel
 
 
@@ -30,7 +34,7 @@ class AccountType(BaseModel):
     ordinal = models.IntegerField()
 
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -52,7 +56,7 @@ class TransactionType(BaseModel):
     ordinal = models.IntegerField()
 
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -79,7 +83,7 @@ class Person(BaseModel):
     name = models.CharField(max_length=50)
 
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -115,8 +119,10 @@ class Account(BaseModel):
         Currency, related_name="accounts", on_delete=models.CASCADE
     )
 
+    backend = UserManager()
+
     class Meta(BaseModel.Meta):
-        ordering = ["-created_at"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -129,14 +135,25 @@ class DematAccount(BaseModel):
     institute = models.ForeignKey(
         MarketBroker, related_name="demat_account", on_delete=models.CASCADE
     )
+    account_type = models.CharField(
+        max_length=50,
+        choices=DematAccountAccessType.choices,
+        default=DematAccountAccessType.DEMAT,
+    )
     client_id = models.CharField(max_length=50)
-    app_key = encrypt(models.CharField(max_length=500))
-    app_secret = encrypt(models.CharField(max_length=500))
+    app_key = encrypt(models.CharField(max_length=500, null=True, blank=True))
+    app_secret = encrypt(models.CharField(max_length=500, null=True, blank=True))
+    access_token = encrypt(models.CharField(max_length=500, null=True, blank=True))
+    is_login_initated = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    last_login = models.DateTimeField(null=True, blank=True)
     Funds = models.DecimalField(max_digits=18, decimal_places=4, null=True, blank=True)
     available_cash = models.DecimalField(
         max_digits=18, decimal_places=4, null=True, blank=True
     )
     margin = models.DecimalField(max_digits=18, decimal_places=4, null=True, blank=True)
+
+    backend = UserManager()
 
     class Meta(BaseModel.Meta):
         ordering = ["-created_at"]

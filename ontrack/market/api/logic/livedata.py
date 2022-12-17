@@ -197,6 +197,7 @@ class LiveData(BaseLogic):
                     SELECT
                         setval('"{table_name}_id_seq"', coalesce(max("id"), 1), max("id") IS NOT null)
                     FROM "{table_name}";
+                    SELECT * FROM {table_name}_id_seq
                     COMMIT;
                     """
                     )

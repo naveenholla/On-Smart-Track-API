@@ -24,6 +24,7 @@ from ontrack.users.models.lookup import (
     TransactionType,
 )
 from ontrack.users.models.user import Setting, UserProfile
+from ontrack.utils.base.enum import AccountType as at
 
 User = get_user_model()
 
@@ -77,8 +78,6 @@ admin.site.register(AccountType)
 admin.site.register(TransactionType)
 admin.site.register(InterestRate)
 admin.site.register(Person)
-admin.site.register(Account)
-admin.site.register(DematAccount)
 admin.site.register(AccountInterestRate)
 admin.site.register(AccountCheque)
 admin.site.register(TodoFolder)
@@ -194,3 +193,37 @@ class StockScreenerSectionItemAdmin(admin.ModelAdmin):
     link_to_screener.short_description = "Screener"
 
     list_per_page = 100
+
+
+@admin.action(description="Mark selected records as in active")
+def make_inactive(modeladmin, request, queryset):
+    queryset.update(is_active=False)
+
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "account_type",
+        "is_active",
+    )
+    list_filter = (
+        "is_active",
+        "account_type",
+    )
+    search_fields = (
+        "name__icontains",
+        "account_type",
+    )
+    list_per_page = 100
+    actions = [make_inactive]
+
+
+@admin.register(DematAccount)
+class DematAccountAdmin(admin.ModelAdmin):
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "account":
+            kwargs["queryset"] = Account.backend.filter(
+                account_type_id=at.TRADING_ACCOUNT, is_active=True
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)

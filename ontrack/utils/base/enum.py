@@ -155,6 +155,14 @@ class OperatorType(models.TextChoices):
     OR = "OR"
 
 
+class DematAccountAccessType(models.TextChoices):
+    API = "API"
+    DEMAT = "DEMAT"
+    PUBLISHER = "PUBLISHER"
+    INFOMATIONAL = "INFOMATIONAL"
+    VIRTUAL = "VIRTUAL"
+
+
 class OrderTriggerType(models.TextChoices):
     LIMIT = "LIMIT"
     MARKET = "MARKET"
@@ -193,3 +201,41 @@ class WeekDayType(models.TextChoices):
     FRIDAY = "Friday"
     SATURDAY = "Saturday"
     SUNDAY = "Sunday"
+
+
+class AccountType(models.IntegerChoices):
+    CASH_IN_HAND = 1, _("Cash In Hand")
+    LOANS = 2, _("Loans")
+    LOYALTY_POINTS = 3, _("Loyalty Points")
+    INVESTMENTS = 4, _("Investments")
+    OUTING = 5, _("Outing")
+    UTILITIES = 6, _("Utilities")
+    COMPANY = 7, _("Company")
+    PPF = 8, _("PPF")
+    MISCELLANEOUS = 9, _("Miscellaneous")
+    HOME_LOAN = 10, _("Home Loan")
+    CREDIT_CARDS = 11, _("Credit Cards")
+    CAR_LOAN = 12, _("Car Loan")
+    PERSONAL_LOAN = 13, _("Personal Loan")
+    GENERAL = 14, _("General")
+    LEASE_ACCOUNT = 15, _("Lease Account")
+    FIXED_DEPOSIT = 16, _("Fixed Deposit")
+    RECURSIVE_DEPOSIT = 17, _("Recursive Deposit")
+    INSURANCES = 18, _("Insurances")
+    HEALTH_INSURANCE = 19, _("Health Insurance")
+    TERM_INSURANCE = 20, _("Term Insurance")
+    LIFE_INSURANCE = 21, _("Life Insurance")
+    ACCIDENT_COVER = 22, _("Accident Cover")
+    EPF = 23, _("EPF")
+    SAVING_ACCOUNT = 24, _("Saving Account")
+    CURRENT_ACCOUNT = 25, _("Current Account")
+    CREDIT_CARD = 26, _("Credit Card")
+    CASH_IN_WALLET = 27, _("Cash In Wallet")
+    POLICY_INVESTMENT = 28, _("Policy Investment")
+    SUKANYA_SAMRIDDHI_ACCOUNT = 29, _("Sukanya Samriddhi Account")
+    MUTUAL_FUNDS = 30, _("Mutual Funds")
+    NPS = 31, _("NPS")
+    STOCKS = 32, _("Stocks")
+    GOLD = 33, _("Gold")
+    TRADING_ACCOUNT = 34, _("Trading Account")
+    DEMAT_ACCOUNT = 35, _("Demat Account")

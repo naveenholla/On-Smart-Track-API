@@ -53,6 +53,9 @@ class AccountLogic(BaseLogic):
         return None
 
     def get_demat_account_login_url(self, account):
+        if account["account_type"] != DematAccountAccessType.API:
+            return None
+
         handler = self.get_demat_account_handler(account)
         if handler:
             return handler.get_login_url()

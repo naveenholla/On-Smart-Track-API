@@ -19,15 +19,22 @@
       <td>{{data.last_login}}</td>
       <td>
         {% if not data.is_connected %}
-        <a class="action-icon" hx-post="{% url 'users:demat-login' data.id %}" hx-target="#demat-account-list" role="button">
-          <i class="mdi mdi-login-variant" title="Login"></i>
-        </a>
+            {% if data.redirect_url %}
+              <a class="action-icon" href="{{data.redirect_url}}" role="button">
+                <i class="mdi mdi-login-variant" title="Login"></i>
+              </a>
+            {% else %}
+              <form hx-post="{% url 'users:demat-login' data.id %}" hx-target="#demat-account-list">
+                <input type="number" id="totp_{{data.id}}" name="totp" min="1" max="6" style="width:100px" placeholder="TOPT">
+                <button class="btn btn-primary" type="submit"><i class="mdi mdi-login-variant" title="Login"></i></button>
+              </form>
+            {% endif %}
         {% else %}
-        <i class="action-icon mdi mdi-lan-connect" title="Connected"></i>
-        <a class="action-icon" hx-post="{% url 'users:demat-login' data.id %}"
-          hx-confirm="Are you sure you wish to logout?" role="button">
-          <i class="mdi mdi-logout-variant" title="Logout"></i>
-        </a>
+          <i class="action-icon mdi mdi-lan-connect" title="Connected"></i>
+          <a class="action-icon" hx-post="{% url 'users:demat-login' data.id %}"
+            hx-confirm="Are you sure you wish to logout?" role="button">
+            <i class="mdi mdi-logout-variant" title="Logout"></i>
+          </a>
         {% endif %}
       </td>
     </tr>
